@@ -3,11 +3,13 @@ import 'package:martabakdjoeragan_app/pages/dashboard.dart';
 import 'package:martabakdjoeragan_app/pages/login.dart';
 import 'package:martabakdjoeragan_app/pages/splash_screen.dart';
 import 'package:martabakdjoeragan_app/pages/master.dart';
+import 'package:martabakdjoeragan_app/pages/Pembelian/pembelian.dart';
 
 var routes1 = <String, WidgetBuilder>{
   "/login": (BuildContext context) => LoginPage(),
   "/dashboard": (BuildContext context) => DashboardPage(),
   "/master": (BuildContext context) => MasterPage(),
+  "/pembelian" : (BuildContext context) => PembelianPage(),
 };
 
 void main() {

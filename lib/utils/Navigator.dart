@@ -10,7 +10,10 @@ class MyNavigator {
     Navigator.pushNamed(context, "/dashboard");
   }
   static void goToMaster(BuildContext context) {
-    Navigator.pushNamed(context, "/masster");
+    Navigator.pushNamed(context, "/master");
+  }
+  static void goToPembelian(BuildContext context) {
+    Navigator.pushNamed(context, "/pembelian");
   }
 
 }

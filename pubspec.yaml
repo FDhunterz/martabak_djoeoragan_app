@@ -83,3 +83,6 @@ flutter:
       fonts:
         - asset: fonts/Quicksand-Bold.ttf
           weight: 700
+    - family: CustomIcon
+      fonts:
+        - asset: fonts/CustomIcon.ttf

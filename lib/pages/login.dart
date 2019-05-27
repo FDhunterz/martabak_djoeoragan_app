@@ -145,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   loginButton,
                   SizedBox(
-                    height: 5.0,
+                    height: 8.0,
                   ),
                 adsSection,
                 SizedBox(
