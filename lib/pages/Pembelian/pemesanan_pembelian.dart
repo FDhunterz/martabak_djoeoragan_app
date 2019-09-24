@@ -28,13 +28,24 @@ class _PemesananPembelianPageState extends State<PemesananPembelianPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                         TextFormField(
+                          decoration: InputDecoration(
+                              labelText: 'Kode Pesanan',
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(5.0)),
+                              )),
+                        ),
+                        Container(
+                          height: 10.0,
+                        ),
+                        TextFormField(
                         decoration: InputDecoration(
                               labelText: 'Catatan Pesanan',
                               border: OutlineInputBorder(
                                 borderRadius:
                                   BorderRadius.all(Radius.circular(5.0)),
                               )),
-                          ),
+                        ),
                         Container(
                           height: 10.0,
                         ),
@@ -55,6 +66,22 @@ class _PemesananPembelianPageState extends State<PemesananPembelianPage> {
                             setState(() => dates = dt);
                             print('Selected date: $dates');
                           },
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            ButtonTheme(
+                              height: 30.0,
+                              buttonColor: Color(0xfffbaf18),
+                              child: RaisedButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "Submit",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

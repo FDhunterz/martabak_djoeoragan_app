@@ -24,6 +24,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   datetime_picker_formfield: ^0.1.8
+  shared_preferences: ^0.5.1+2
+  provider: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +50,12 @@ flutter:
   assets:
     - images/djoeragan.png
     - images/jisoocu.jpg
+    - images/martabak1.jpg
+    - images/martabak2.jpg
+    - images/martabak3.jpg
+    - images/martabak4.jpg
+    - images/martabak5.jpg
+    - images/empty.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -87,3 +95,7 @@ flutter:
     - family: CustomIcon
       fonts:
         - asset: fonts/CustomIcon.ttf
+    - family: TitilliumWeb
+      fonts:
+        - asset: fonts/TitilliumWeb-Bold.ttf
+          weight: 700

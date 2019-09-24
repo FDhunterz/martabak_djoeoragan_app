@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:martabakdjoeragan_app/main.dart';
-import 'package:martabakdjoeragan_app/pages/master.dart';
 
 class MyNavigator {
   static void goToLogin(BuildContext context) {
@@ -14,6 +12,9 @@ class MyNavigator {
   }
   static void goToPembelian(BuildContext context) {
     Navigator.pushNamed(context, "/pembelian");
+  }
+  static void goToPOS(BuildContext context) {
+    Navigator.pushNamed(context, "/pos");
   }
 
 }

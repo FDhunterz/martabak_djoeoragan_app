@@ -4,22 +4,33 @@ import 'package:martabakdjoeragan_app/pages/login.dart';
 import 'package:martabakdjoeragan_app/pages/splash_screen.dart';
 import 'package:martabakdjoeragan_app/pages/master.dart';
 import 'package:martabakdjoeragan_app/pages/Pembelian/pembelian.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/pointofsale.dart';
+import 'package:provider/provider.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/cart_bloc.dart';
 
-var routes1 = <String, WidgetBuilder>{
+var routes = <String, WidgetBuilder>{
   "/login": (BuildContext context) => LoginPage(),
   "/dashboard": (BuildContext context) => DashboardPage(),
   "/master": (BuildContext context) => MasterPage(),
   "/pembelian" : (BuildContext context) => PembelianPage(),
+  "/pos" : (BuildContext context) => Pointofsales(),
 };
 
-void main() {
-  runApp(new MaterialApp(
-    title: "Martabak Djoeragan",
-    home: new SplashScreen(),
-    theme: new ThemeData(fontFamily: 'Roboto'),
-    debugShowCheckedModeBanner: false,
-    routes: routes1,
-  ));
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<CartBloc>(
+        builder: (context) => CartBloc(),
+        child: MaterialApp(
+          title: "Martabak Djoeragan",
+          theme: new ThemeData(fontFamily: 'TitilliumWeb'),
+          home: new SplashScreen(),
+          debugShowCheckedModeBanner: false,
+          routes: routes,
+        ));
+  }
 }
 
 ThemeData buildDarkTheme() {

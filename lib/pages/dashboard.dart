@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:martabakdjoeragan_app/utils/Navigator.dart';
-import 'package:martabakdjoeragan_app/pages/master.dart';
-import 'package:martabakdjoeragan_app/pages/Pembelian/pembelian.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
