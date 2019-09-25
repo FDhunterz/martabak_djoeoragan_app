@@ -16,8 +16,6 @@ class Pointofsales extends StatefulWidget {
 class _PointofsalesState extends State<Pointofsales> {
   final TextEditingController _searchControl = new TextEditingController();
 
-  get food => foods;
-
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
@@ -211,7 +209,6 @@ class _PointofsalesState extends State<Pointofsales> {
               shrinkWrap: true,
               itemCount: foods == null ? 0 : foods.length,
               itemBuilder: (BuildContext context, int index) {
-                var store = new DataStore();
                 Map food = foods[index];
                 return Padding(
                   padding: const EdgeInsets.only(bottom:15.0),
