@@ -24,7 +24,6 @@ class _PointofsalesState extends State<Pointofsales> {
       totalCount = bloc.cart.values.reduce((a, b) => a + b);
     }
 
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

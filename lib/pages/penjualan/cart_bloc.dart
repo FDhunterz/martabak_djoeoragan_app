@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:martabakdjoeragan_app/utils/foods.dart';
 
 class CartBloc with ChangeNotifier {
   Map<int, int> _cart = {};
@@ -12,6 +13,20 @@ class CartBloc with ChangeNotifier {
       _cart[index] = 1;
     }
     notifyListeners();
+  }
+
+  void reduceQty(index) {
+    if (_cart[index] == 1) {
+      _cart.remove(index);
+      notifyListeners();
+    } else {
+      if (_cart.containsKey(index)) {
+        _cart[index] -= 1;
+      } else {
+        _cart[index] = 1;
+      }
+      notifyListeners();
+    }
   }
 
   void clear(index) {
