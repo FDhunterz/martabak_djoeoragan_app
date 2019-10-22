@@ -5,12 +5,12 @@ import 'package:martabakdjoeragan_app/pages/splash_screen.dart';
 import 'package:martabakdjoeragan_app/pages/master.dart';
 import 'package:martabakdjoeragan_app/pages/Pembelian/pembelian.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/pointofsale.dart';
-import 'package:provider/provider.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cart_bloc.dart';
+import 'package:provider/provider.dart';
 
 var routes = <String, WidgetBuilder>{
-  "/login": (BuildContext context) => LoginPage(),
   "/dashboard": (BuildContext context) => DashboardPage(),
+  "/login": (BuildContext context) => LoginPage(),
   "/master": (BuildContext context) => MasterPage(),
   "/pembelian" : (BuildContext context) => PembelianPage(),
   "/pos" : (BuildContext context) => Pointofsales(),

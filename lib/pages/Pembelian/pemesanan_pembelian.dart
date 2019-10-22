@@ -153,7 +153,7 @@ class _PemesananPembelianPageState extends State<PemesananPembelianPage> {
                                 color: Color(0xffE52A34),
                               ),
                               child: new Icon(Icons.delete),
-                            ),
+                            ), onPressed: () {},
                           ),
                         ],
                       ),

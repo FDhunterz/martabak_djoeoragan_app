@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:martabakdjoeragan_app/main.dart';
+import 'package:martabakdjoeragan_app/pages/dashboard.dart';
 import 'package:martabakdjoeragan_app/utils/foods.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +39,33 @@ class _PointofsalesState extends State<Pointofsales> {
           ),
         ),
         actions: <Widget>[
+          new Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: new Container(
+                height: 150.0,
+                width: 30.0,
+                child: new GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DashboardPage(),
+                      ),
+                    );
+                  },
+                  child: new Stack(
+                    children: <Widget>[
+                      new IconButton(
+                        icon: new Icon(
+                          Icons.person,
+                          color: Color(0xff25282b),
+                        ),
+                        onPressed: null,
+                      ),
+                    ],
+                  ),
+                )),
+          ),
           new Padding(
             padding: const EdgeInsets.all(10.0),
             child: new Container(
