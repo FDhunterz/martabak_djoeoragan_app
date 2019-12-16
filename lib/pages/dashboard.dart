@@ -62,242 +62,393 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
           ),
-        body: Stack(
-          children: <Widget>[
-            ListView(
-            children: <Widget>[
-              Container(
-              padding: EdgeInsets.only(top: 10, left: 20),
-              height: 40,
-              child: Row(
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(41, 56, 70, 1),
+          title: Text('Dashboard'),
+        ),
+        body: Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.05),
+          ),
+          child:   SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.menu),
-                    color: Color(0xff25282b),
-                    onPressed: () => scaffoldKey.currentState.openDrawer(),
+                  Container(
+                    width: double.infinity,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10 , vertical: 10),
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(3.0),
+                                    topRight: Radius.circular(3.0),
+                                    bottomRight: Radius.circular(3.0),
+                                    bottomLeft: Radius.circular(3.0),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      offset:Offset(0.0 ,0.0),
+                                      blurRadius: 1,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                padding: EdgeInsets.symmetric(horizontal: 15 , vertical: 15),
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(253 , 200 , 110 , 1),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(100.0),
+                                          topRight: Radius.circular(100.0),
+                                          bottomRight: Radius.circular(100.0),
+                                          bottomLeft: Radius.circular(100.0),
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.accessibility_new,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+
+                                    SizedBox(width: 10,),
+
+                                    Container(
+                                      width: MediaQuery.of(context).size.width * 0.20,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text('Penjualan',
+                                            style: TextStyle(
+                                              color: Color.fromRGBO(99 , 110 , 114 , 1),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          Text('Viewer',
+                                            style: TextStyle(
+                                              color: Colors.black26,
+                                              fontSize: 10
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+
+                              SizedBox(width: 10,),
+
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(3.0),
+                                    topRight: Radius.circular(3.0),
+                                    bottomRight: Radius.circular(3.0),
+                                    bottomLeft: Radius.circular(3.0),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      offset:Offset(0.0 ,0.0),
+                                      blurRadius: 1,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                padding: EdgeInsets.symmetric(horizontal: 15 , vertical: 15),
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(35 , 198 , 200 , 1),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(100.0),
+                                          topRight: Radius.circular(100.0),
+                                          bottomRight: Radius.circular(100.0),
+                                          bottomLeft: Radius.circular(100.0),
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.access_alarm,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+
+                                    SizedBox(width: 10,),
+
+                                    Container(
+                                      width: MediaQuery.of(context).size.width * 0.20,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text('Penjualan',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Color.fromRGBO(99 , 110 , 114 , 1),
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          Text('Viewer',
+                                            style: TextStyle(
+                                              color: Colors.black26,
+                                              fontSize: 10
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+
+                        Container(
+                          padding: EdgeInsets.only(left: 10 , right: 10 , bottom: 10),
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(3.0),
+                                    topRight: Radius.circular(3.0),
+                                    bottomRight: Radius.circular(3.0),
+                                    bottomLeft: Radius.circular(3.0),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      offset:Offset(0.0 ,0.0),
+                                      blurRadius: 1,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                padding: EdgeInsets.symmetric(horizontal: 15 , vertical: 15),
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(35 , 198 , 200 , 1),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(100.0),
+                                          topRight: Radius.circular(100.0),
+                                          bottomRight: Radius.circular(100.0),
+                                          bottomLeft: Radius.circular(100.0),
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.access_alarm,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+
+                                    SizedBox(width: 10,),
+
+                                    Container(
+                                      width: MediaQuery.of(context).size.width * 0.20,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text('Penjualan',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Color.fromRGBO(99 , 110 , 114 , 1),
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          Text('Viewer',
+                                            style: TextStyle(
+                                              color: Colors.black26,
+                                              fontSize: 10
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+
+                              SizedBox(width: 10,),
+
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(3.0),
+                                    topRight: Radius.circular(3.0),
+                                    bottomRight: Radius.circular(3.0),
+                                    bottomLeft: Radius.circular(3.0),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      offset:Offset(0.0 ,0.0),
+                                      blurRadius: 1,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                padding: EdgeInsets.symmetric(horizontal: 15 , vertical: 15),
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(35 , 198 , 200 , 1),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(100.0),
+                                          topRight: Radius.circular(100.0),
+                                          bottomRight: Radius.circular(100.0),
+                                          bottomLeft: Radius.circular(100.0),
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.access_alarm,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+
+                                    SizedBox(width: 10,),
+
+                                    Container(
+                                      width: MediaQuery.of(context).size.width * 0.20,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text('Penjualan',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Color.fromRGBO(99 , 110 , 114 , 1),
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          Text('Viewer',
+                                            style: TextStyle(
+                                              color: Colors.black26,
+                                              fontSize: 10
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+
+                  Container(
+                    width: double.infinity,
+                    // margin: EdgeInsets.only(horizontal: 10 , vertical: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.92,
+                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3.0),
+                              topRight: Radius.circular(3.0),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset:Offset(0.0 ,0.0),
+                                blurRadius: 1,
+                                spreadRadius: 1,
+                              ),
+                            ]
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Text('Action Activity',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Color.fromRGBO(99 , 110 , 114, 1)
+                                  ),
+                                ),
+                              ),
+
+                              Icon(Icons.add,
+                                color: Color.fromRGBO(99 , 110 , 114, 1)
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.92,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border(
+                              bottom: BorderSide(width: 1.0, color: Colors.black26),
+                              top: BorderSide(width: 1.0, color: Colors.black26),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset:Offset(0.0 ,0.0),
+                                blurRadius: 1,
+                                spreadRadius: 1,
+                              ),
+                            ]
+                          ),
+                          child: Text('a'),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey[50],
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5.0),
-                    ),
-                  ),
-
-                  child: TextField(
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.blueGrey[700],
-                    ),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        borderSide: BorderSide(color: Colors.white,),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white,),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      hintText: "Pencarian",
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Colors.blueGrey[500],
-                      ),
-                      hintStyle: TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.blueGrey[400],
-                      ),
-                    ),
-                    maxLines: 1,
-                  ),
-                ),
-              ),
-
-              Container(
-                padding: EdgeInsets.only(top: 10, left: 20),
-                height: 200,
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  primary: false,
-                  itemCount: 3,
-                  itemBuilder: (BuildContext context, int index) {
-
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: InkWell(
-                        child: Container(
-                          height: 178,
-                          width: 450,
-    //                      color: Colors.green,
-                          child: Column(
-                            children: <Widget>[
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  "images/martabak4.jpg",
-                                  height: 178,
-                                  width: 450,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        onTap: null,
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              Container(
-                padding: EdgeInsets.only(top: 10, left: 20),
-                height: 90,
-                width: 400,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                    child: InkWell(
-                      child: Container(
-                        height: 178,
-                        width: 450,
-                        child: Column(
-                          children: <Widget>[
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
-                                "images/martabak4.jpg",
-                                height: 68,
-                                color: Colors.green,
-                                width: 450,
-                                fit: BoxFit.cover,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        onTap: null,
-                      ),
-                    ),
-              ),
-
-              Container(
-                padding: EdgeInsets.only(top: 10, left: 20),
-                height: 120,
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  primary: false,
-                  itemCount: 9,
-                  itemBuilder: (BuildContext context, int index) {
-
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: InkWell(
-                        child: Container(
-                          height: 68,
-                          width: 68,
-    //                      color: Colors.green,
-                          child: Column(
-                            children: <Widget>[
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  "images/martabak4.jpg",
-                                  color: Colors.black26,
-                                  height: 68,
-                                  width: 68,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text('Menu'),
-                            ],
-                          ),
-                        ),
-                        onTap: null,
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              Container(
-                width: 400,
-                height: MediaQuery.of(context).size.height,
-                padding: EdgeInsets.only(top: 10,left: 10),
-                margin: EdgeInsets.only(bottom:20),
-                child : ListView.builder(
-                  itemCount: 3,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: InkWell(
-                        child: Container(
-                          height: 300,
-                          width: 240,
-                          child: Wrap(
-                            direction: Axis.vertical,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 20),
-                                child: Column(
-                                  children: <Widget>[
-                                    ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  "images/martabak4.jpg",
-                                  height: 150,
-                                  width: 200,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text('Menu'),
-                              Text('Deskripsi'),
-                                  ],
-                                ),
-
-                              ),
-
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 20),
-                                child: Column(
-                                  children: <Widget>[
-                                    ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  "images/martabak4.jpg",
-                                  height: 150,
-                                  width: 200,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text('Menu'),
-                                  ],
-                                ),
-
-                              ),
-
-                            ],
-                          ),
-                        ),
-                        onTap: null,
-                      ),
-                    );
-                 },
-                ),
-              ),
-             ],
-            ),
-          ],
-        ),
+          ),
+        ), 
       ),
     );
   }
