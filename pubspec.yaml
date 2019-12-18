@@ -29,6 +29,7 @@ dependencies:
   http:
   dio:
   fluttertoast:
+  font_awesome_flutter:
   
 
 dev_dependencies:

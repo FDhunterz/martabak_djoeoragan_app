@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:martabakdjoeragan_app/utils/Navigator.dart';
+import '../core/api.dart';
 
+
+TextEditingController username = TextEditingController();
+TextEditingController password = TextEditingController();
+bool loading = false; 
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  List headsession = ['nama','username','id','nomor','jenis'];
+  List getsession = ['m_name','m_username','m_id','m_phone','m_gender'];
+  login() async {
+    await Auth(username: username,password: password ,name: 'login',nameStringsession: headsession , dataStringsession: getsession).getuser();
+    loading = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final usernameField = TextField(
@@ -61,7 +73,14 @@ class _LoginPageState extends State<LoginPage> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {
+        onPressed: () async {
+          // setState(() {
+          //   loading = true;            
+          // });
+          // await login();
+          // setState(() {
+          //   loading = false;
+          // });
           // Navigator.pushReplacementNamed(context, "/pos");
           Navigator.pushReplacementNamed(context, "/dashboard");
         },

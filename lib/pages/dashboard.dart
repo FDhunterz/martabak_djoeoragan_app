@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:martabakdjoeragan_app/utils/Navigator.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -40,7 +41,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                     MyNavigator.goToMaster(context);
                   },
                 ),
@@ -55,7 +56,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                     MyNavigator.goToPembelian(context);
                   },
                 ),
@@ -110,7 +111,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       decoration: BoxDecoration(
-                                        color: Color.fromRGBO(253 , 200 , 110 , 1),
+                                        color: Color.fromRGBO(26 , 179 , 148 , 1),
                                         borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(100.0),
                                           topRight: Radius.circular(100.0),
@@ -119,7 +120,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                         ),
                                       ),
                                       child: Icon(
-                                        Icons.accessibility_new,
+                                        Icons.attach_money,
                                         color: Colors.white,
                                       ),
                                     ),
@@ -132,14 +133,14 @@ class _DashboardPageState extends State<DashboardPage> {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text('Penjualan',
+                                          Text('Net Sales',
                                             style: TextStyle(
                                               color: Color.fromRGBO(99 , 110 , 114 , 1),
                                               fontWeight: FontWeight.bold,
                                             ),
                                             textAlign: TextAlign.left,
                                           ),
-                                          Text('Viewer',
+                                          Text('Penjualan Bersih',
                                             style: TextStyle(
                                               color: Colors.black26,
                                               fontSize: 10
@@ -227,7 +228,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
 
                         Container(
-                          padding: EdgeInsets.only(left: 10 , right: 10 , bottom: 10),
+                          padding: EdgeInsets.only(left: 10 , right: 10,bottom : 10),
                           width: double.infinity,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -378,69 +379,166 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
 
                   Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                     width: double.infinity,
-                    // margin: EdgeInsets.only(horizontal: 10 , vertical: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: Wrap(
+                      // alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 5,horizontal : 5),
+                          width: MediaQuery.of(context).size.width * 0.20,
+                          height: MediaQuery.of(context).size.width * 0.20,
+                          child: Material(
+                            child:   InkWell(
+                              onTap: (){
+                                Navigator.pushNamed(context, '/pos');
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                color: Colors.transparent,
+                               ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.add_shopping_cart, 
+                                      color:Colors.white,
+                                      size: 30,
+                                    ),
+
+                                    SizedBox(height: 5,),
+
+                                    Text('Kasir',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 11,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            color: Color.fromRGBO(41, 56, 70, 1),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5.0),
+                              topRight: Radius.circular(5.0),
+                              bottomRight: Radius.circular(5.0),
+                              bottomLeft: Radius.circular(5.0),
+                            ),
+                          ),
+                        ),
 
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.92,
-                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(3.0),
-                              topRight: Radius.circular(3.0),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                offset:Offset(0.0 ,0.0),
-                                blurRadius: 1,
-                                spreadRadius: 1,
+                          margin: EdgeInsets.symmetric(vertical: 5,horizontal : 5),
+                          width: MediaQuery.of(context).size.width * 0.20,
+                          height: MediaQuery.of(context).size.width * 0.20,
+                          child: Material(
+                            child:   InkWell(
+                              onTap: (){
+                                Navigator.pushNamed(context, '/inventory');
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                color: Colors.transparent,
+                               ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.library_books, 
+                                      color:Colors.white,
+                                      size: 30,
+                                    ),
+
+                                    SizedBox(height: 5,),
+
+                                    Text('Inventory',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 11,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ]
+                            ),
+                            color: Color.fromRGBO(41, 56, 70, 1),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5.0),
+                              topRight: Radius.circular(5.0),
+                              bottomRight: Radius.circular(5.0),
+                              bottomLeft: Radius.circular(5.0),
+                            ),
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Text('Action Activity',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Color.fromRGBO(99 , 110 , 114, 1)
+                        ),
+
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 5,horizontal : 5),
+                          width: MediaQuery.of(context).size.width * 0.20,
+                          height: MediaQuery.of(context).size.width * 0.20,
+                          child: Material(
+                            child:   InkWell(
+                              onTap: (){
+                                Navigator.pushNamed(context, '/pembelian');
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                color: Colors.transparent,
+                               ),
+                                child: Center(
+                                  child : Icon(
+                                    Icons.payment, 
+                                    color:Colors.white,
+                                    size: 30,
                                   ),
                                 ),
                               ),
-
-                              Icon(Icons.add,
-                                color: Color.fromRGBO(99 , 110 , 114, 1)
-                              ),
-                            ],
+                            ),
+                            color: Color.fromRGBO(41, 56, 70, 1),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5.0),
+                              topRight: Radius.circular(5.0),
+                              bottomRight: Radius.circular(5.0),
+                              bottomLeft: Radius.circular(5.0),
+                            ),
                           ),
                         ),
 
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.92,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border(
-                              bottom: BorderSide(width: 1.0, color: Colors.black26),
-                              top: BorderSide(width: 1.0, color: Colors.black26),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                offset:Offset(0.0 ,0.0),
-                                blurRadius: 1,
-                                spreadRadius: 1,
+                          margin: EdgeInsets.symmetric(vertical: 5,horizontal : 5),
+                          width: MediaQuery.of(context).size.width * 0.20,
+                          height: MediaQuery.of(context).size.width * 0.20,
+                          child: Material(
+                            child:   InkWell(
+                              onTap: (){
+                                Navigator.pushNamed(context, '/master');
+                              },
+                              child: Container(
+                                child: Center(
+                                  child : Icon(
+                                    Icons.person_add, 
+                                    color:Colors.white,
+                                    size: 30,
+                                  ),
+                                ),
                               ),
-                            ]
+                            ),
+                            color: Color.fromRGBO(41, 56, 70, 1),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5.0),
+                              topRight: Radius.circular(5.0),
+                              bottomRight: Radius.circular(5.0),
+                              bottomLeft: Radius.circular(5.0),
+                            ),
                           ),
-                          child: Text('a'),
                         ),
+                        
                       ],
                     ),
                   ),
