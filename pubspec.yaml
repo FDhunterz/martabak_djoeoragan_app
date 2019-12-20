@@ -31,7 +31,7 @@ dependencies:
   fluttertoast:
   font_awesome_flutter:
   shimmer:
-  fl_chart:
+  fl_chart: ^0.6.0
   
 
 dev_dependencies:

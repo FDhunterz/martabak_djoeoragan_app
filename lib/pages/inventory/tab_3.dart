@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'tambah_opname.dart';
 
 class InventoryTab3 extends StatefulWidget {
 
@@ -187,7 +188,7 @@ class _InventoryTab3 extends State<InventoryTab3>{
             color: Colors.blue,
             ),
           onPressed: (){
-
+            Navigator.push(context, MaterialPageRoute(builder: (context) => TambahOpname()));
           },
         ),
       ),

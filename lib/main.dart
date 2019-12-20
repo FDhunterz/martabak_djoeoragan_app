@@ -8,6 +8,7 @@ import 'package:martabakdjoeragan_app/pages/penjualan/pointofsale.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cart_bloc.dart';
 import 'package:provider/provider.dart';
 import 'pages/inventory/inventory.dart';
+import 'pages/inventory/tambah_opname.dart';
 
 var routes = <String, WidgetBuilder>{
   "/dashboard": (BuildContext context) => DashboardPage(),
@@ -16,6 +17,7 @@ var routes = <String, WidgetBuilder>{
   "/pembelian" : (BuildContext context) => PembelianPage(),
   "/pos" : (BuildContext context) => Pointofsales(),
   "/inventory" : (BuildContext context) => Inventory(),
+  "/opname" : (BuildContext context) => TambahOpname(),
 };
 
 void main() => runApp(MyApp());
