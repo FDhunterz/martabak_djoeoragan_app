@@ -29,6 +29,7 @@ class Auth{
 
 
   proses() async {
+    Fluttertoast.showToast(msg:'Proses Login');
    try{
     final sendlogin = await http.post(noapiurl+'oauth/token', body: {
         'grant_type': grantType,
@@ -51,7 +52,7 @@ class Auth{
           session.saveString('token_type', getresponse['token_type']);
         }
       Fluttertoast.showToast(msg:'Token saved');
-      await getuser();
+      // await getuser();
       return 'success';
     }else{
       Fluttertoast.showToast(msg:'Error Code ${sendlogin.statusCode}');
@@ -62,6 +63,7 @@ class Auth{
     } on TimeoutException catch (_){
       Fluttertoast.showToast(msg:'Request Timeout, try again');
     } catch (e) {
+      Fluttertoast.showToast(msg:'$e');
       // Fluttertoast.showToast(msg:e.toString(),
       //   position: ToastPosition.bottom,
       // );

@@ -30,6 +30,8 @@ dependencies:
   dio:
   fluttertoast:
   font_awesome_flutter:
+  shimmer:
+  fl_chart:
   
 
 dev_dependencies:

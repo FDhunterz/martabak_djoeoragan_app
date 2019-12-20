@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'modal_detail.dart';
 
 List<Listproduk> listproduk = [];
@@ -20,8 +19,14 @@ class _InventoryTab2 extends State<InventoryTab2>{
         cycletime: '$i',
         nama: 'Produk $i',
         safety: '$i',
-        tanggalopname: 'terakhir  opname  $i/12/2019',
+        tanggalopname: i.toString()+'0/12/19',
+        nextopname: i.toString() + '0/12/20',
         satuan: 'kg$i',
+        code: i.toString() + '91828',
+        stock: i.toString() + '00',
+        max: i.toString() + '00000',
+        image: 'images/martabak1.jpg',
+
       ); 
       listproduk.add(produk);
     }
@@ -62,7 +67,7 @@ class _InventoryTab2 extends State<InventoryTab2>{
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
                           child: Image.asset(
-                            "images/martabak1.jpg",
+                            f.image,
                             height: 70,
                             width: 70,
                             fit: BoxFit.cover,
@@ -74,7 +79,7 @@ class _InventoryTab2 extends State<InventoryTab2>{
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              f.tanggalopname,
+                              'terakhir  opname '+f.tanggalopname,
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
@@ -142,7 +147,7 @@ class _InventoryTab2 extends State<InventoryTab2>{
                   onTap: () async {
                     await showDialog(
                       context: context,
-                      builder: (BuildContext context) => ModalDetailDataStock(),
+                      builder: (BuildContext context) => ModalDetailDataStock(image : f.image,name : f.nama , code : f.code , stock : f.stock , safety : f.safety , max : f.max , cycle : f.cycletime , lastopname : f.tanggalopname , nextopname : f.nextopname , satuan: f.satuan,),
                     );
                   },
                 ),
@@ -162,5 +167,10 @@ class Listproduk{
   var safety;
   var cycletime;
   var satuan;
-  Listproduk({Key key , this.nama , this.tanggalopname , this.berat , this.cycletime , this.safety, this.satuan});
+  var code;
+  var stock;
+  var max ; 
+  var nextopname;
+  var image;
+  Listproduk({Key key, this.code , this.max , this.stock, this.nama , this.tanggalopname , this.berat , this.cycletime , this.safety, this.satuan , this.nextopname , this.image});
 }

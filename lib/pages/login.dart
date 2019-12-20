@@ -12,16 +12,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  List headsession = ['nama','username','id','nomor','jenis'];
-  List getsession = ['m_name','m_username','m_id','m_phone','m_gender'];
+  // List headsession = ['nama','username','id','nomor','jenis'];
+  // List getsession = ['m_name','m_username','m_id','m_phone','m_gender'];
   login() async {
-    await Auth(username: username,password: password ,name: 'login',nameStringsession: headsession , dataStringsession: getsession).getuser();
+    print('login');
+    // await Auth(username: username,password: password ,name: 'login',nameStringsession: headsession , dataStringsession: getsession).getuser();
+    await Auth(username: username.text , password: password.text ).proses();
+    Navigator.pushReplacementNamed(context, "/dashboard");
     loading = false;
   }
 
   @override
   Widget build(BuildContext context) {
     final usernameField = TextField(
+      controller: username,
       autofocus: true,
       obscureText: false,
       style: TextStyle(
@@ -32,19 +36,23 @@ class _LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: "Nama Pengguna",
-          hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Color(0xff25282b)),
+          hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.black38, fontSize: 14),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              borderSide: BorderSide(color: Colors.black38)),
           border:
           OutlineInputBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(3.0),
-              topRight: Radius.circular(3.0),
-              bottomRight: Radius.circular(3.0),
-              bottomLeft: Radius.circular(3.0),
+              topLeft: Radius.circular(5.0),
+              topRight: Radius.circular(5.0),
+              bottomRight: Radius.circular(5.0),
+              bottomLeft: Radius.circular(5.0),
             ),
           )
       ),
     );
     final passwordField = TextField(
+      controller: password,
       obscureText: true,
       style: TextStyle(
         fontFamily: 'Roboto',
@@ -54,14 +62,17 @@ class _LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: "Kata Sandi",
-          hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Color(0xff25282b)),
+          hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.black38, fontSize: 14),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              borderSide: BorderSide(color: Colors.black38)),
           border:
           OutlineInputBorder(
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(3.0),
-                topRight: Radius.circular(3.0),
-                bottomRight: Radius.circular(3.0),
-                bottomLeft: Radius.circular(3.0),
+              topLeft: Radius.circular(5.0),
+              topRight: Radius.circular(5.0),
+              bottomRight: Radius.circular(5.0),
+              bottomLeft: Radius.circular(5.0),
             ),
           )
       ),
@@ -82,15 +93,16 @@ class _LoginPageState extends State<LoginPage> {
           //   loading = false;
           // });
           // Navigator.pushReplacementNamed(context, "/pos");
-          Navigator.pushReplacementNamed(context, "/dashboard");
+          // Navigator.pushReplacementNamed(context, "/dashboard");
+          login();
         },
         child: Text("Masuk",
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontFamily: 'Roboto',
-              fontSize: 16.0,
+              fontSize: 14.0,
           ),
         ),
       ),
@@ -104,20 +116,22 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(
               color: Colors.grey[500],
               fontFamily: 'Roboto',
-              fontSize: 13.0,
+              fontSize: 11.0,
             ),
           ),
+          SizedBox(height: 10),
           OutlineButton(
             padding: EdgeInsets.fromLTRB(20.0, 1.0, 20.0, 1.0),
             onPressed: () {
-              MyNavigator.goToDashboard(context);
+              // MyNavigator.goToDashboard(context);
             },
             child: Text("Hubungi Kami Segera",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
                 fontFamily: 'Roboto',
-                fontSize: 14.0,
+                fontSize: 12.0,
               ),
             ),
           ),
@@ -129,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
       style: TextStyle(
         color: Colors.grey,
         fontFamily: 'Roboto',
-        fontSize: 12.0
+        fontSize: 10.0
       ),
     );
 
@@ -156,20 +170,65 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
+
+                  Container(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: BorderDirectional(
+                                bottom: BorderSide(width: 1 , color: Colors.black45),
+                              )
+                            ),
+                          ),
+                        ),
+
+                        Expanded(
+                          child:  Center(
+                            child: Text('Login',
+                              style: TextStyle(
+                                fontFamily: 'Roboto',
+                                color: Colors.black45,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16
+                              ),
+                            ),
+                          ), 
+                        ),
+
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: BorderDirectional(
+                                bottom: BorderSide(width: 1 , color: Colors.black45),
+                              )
+                            ),
+                          ),
+                        ),
+
+                        
+                      ],  
+                    ),
+                  ),
+
                   SizedBox(height: 20.0),
                   usernameField,
                   SizedBox(height: 15.0),
                   passwordField,
                   SizedBox(
-                    height: 20.0,
+                    height: 15.0,
                   ),
                   loginButton,
                   SizedBox(
-                    height: 8.0,
+                    height: 15.0,
                   ),
                 adsSection,
                 SizedBox(
-                  height: 10.0,
+                  height: 15.0,
                 ),
                 footer,
                 SizedBox(

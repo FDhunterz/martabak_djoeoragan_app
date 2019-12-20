@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:martabakdjoeragan_app/utils/Navigator.dart';
+import 'package:martabakdjoeragan_app/pages/inventory/tab_3.dart';
 import 'tab_1.dart';
 import 'tab_2.dart';
+import 'tab_3.dart';
 
 class Inventory extends StatefulWidget {
   @override
@@ -17,9 +18,7 @@ class _InventoryState extends State<Inventory> {
   static List<Widget> _widgetOptions = <Widget>[
     InventoryTab1(),
     InventoryTab2(),
-    Text(
-      'Index 2: School',
-    ),
+    InventoryTab3(),
   ];
 
   void _onItemTapped(int index) {
