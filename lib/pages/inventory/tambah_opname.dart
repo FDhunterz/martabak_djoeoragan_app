@@ -5,10 +5,14 @@ import 'isi_form.dart';
 var selected = 'ada';
 List<ProdukAwal> listprodukawal = [];
 List<ProdukSementara> listproduksementara = [];
+List<SearchProduk> listsearchproduk = [];
 List<Gudang> listgudang = [];
-String catatan ;
+String catatan = '' ;
+String textsearch;
+TextEditingController searchController = TextEditingController();
 var selectedgudang;
 bool loading = true;
+double buttonwidth = 84;
 
 class TambahOpname extends StatefulWidget {
   @override
@@ -17,6 +21,16 @@ class TambahOpname extends StatefulWidget {
 
 class _TambahOpname extends State<TambahOpname>{
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  searchproduk(judul){
+    listsearchproduk = [];
+
+    for(var i = 0;i < listprodukawal.length; i++){
+      if(listprodukawal[i].nama.toUpperCase() == judul.toUpperCase()){
+        print('ok');
+      }
+    }
+  }
 
   getproduk(){
     listprodukawal = [];
@@ -36,24 +50,37 @@ class _TambahOpname extends State<TambahOpname>{
     });
   }
 
-  getgudang(){
+  getgudang() async {
+  }
 
+  ubahqty(qty,code){
+    for(var i = 0;i < listproduksementara.length;i++){
+      if(listproduksementara[i].code == code){
+        for(var j = 0;j < listproduksementara.length;j++){
+        if(listproduksementara[j].qty < int.parse(uqty.text)){
+          if(int.parse(uqty.text) < 100){
+            buttonwidth = 84;
+          }else if(int.parse(uqty.text) > 99 && int.parse(uqty.text) < 1000){
+            buttonwidth = 99;
+          }else if (int.parse(uqty.text) > 999 && int.parse(uqty.text) < 10000){
+            buttonwidth = 110;
+          }else if (int.parse(uqty.text) > 9999 && int.parse(uqty.text) < 100000){
+            buttonwidth = 120;
+          }else if (int.parse(uqty.text) > 99999 && int.parse(uqty.text) < 1000000){
+            buttonwidth = 130;
+          }else{
+            buttonwidth = 150;
+          }
+        }
+      }
+      }
+    }
   }
 
   tambah(code){
     for(var i = 0;i < listproduksementara.length;i++){
-        ProdukSementara appen = ProdukSementara(
-          code: listproduksementara[i].code,
-          qty: listproduksementara[i].qty + 1,
-          nama: listproduksementara[i].nama,
-          deskripsi: listproduksementara[i].deskripsi,
-        );
-
       if(code == listproduksementara[i].code){
-        listproduksementara.removeWhere((c)=> c.code == code);
-        listproduksementara.add(appen);
-      }else{
-        listproduksementara.add(appen);
+        listproduksementara[i].qty = listproduksementara[i].qty + 1;
       }
     }
   }
@@ -61,18 +88,8 @@ class _TambahOpname extends State<TambahOpname>{
   kurang(code){
     for(var i = 0;i < listproduksementara.length;i++){
       if(listproduksementara[i].qty > 0){
-        ProdukSementara appen = ProdukSementara(
-          code: listproduksementara[i].code,
-          qty: listproduksementara[i].qty - 1,
-          nama: listproduksementara[i].nama,
-          deskripsi: listproduksementara[i].deskripsi,
-        );
-
         if(code == listproduksementara[i].code){
-          listproduksementara.removeWhere((c)=> c.code == code);
-          listproduksementara.add(appen);
-        }else{
-          listproduksementara.add(appen);
+          listproduksementara[i].qty = listproduksementara[i].qty - 1;
         }
       }
     }
@@ -118,6 +135,13 @@ class _TambahOpname extends State<TambahOpname>{
               child: Column(
                 children: <Widget>[
                   TextField(
+                    controller: searchController,
+                    onChanged: (data){
+                      setState(() {                        
+                       textsearch = data;
+                      });
+                      print(textsearch);
+                    },
                     style: TextStyle(
                       fontFamily: 'Roboto',
                       fontSize: 16.0,
@@ -150,7 +174,48 @@ class _TambahOpname extends State<TambahOpname>{
 
                   Container(
                     child: Column(
-                      children: listprodukawal.map(( ProdukAwal f) => InkWell(
+                      children: textsearch != null && textsearch != '' ? 
+                        listprodukawal.where((ProdukAwal f) => f.nama.toLowerCase().contains(textsearch.toLowerCase())).map(( ProdukAwal f) => InkWell(
+                        onTap: (){
+                            if(f.checked == true){
+                              setState(() {                          
+                                f.checked = false;
+                                tambahsementara(f.code);
+                              });
+                            }else{
+                              setState(() {                          
+                                f.checked = true;
+                                tambahsementara(f.code);
+                              });
+                            }
+                          },
+                        child : ListTile(
+                        title: Container(
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Text(f.nama != null ? f.nama : ''),
+                                ),
+                                
+                                Checkbox(
+                                  value: f.checked,
+                                  onChanged: (isinya){
+                                    print(listproduksementara.length);
+                                    setState(() {
+                                      f.checked = isinya;                              
+                                      tambahsementara(f.code);
+                                    });
+                                  },
+                                ),
+
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    ).toList()
+                      :
+                      listprodukawal.map(( ProdukAwal f) => InkWell(
                       onTap: (){
                           if(f.checked == true){
                             setState(() {                          
@@ -234,8 +299,11 @@ class _TambahOpname extends State<TambahOpname>{
               margin: EdgeInsets.only(right:10),
               child: Material(
                 child: InkWell(
-                  onTap: (){
-                    popupbawah(IsiGudang());
+                  onTap: ()async {
+                    await popupbawah(IsiGudang());
+                    setState(() {
+                      getproduk();
+                    });
                   },
                   child: Icon(FontAwesomeIcons.cog,
                     color: Colors.white,
@@ -259,7 +327,7 @@ class _TambahOpname extends State<TambahOpname>{
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border : Border(
+                    border :listproduksementara.length == 0 ? null : Border(
                       top: BorderSide(width: 1,color: Color(0xfffbaf18)),
                       left: BorderSide(width: 10,color: Color(0xfffbaf18)),
                       right: BorderSide(width: 1,color: Color(0xfffbaf18)),
@@ -267,13 +335,35 @@ class _TambahOpname extends State<TambahOpname>{
                     ),
                   ),
                   child: Column(
-                    children: listproduksementara.map((ProdukSementara f) => ListTile(
-                      onLongPress: () => popupbawah(UbahQty()),
-                      title: Text('Produk 1'),
-                      subtitle: Text('Ini adalah Produk 1'),
+                    children: listproduksementara.length == 0 ? <Widget> [
+                      Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: 40),
+                  Icon(
+                      FontAwesomeIcons.parachuteBox,
+                      color: Colors.black26,
+                      size:170
+                  ),
+                  SizedBox(height: 30),
+                  Text('tidak Ada barang',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black38
+                      ),
+                  )
+                ],
+              ),
+            )
+          ] : listproduksementara.map((ProdukSementara f) => ListTile(
+                      onLongPress: () => popupbawah(UbahQty(qty:f.qty,code:f.code)),
+                      title: Text(f.nama != null ? f.nama : ''),
+                      subtitle: Text(f.deskripsi != null ? f.deskripsi : ''),
                       trailing: Container(
                         padding: EdgeInsets.all(3),
-                        width: 84,
+                        width: buttonwidth,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
@@ -297,33 +387,42 @@ class _TambahOpname extends State<TambahOpname>{
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(left: 10.0),
-                              child: GestureDetector(
+                              child: InkWell(
                                 onTap: () {
-                                  kurang(f.code);
+                                  setState(() {                                    
+                                    kurang(f.code);
+                                  });
                                 },
                                 child: const Text(
                                     '-',
-                                    style: TextStyle(fontSize: 15, color: Color(0xfffbaf18))
+                                    style: TextStyle(fontSize: 25, color: Color(0xfffbaf18))
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 15.0, left: 15.0),
-                              child: Text(
-                                f.qty != null ? f.qty.toString() : '',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                ),
-                                maxLines: 2,
-                                textAlign: TextAlign.left,
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    f.qty != null ? f.qty.toString() : '',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 15,
+                                    ),
+                                    maxLines: 2,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ],
                               ),
                             ),
                             Padding(
                               padding: EdgeInsets.only(right: 10.0),
-                              child: GestureDetector(
+                              child: InkWell(
                                 onTap: () {
-                                  tambah(f.code);
+                                  setState(() {
+                                    tambah(f.code);
+                                  });
                                 },
                                 child: const Text(
                                     '+',
@@ -338,6 +437,41 @@ class _TambahOpname extends State<TambahOpname>{
                   )
                 ),
               ),
+
+              listproduksementara.length < 1 ? 
+              Container()
+              : Container(
+                margin: EdgeInsetsDirectional.only(top: 20),
+                padding: EdgeInsets.only(bottom : 10 , left: 10 , right: 10 ),
+                child: ButtonTheme(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    minWidth: MediaQuery.of(context).size.width * 0.5,
+                    height: 50.0,
+                    child: RaisedButton(
+                      color: Colors.green,
+                      onPressed: (){
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.check_box,
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 10,),
+                          Text('Simpan Data',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -345,7 +479,37 @@ class _TambahOpname extends State<TambahOpname>{
     );
   }
 
-  void popupbawah(target) async {
+  void konfirmasi(){
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Apakah Anda Yakin?"),
+          content: new Text("Barang Masih Belum Di Simpan!"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("close"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+
+            new FlatButton(
+              child: new Text("ok"),
+              onPressed: () {
+                Navigator.pushNamed(context, '/inventory');
+              },
+            ),
+
+          ],
+        );
+      },
+    );
+}
+
+  popupbawah(target) async {
     await showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: Colors.white.withOpacity(0),
@@ -367,6 +531,17 @@ class ProdukAwal{
   var deskripsi;
 
   ProdukAwal({Key key , this.code , this.deskripsi , this.nama , this.satuan , this.stock , this.checked});
+}
+
+class SearchProduk{
+  var stock;
+  var nama;
+  var code;
+  var satuan;
+  bool checked;
+  var deskripsi;
+
+  SearchProduk({Key key , this.code , this.deskripsi , this.nama , this.satuan , this.stock , this.checked});
 }
 
 class ProdukSementara{

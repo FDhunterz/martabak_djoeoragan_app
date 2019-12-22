@@ -1,12 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:martabakdjoeragan_app/pages/inventory/tab_2.dart';
 import 'tambah_opname.dart';
 
+TextEditingController uqty = TextEditingController();
+TextEditingController catatanC = TextEditingController();
 class IsiForm extends StatefulWidget{
   _IsiForm createState()=> _IsiForm();
 }
 
 class _IsiForm extends State<IsiForm>{
+
+  void initState() {
+    catatanC = TextEditingController(text: catatan);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +45,7 @@ class _IsiForm extends State<IsiForm>{
                 SizedBox(height: 10,),
                 
                 TextField(
+                  controller: catatanC,
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 16.0,
@@ -72,6 +81,7 @@ class _IsiForm extends State<IsiForm>{
                     minWidth: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                     onPressed: () async {
+                      catatan = catatanC.text;
                       Navigator.pop(context);
                     },
                     child: Text("Simpan",
@@ -100,6 +110,43 @@ class IsiGudang extends StatefulWidget{
 }
 
 class _IsiGudang extends State<IsiGudang>{
+  konfirmasi(gudang){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Apakah Anda Yakin?"),
+          content: new Text("Barang Masih Belum Di Simpan!"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("close"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+
+            new FlatButton(
+              child: new Text("ok"),
+              onPressed: () async {
+                Navigator.pop(context);
+                await ubahgudang(gudang);
+              },
+            ),
+
+          ],
+        );
+      },
+    );
+  }
+
+  ubahgudang(gudang){
+    selectedgudang = gudang;
+    listproduksementara = [];
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -129,7 +176,14 @@ class _IsiGudang extends State<IsiGudang>{
 
                 ListTile(
                   onTap:() async {
-                      Navigator.of(context).pop();
+                    if(listproduksementara.length != 0){
+                      await konfirmasi('1');
+                    }else{
+                      await ubahgudang('1');
+                    }
+                    setState(() {
+                        
+                      });
                   } ,
                   leading: selected == null ? Icon(
                     Icons.check,
@@ -157,10 +211,48 @@ class _IsiGudang extends State<IsiGudang>{
 }
 
 class UbahQty extends StatefulWidget{
-  _UbahQty createState()=> _UbahQty();
+  var code;
+  var qty;
+  UbahQty({Key key , this.code , this.qty});
+  _UbahQty createState()=> _UbahQty(code: code , qty: qty);
 }
 
 class _UbahQty extends State<UbahQty>{
+  var code;
+  var qty;
+
+  _UbahQty({Key key, this.code , this.qty});
+
+  void initState() {
+    uqty = TextEditingController(text: qty.toString());
+    super.initState();
+  }
+
+  ubahqty(qty,code){
+    for(var i = 0;i < listproduksementara.length;i++){
+      if(listproduksementara[i].code == code){
+        for(var j = 0;j < listproduksementara.length;j++){
+        if(listproduksementara[j].qty < int.parse(uqty.text)){
+          if(int.parse(uqty.text) < 100){
+            buttonwidth = 84;
+          }else if(int.parse(uqty.text) > 99 && int.parse(uqty.text) < 1000){
+            buttonwidth = 99;
+          }else if (int.parse(uqty.text) > 999 && int.parse(uqty.text) < 10000){
+            buttonwidth = 110;
+          }else if (int.parse(uqty.text) > 9999 && int.parse(uqty.text) < 100000){
+            buttonwidth = 120;
+          }else if (int.parse(uqty.text) > 99999 && int.parse(uqty.text) < 1000000){
+            buttonwidth = 130;
+          }else{
+            buttonwidth = 150;
+          }
+        }
+      }
+
+      listproduksementara[i].qty = int.parse(uqty.text);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -191,6 +283,7 @@ class _UbahQty extends State<UbahQty>{
                 SizedBox(height: 10,),
                 
                 TextField(
+                  controller: uqty,
                   keyboardType: TextInputType.number,
                   style: TextStyle(
                     fontFamily: 'Roboto',
@@ -227,6 +320,7 @@ class _UbahQty extends State<UbahQty>{
                     minWidth: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                     onPressed: () async {
+                      await ubahqty(uqty,code);
                       Navigator.pop(context);
                     },
                     child: Text("Simpan",
