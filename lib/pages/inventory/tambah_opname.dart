@@ -270,7 +270,7 @@ class _TambahOpname extends State<TambahOpname>{
         ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(90.0),
+        preferredSize: Size.fromHeight(0.0),
         child: AppBar(
           backgroundColor: Color(0xfffbaf18),
           leading: null,
