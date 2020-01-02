@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:martabakdjoeragan_app/pages/dashboard.dart';
+import 'package:shimmer/shimmer.dart';
 import 'isi_form.dart';
 
 var selected = 'ada';
@@ -13,6 +16,7 @@ TextEditingController searchController = TextEditingController();
 var selectedgudang;
 bool loading = true;
 double buttonwidth = 84;
+DateTime currentBackPressTime;
 
 class TambahOpname extends StatefulWidget {
   @override
@@ -45,6 +49,16 @@ class _TambahOpname extends State<TambahOpname>{
       );
       listprodukawal.add(awal);
     }
+
+    if(listproduksementara.length > 0){
+      for(var i = 0 ; i < listprodukawal.length ; i++){
+        for(var j = 0 ; j < listproduksementara.length ; j++){
+          if(listproduksementara[j].code == listprodukawal[i].code){
+            listprodukawal[i].checked = true;
+          }
+        }
+      }
+    }
     setState(() {    
       loading = false;
     });
@@ -70,9 +84,9 @@ class _TambahOpname extends State<TambahOpname>{
             buttonwidth = 130;
           }else{
             buttonwidth = 150;
+            }
           }
         }
-      }
       }
     }
   }
@@ -117,6 +131,8 @@ class _TambahOpname extends State<TambahOpname>{
 
 @override
   void initState() {
+    loading = true;
+    listproduksementara = [];
     loading = true;
     getproduk();
     super.initState();
@@ -316,166 +332,190 @@ class _TambahOpname extends State<TambahOpname>{
           ],
         )
       ),
-      body: Container(
-        padding: EdgeInsets.only(top: 30),
-        child : SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.symmetric(horizontal:10 , vertical: 5),
-                width: double.infinity,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border :listproduksementara.length == 0 ? null : Border(
-                      top: BorderSide(width: 1,color: Color(0xfffbaf18)),
-                      left: BorderSide(width: 10,color: Color(0xfffbaf18)),
-                      right: BorderSide(width: 1,color: Color(0xfffbaf18)),
-                      bottom: BorderSide(width: 1,color: Color(0xfffbaf18))
-                    ),
-                  ),
-                  child: Column(
-                    children: listproduksementara.length == 0 ? <Widget> [
-                      Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: 40),
-                  Icon(
-                      FontAwesomeIcons.parachuteBox,
-                      color: Colors.black26,
-                      size:170
-                  ),
-                  SizedBox(height: 30),
-                  Text('tidak Ada barang',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black38
+      body: loading? 
+      SingleChildScrollView(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            viewloading(0.9,100),
+            viewloading(0.9,10),
+            viewloading(0.7,10),
+            SizedBox(height: 10,),
+            viewloading(0.9,100),
+            viewloading(0.9,10),
+            viewloading(0.7,10),
+            SizedBox(height: 10,),
+            viewloading(0.9,100),
+            viewloading(0.9,10),
+            viewloading(0.7,10),
+          ],
+        ),
+      )
+      : WillPopScope(
+        onWillPop: onWillPop,
+          child: Container(
+          padding: EdgeInsets.only(top: 30),
+          child : SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal:10 , vertical: 5),
+                  width: double.infinity,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border :listproduksementara.length == 0 ? null : Border(
+                        top: BorderSide(width: 1,color: Color(0xfffbaf18)),
+                        left: BorderSide(width: 10,color: Color(0xfffbaf18)),
+                        right: BorderSide(width: 1,color: Color(0xfffbaf18)),
+                        bottom: BorderSide(width: 1,color: Color(0xfffbaf18))
                       ),
-                  )
-                ],
-              ),
-            )
-          ] : listproduksementara.map((ProdukSementara f) => ListTile(
-                      onLongPress: () => popupbawah(UbahQty(qty:f.qty,code:f.code)),
-                      title: Text(f.nama != null ? f.nama : ''),
-                      subtitle: Text(f.deskripsi != null ? f.deskripsi : ''),
-                      trailing: Container(
-                        padding: EdgeInsets.all(3),
-                        width: buttonwidth,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0),
-                            topRight: Radius.circular(10.0),
-                            bottomRight: Radius.circular(10.0),
-                            bottomLeft: Radius.circular(10.0),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              offset:Offset(0.0 ,0.0),
-                              blurRadius: 1,
-                              spreadRadius: 1,
-                            ),
-                          ]
+                    ),
+                    child: Column(
+                      children: listproduksementara.length == 0 ? <Widget> [
+                        Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: 40),
+                    Icon(
+                        FontAwesomeIcons.parachuteBox,
+                        color: Colors.black26,
+                        size:170
+                    ),
+                    SizedBox(height: 30),
+                    Text('tidak Ada barang',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black38
                         ),
+                    )
+                  ],
+                ),
+              )
+            ] : listproduksementara.map((ProdukSementara f) => ListTile(
+                        onLongPress: () => popupbawah(UbahQty(qty:f.qty,code:f.code)),
+                        title: Text(f.nama != null ? f.nama : ''),
+                        subtitle: Text(f.deskripsi != null ? f.deskripsi : ''),
+                        trailing: Container(
+                          padding: EdgeInsets.all(3),
+                          width: buttonwidth,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              topRight: Radius.circular(10.0),
+                              bottomRight: Radius.circular(10.0),
+                              bottomLeft: Radius.circular(10.0),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset:Offset(0.0 ,0.0),
+                                blurRadius: 1,
+                                spreadRadius: 1,
+                              ),
+                            ]
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(left: 10.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {                                    
+                                      kurang(f.code);
+                                    });
+                                  },
+                                  child: const Text(
+                                      '-',
+                                      style: TextStyle(fontSize: 25, color: Color(0xfffbaf18))
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      f.qty != null ? f.qty.toString() : '',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 15,
+                                      ),
+                                      maxLines: 2,
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(right: 10.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      tambah(f.code);
+                                    });
+                                  },
+                                  child: const Text(
+                                      '+',
+                                      style: TextStyle(fontSize: 20, color: Color(0xfffbaf18))
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ),
+                      ),).toList(),
+                    )
+                  ),
+                ),
+
+                listproduksementara.length < 1 ? 
+                Container()
+                : Container(
+                  margin: EdgeInsetsDirectional.only(top: 20),
+                  padding: EdgeInsets.only(bottom : 10 , left: 10 , right: 10 ),
+                  child: ButtonTheme(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      minWidth: MediaQuery.of(context).size.width * 0.5,
+                      height: 50.0,
+                      child: RaisedButton(
+                        color: Colors.green,
+                        onPressed: (){
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(left: 10.0),
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {                                    
-                                    kurang(f.code);
-                                  });
-                                },
-                                child: const Text(
-                                    '-',
-                                    style: TextStyle(fontSize: 25, color: Color(0xfffbaf18))
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    f.qty != null ? f.qty.toString() : '',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 15,
-                                    ),
-                                    maxLines: 2,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    tambah(f.code);
-                                  });
-                                },
-                                child: const Text(
-                                    '+',
-                                    style: TextStyle(fontSize: 20, color: Color(0xfffbaf18))
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ),
-                    ),).toList(),
-                  )
-                ),
-              ),
-
-              listproduksementara.length < 1 ? 
-              Container()
-              : Container(
-                margin: EdgeInsetsDirectional.only(top: 20),
-                padding: EdgeInsets.only(bottom : 10 , left: 10 , right: 10 ),
-                child: ButtonTheme(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    minWidth: MediaQuery.of(context).size.width * 0.5,
-                    height: 50.0,
-                    child: RaisedButton(
-                      color: Colors.green,
-                      onPressed: (){
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                            Icons.check_box,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 10,),
-                          Text('Simpan Data',
-                            style: TextStyle(
-                              fontSize: 16,
+                            Icon(
+                              Icons.check_box,
                               color: Colors.white,
-                              fontWeight: FontWeight.bold
+                            ),
+                            SizedBox(width: 10,),
+                            Text('Simpan Data',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
-        ),
-      ),
+        )
+      )
     );
   }
 
@@ -508,6 +548,90 @@ class _TambahOpname extends State<TambahOpname>{
       },
     );
 }
+
+void _konfirmasi(){
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Apakah Anda Yakin?"),
+          content: new Text("Barang Masih Belum Di Simpan!"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("close"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+
+            new FlatButton(
+              child: new Text("ok"),
+              onPressed: () {
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashboardPage()), (Route<dynamic> route) => false);
+              },
+            ),
+
+          ],
+        );
+      },
+    );
+}
+
+viewloading(double sizecustom,double heightcustom){
+    return Shimmer.fromColors(
+      highlightColor: Colors.white,
+      baseColor: Colors.grey[300],
+      child: Container(
+          child: Container(
+            margin: EdgeInsets.only(top: 20),
+            height: heightcustom,
+            width: MediaQuery.of(context).size.width * sizecustom,
+            color: Colors.grey,
+            padding: EdgeInsets.only(left: 20.0, top: 10.0),
+          ),
+        ),
+      );
+  }
+
+Future<bool> onWillPop() async {
+    Widget widget = Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(30.0),
+        child: Container(
+          width: 40.0,
+          height: 40.0,
+           color: Colors.grey.withOpacity(0.3),
+          child: Icon(
+            Icons.add,
+            size: 30.0,
+            color: Colors.green,
+          ),
+        ),
+      ),
+    );
+
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null || 
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      if(listproduksementara.length != 0){
+        _konfirmasi();
+      }else{
+        Fluttertoast.showToast(
+          msg: "double click untuk kembali"
+        );
+      }
+      return false;
+    }
+    if(listproduksementara.length != 0){
+    return false;
+    }
+    Navigator.pop(context);
+    return false;
+    // return true;
+  }
 
   popupbawah(target) async {
     await showModalBottomSheet(

@@ -15,7 +15,7 @@ class _InventoryState extends State<Inventory> {
   // var scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
+  List _widgetOptions = [
     InventoryTab1(),
     InventoryTab2(),
     InventoryTab3(),
