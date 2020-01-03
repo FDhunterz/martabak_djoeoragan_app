@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:martabakdjoeragan_app/pages/profile.dart';
+import 'package:flutter/services.dart';
 import 'package:martabakdjoeragan_app/utils/Navigator.dart';
 import 'package:martabakdjoeragan_app/core/api.dart';
 
@@ -14,6 +15,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
