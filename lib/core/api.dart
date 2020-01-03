@@ -276,6 +276,169 @@ class ArrayRequestSend{
   }
 }
 
-class ArrayImageSend{
+class RequestArrayImage{
+  var name;
+  var customurl;
+  var body;
+  List list;
+  List value;
+  List singlelist;
+  List singlevalue;
+  Session session = new Session();
+  Map<String, String> requestHeaders = Map();
+  Map<String, dynamic> build = Map();
 
+  RequestArrayImage({Key key , this.body , this.name , this.customurl , this.list , this.value , this.singlelist , this.singlevalue });
+
+  send(File imageFile) async { 
+    if(customurl != '' || customurl != null){
+      url = customurl;
+    }
+    var tokenTypesession = await session.getString('token_type');
+    var accessTokensession = await session.getString('access_token');
+    requestHeaders['Accept'] = 'application/json';
+    requestHeaders['Authorization'] = '$tokenTypesession $accessTokensession';
+    Map<String, String> headers = requestHeaders;
+
+    print(Uri.parse(url + name));
+    var request = new http.MultipartRequest(
+      "POST", Uri.parse(url + name)
+    );
+    
+
+    request.headers.addAll(headers);
+
+    if (imageFile != null) {
+      request.fields['image'] = base64Encode(imageFile.readAsBytesSync());
+    }
+
+    for(var i = 0; i < singlelist.length ; i++){
+      request.fields[singlelist[i]] = singlevalue[i];
+    }
+
+    var response = await request.send();
+    print(response.statusCode);
+    final respStr = await response.stream.bytesToString();
+    var resp = json.decode(respStr);
+    // modalkeluar('$respStr');
+    if (response.statusCode == 200) {
+      if (resp['error'] != null) {
+        print((resp['error']).toString());
+      } else {
+        print('Success');
+      }
+    } else {
+      var i = response.statusCode;
+      print(resp);
+      print('image failed to upload code $i');
+    }
+
+  }
+
+  sendWithArray(File imageFile) async {
+    if(customurl != '' || customurl != null){
+      url = customurl;
+    }
+    double count = value.length / list.length;
+    int ulang= 0;
+    var tokenTypesession = await session.getString('token_type');
+    var accessTokensession = await session.getString('access_token');
+    requestHeaders['Accept'] = 'application/json';
+    requestHeaders['Authorization'] = '$tokenTypesession $accessTokensession';
+    Map<String, String> headers = requestHeaders;
+
+    var request = new http.MultipartRequest(
+      "POST", Uri.parse(url + name)
+    );
+    
+    request.headers.addAll(headers);
+
+    if (imageFile != null) {
+      request.fields['image'] = base64Encode(imageFile.readAsBytesSync());
+    }
+
+    for(var i = 0 ; i < list.length ; i++){
+      build[list[i]] = [];
+    }
+
+    for(var j = 0 ; j < list.length ; j++){
+      for(var i = 0 + ulang ; i < count.round() ; i++){
+        build[list[j]].add(value[j + (list.length * i)]);
+      }
+      request.fields[list[j]] = build[list[j]];
+    }
+
+    var response = await request.send();
+    print(response.statusCode);
+    final respStr = await response.stream.bytesToString();
+    var resp = json.decode(respStr);
+    // modalkeluar('$respStr');
+    if (response.statusCode == 200) {
+      if (resp['error'] != null) {
+        print((resp['error']).toString());
+      } else {
+        print('Success');
+      }
+    } else {
+      var i = response.statusCode;
+      print(resp);
+      print('image failed to upload code $i');
+    }
+
+  }
+
+  sendWithsingleArray(File imageFile) async {
+    if(customurl != '' || customurl != null){
+      url = customurl;
+    }
+    double count = value.length / list.length;
+    int ulang= 0;
+    var tokenTypesession = await session.getString('token_type');
+    var accessTokensession = await session.getString('access_token');
+    requestHeaders['Accept'] = 'application/json';
+    requestHeaders['Authorization'] = '$tokenTypesession $accessTokensession';
+    Map<String, String> headers = requestHeaders;
+
+    var request = new http.MultipartRequest(
+      "POST", Uri.parse(url + name)
+    );
+    
+    request.headers.addAll(headers);
+
+    if (imageFile != null) {
+      request.fields['image'] = base64Encode(imageFile.readAsBytesSync());
+    }
+
+    for(var i = 0 ; i < list.length ; i++){
+      build[list[i]] = [];
+    }
+
+    for(var j = 0 ; j < list.length ; j++){
+      for(var i = 0 + ulang ; i < count.round() ; i++){
+        build[list[j]].add(value[j + (list.length * i)]);
+      }
+      request.fields[list[j]] = build[list[j]];
+    }
+
+    for(var k = 0; k < singlelist.length ; k++){
+      request.fields[singlelist[k]] = singlevalue[k];
+    }
+
+    var response = await request.send();
+    print(response.statusCode);
+    final respStr = await response.stream.bytesToString();
+    var resp = json.decode(respStr);
+    // modalkeluar('$respStr');
+    if (response.statusCode == 200) {
+      if (resp['error'] != null) {
+        print((resp['error']).toString());
+      } else {
+        print('Success');
+      }
+    } else {
+      var i = response.statusCode;
+      print(resp);
+      print('image failed to upload code $i');
+    }
+  }
 }

@@ -15,7 +15,6 @@ class _LoginPageState extends State<LoginPage> {
   // List headsession = ['nama','username','id','nomor','jenis'];
   // List getsession = ['m_name','m_username','m_id','m_phone','m_gender'];
   login() async {
-    print('login');
     // await Auth(username: username,password: password ,name: 'login',nameStringsession: headsession , dataStringsession: getsession).getuser();
     dynamic login = await Auth(username: username.text , password: password.text ).proses();
     if(login == 'success'){

@@ -18,6 +18,7 @@ var routes = <String, WidgetBuilder>{
   "/pos" : (BuildContext context) => Pointofsales(),
   "/inventory" : (BuildContext context) => Inventory(),
   "/opname" : (BuildContext context) => TambahOpname(),
+  "/splash" : (BuildContext context) => SplashScreen(),
 };
 
 void main() => runApp(MyApp());

@@ -178,7 +178,7 @@ class _Profile extends State<Profile>{
                         padding: EdgeInsets.symmetric(vertical: 10),
                         onPressed: () async {
                           await Auth().logout();
-                          Navigator.pushReplacementNamed(context, '/login');
+                          Navigator.pushReplacementNamed(context, '/splash');
                         },
                       child: Text('Logout',
                         style: TextStyle(
