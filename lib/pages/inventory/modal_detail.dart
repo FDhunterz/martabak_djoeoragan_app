@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class ModalDetailDataStock extends StatefulWidget{
-  var name , code , stock , safety , max , cycle , lastopname , nextopname , image , satuan;
+  var name , code , stock , safety , max , leadtime , lastopname , nextopname , image , satuan;
 
-  ModalDetailDataStock({Key key , this.safety , this.code, this.cycle , this.lastopname , this.max , this.name , this.nextopname , this.stock , this.image , this.satuan});
+  ModalDetailDataStock({Key key , this.safety , this.code, this.leadtime , this.lastopname , this.max , this.name , this.nextopname , this.stock , this.image , this.satuan});
   @override
-  _ModalDetailDataStock createState()=> _ModalDetailDataStock(name: name , code: code, stock: stock, safety:safety , max: max, cycle: cycle, lastopname: lastopname, nextopname: nextopname , image : image , satuan : satuan);
+  _ModalDetailDataStock createState()=> _ModalDetailDataStock(name: name , code: code, stock: stock, safety:safety , max: max, leadtime: leadtime, lastopname: lastopname, nextopname: nextopname , image : image , satuan : satuan);
 }
 
 class _ModalDetailDataStock extends State<ModalDetailDataStock>{
 
-  var name , code , stock , safety , max , cycle , lastopname , nextopname , image , satuan;
+  var name , code , stock , safety , max , leadtime , lastopname , nextopname , image , satuan;
 
-  _ModalDetailDataStock({Key key , this.safety , this.code, this.cycle , this.lastopname , this.max , this.name , this.nextopname , this.stock , this.image , this.satuan});
+  _ModalDetailDataStock({Key key , this.safety , this.code, this.leadtime , this.lastopname , this.max , this.name , this.nextopname , this.stock , this.image , this.satuan});
 
   dialogContent(BuildContext context) {
   return  SingleChildScrollView(
@@ -238,7 +238,7 @@ class _ModalDetailDataStock extends State<ModalDetailDataStock>{
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Text('Nilai maksimal',
+                                Text('stock maksimal',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 10,
@@ -295,13 +295,13 @@ class _ModalDetailDataStock extends State<ModalDetailDataStock>{
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Text('Cycle time',
+                                Text('leadtime time',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 10,
                                   ),
                                 ),
-                                Text( cycle != null ? cycle.toString() :  '',
+                                Text( leadtime != null ? leadtime.toString() + ' Hari' :  '',
                                   style: TextStyle(
                                     color: Colors.green
                                   ),
@@ -329,7 +329,8 @@ class _ModalDetailDataStock extends State<ModalDetailDataStock>{
                                 ),
                                 Text( lastopname != null ? lastopname : '',
                                   style: TextStyle(
-                                    color: Colors.green
+                                    color: Colors.green,
+                                    fontSize: 11,
                                   ),
                                 ),
                               ],
@@ -360,7 +361,8 @@ class _ModalDetailDataStock extends State<ModalDetailDataStock>{
                                 ),
                                 Text( nextopname != null ? nextopname : '',
                                   style: TextStyle(
-                                    color: Colors.green
+                                    color: Colors.green,
+                                    fontSize: 11,
                                   ),
                                 ),
                               ],

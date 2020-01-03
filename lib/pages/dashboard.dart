@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:martabakdjoeragan_app/pages/profile.dart';
 import 'package:martabakdjoeragan_app/utils/Navigator.dart';
+import 'package:martabakdjoeragan_app/core/api.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -16,56 +18,77 @@ class _DashboardPageState extends State<DashboardPage> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           key: scaffoldKey,
-          drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                UserAccountsDrawerHeader(
-                  accountName: Text('Kim Jisoo'),
-                  accountEmail: Text('Jisoocu@gmail.com'),
-                  currentAccountPicture: CircleAvatar(
-                    backgroundImage: AssetImage('images/jisoocu.jpg'),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Color(0xfffbaf18),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.view_list),
-                  title: Text(
-                    'Data  Master',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontFamily: 'Roboto',
-                      color: Color(0xff25282b),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigator.pop(context);
-                    MyNavigator.goToMaster(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.view_list),
-                  title: Text(
-                    'Pembelian',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontFamily: 'Roboto',
-                      color: Color(0xff25282b),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigator.pop(context);
-                    MyNavigator.goToPembelian(context);
-                  },
-                ),
-              ],
-            ),
-          ),
+          // drawer: Drawer(
+          //   child: ListView(
+          //     padding: EdgeInsets.zero,
+          //     children: <Widget>[
+          //       UserAccountsDrawerHeader(
+          //         accountName: Text('Kim Jisoo'),
+          //         accountEmail: Text('Jisoocu@gmail.com'),
+          //         currentAccountPicture: CircleAvatar(
+          //           backgroundImage: AssetImage('images/jisoocu.jpg'),
+          //         ),
+          //         decoration: BoxDecoration(
+          //           color: Color(0xfffbaf18),
+          //         ),
+          //       ),
+          //       ListTile(
+          //         leading: Icon(Icons.view_list),
+          //         title: Text(
+          //           'Data  Master',
+          //           style: TextStyle(
+          //             fontSize: 16.0,
+          //             fontFamily: 'Roboto',
+          //             color: Color(0xff25282b),
+          //           ),
+          //         ),
+          //         onTap: () {
+          //           // Navigator.pop(context);
+          //           MyNavigator.goToMaster(context);
+          //         },
+          //       ),
+          //       ListTile(
+          //         leading: Icon(Icons.view_list),
+          //         title: Text(
+          //           'Pembelian',
+          //           style: TextStyle(
+          //             fontSize: 16.0,
+          //             fontFamily: 'Roboto',
+          //             color: Color(0xff25282b),
+          //           ),
+          //         ),
+          //         onTap: () {
+          //           // Navigator.pop(context);
+          //           MyNavigator.goToPembelian(context);
+          //         },
+          //       ),
+          //     ],
+          //   ),
+          // ),
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(41, 56, 70, 1),
           title: Text('Dashboard'),
+          actions: <Widget>[
+            Material(
+              // borderRadius: BorderRadius.all(Radius.circular(50.0)),  
+              color: Color.fromRGBO(41, 56, 70, 1),
+              child: InkWell(
+              // borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                onTap: (){
+                  popupbawah(Profile());
+                },
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    // borderRadius: BorderRadius.all(Radius.circular(50.0)),  
+                  ),
+                  child : Icon(Icons.person),
+                ),
+              ), 
+            ),
+          ],
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -549,5 +572,17 @@ class _DashboardPageState extends State<DashboardPage> {
         ), 
       ),
     );
+  }
+
+  popupbawah(target) async {
+    await showModalBottomSheet(
+      isScrollControlled: true,
+      backgroundColor: Colors.white.withOpacity(0),
+      context: context,
+      builder: (BuildContext context) => target,
+    );
+    setState(() {
+      
+    });
   }
 }

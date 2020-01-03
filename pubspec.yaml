@@ -32,6 +32,7 @@ dependencies:
   font_awesome_flutter:
   shimmer:
   fl_chart: ^0.6.0
+  loading:
   
 
 dev_dependencies:
@@ -63,6 +64,7 @@ flutter:
     - images/martabak4.jpg
     - images/martabak5.jpg
     - images/empty.png
+    - images/support.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

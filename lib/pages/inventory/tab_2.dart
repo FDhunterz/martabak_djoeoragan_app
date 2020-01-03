@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:martabakdjoeragan_app/core/api.dart';
+import 'package:shimmer/shimmer.dart';
 import 'modal_detail.dart';
 
 List<Listproduk> listproduk = [];
@@ -11,37 +13,48 @@ class InventoryTab2 extends StatefulWidget{
 
 class _InventoryTab2 extends State<InventoryTab2>{
 
-  dummy(){
+  first() async {
+
+    dynamic list = await RequestGet(
+      name: 'master/item/get/data',
+      customrequest: '',
+    ).getdata();
+
     listproduk = [];
-    for(var i = 0 ; i < 15 ; i++){
+    for(var i = 0 ; i < list.length ; i++){
       Listproduk produk = Listproduk(
-        berat: '$i.00',
-        cycletime: '$i',
-        nama: 'Produk $i',
-        safety: '$i',
-        tanggalopname: i.toString()+'0/12/19',
-        nextopname: i.toString() + '0/12/20',
-        satuan: 'kg$i',
-        code: i.toString() + '91828',
-        stock: i.toString() + '00',
-        max: i.toString() + '00000',
+        berat: list[i]['stok']['s_qty'],
+        leadtime: list[i]['setting']['id_lead_time'],
+        nama: list[i]['i_nama'],
+        safety: list[i]['setting']['id_safety_stock'],
+        tanggalopname: list[i]['i_last_opname'],
+        nextopname: list[i]['i_next_opname'],
+        satuan: list[i]['s_inisial'],
+        code: list[i]['i_kode'],
+        stock: list[i]['stok']['s_qty'],
+        max: list[i]['setting']['id_stock_max'],
         image: 'images/martabak1.jpg',
 
       ); 
+      print(list[i]['stok']['s_qty']);
       listproduk.add(produk);
     }
+    setState(() {
+      
+    });
   }
 
   @override
   void initState() {
-    dummy();
+    listproduk = [];
+    first();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: listproduk.length < 1 ? loading() :Container(
         child:   SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -100,7 +113,7 @@ class _InventoryTab2 extends State<InventoryTab2>{
                                 ),
                                 Text(' - '),
                                 Text(
-                                  f.cycletime+ ' Hari',
+                                  f.leadtime+ ' Hari',
                                   style: TextStyle(
                                     color: Color.fromRGBO(35 , 198 , 200, 1),
                                     fontSize: 10,
@@ -147,7 +160,7 @@ class _InventoryTab2 extends State<InventoryTab2>{
                   onTap: () async {
                     await showDialog(
                       context: context,
-                      builder: (BuildContext context) => ModalDetailDataStock(image : f.image,name : f.nama , code : f.code , stock : f.stock , safety : f.safety , max : f.max , cycle : f.cycletime , lastopname : f.tanggalopname , nextopname : f.nextopname , satuan: f.satuan,),
+                      builder: (BuildContext context) => ModalDetailDataStock(image : f.image,name : f.nama , code : f.code , stock : f.stock , safety : f.safety , max : f.max , leadtime : f.leadtime , lastopname : f.tanggalopname , nextopname : f.nextopname , satuan: f.satuan,),
                     );
                   },
                 ),
@@ -158,6 +171,45 @@ class _InventoryTab2 extends State<InventoryTab2>{
       ),
     ) ;
   }
+
+  Widget loading(){
+    return SingleChildScrollView(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            viewloading(0.9,100),
+            viewloading(0.9,10),
+            viewloading(0.7,10),
+            SizedBox(height: 10,),
+            viewloading(0.9,100),
+            viewloading(0.9,10),
+            viewloading(0.7,10),
+            SizedBox(height: 10,),
+            viewloading(0.9,100),
+            viewloading(0.9,10),
+            viewloading(0.7,10),
+          ],
+        ),
+      );
+  }
+
+  viewloading(double sizecustom,double heightcustom){
+    return Shimmer.fromColors(
+      highlightColor: Colors.white,
+      baseColor: Colors.grey[300],
+      child: Container(
+          child: Container(
+            margin: EdgeInsets.only(top: 20),
+            height: heightcustom,
+            width: MediaQuery.of(context).size.width * sizecustom,
+            color: Colors.grey,
+            padding: EdgeInsets.only(left: 20.0, top: 10.0),
+          ),
+        ),
+      );
+  }
 }
 
 class Listproduk{
@@ -165,12 +217,12 @@ class Listproduk{
   var tanggalopname;
   var berat;
   var safety;
-  var cycletime;
+  var leadtime;
   var satuan;
   var code;
   var stock;
   var max ; 
   var nextopname;
   var image;
-  Listproduk({Key key, this.code , this.max , this.stock, this.nama , this.tanggalopname , this.berat , this.cycletime , this.safety, this.satuan , this.nextopname , this.image});
+  Listproduk({Key key, this.code , this.max , this.stock, this.nama , this.tanggalopname , this.berat , this.leadtime , this.safety, this.satuan , this.nextopname , this.image});
 }

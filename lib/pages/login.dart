@@ -17,8 +17,11 @@ class _LoginPageState extends State<LoginPage> {
   login() async {
     print('login');
     // await Auth(username: username,password: password ,name: 'login',nameStringsession: headsession , dataStringsession: getsession).getuser();
-    await Auth(username: username.text , password: password.text ).proses();
-    Navigator.pushReplacementNamed(context, "/dashboard");
+    dynamic login = await Auth(username: username.text , password: password.text ).proses();
+    if(login == 'success'){
+      Navigator.pushReplacementNamed(context, "/dashboard");
+    }
+
     loading = false;
   }
 

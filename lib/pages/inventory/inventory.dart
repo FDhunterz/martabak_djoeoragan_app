@@ -35,27 +35,6 @@ class _InventoryState extends State<Inventory> {
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(41, 56, 70, 1),
           title: Text('Inventory'),
-          actions: <Widget>[
-            Material(
-              // borderRadius: BorderRadius.all(Radius.circular(50.0)),  
-              color: Color.fromRGBO(41, 56, 70, 1),
-              child: InkWell(
-              // borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                onTap: (){
-
-                },
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    // borderRadius: BorderRadius.all(Radius.circular(50.0)),  
-                  ),
-                  child : Icon(Icons.person),
-                ),
-              ), 
-            ),
-          ],
           leading: Material( 
             color: Color.fromRGBO(41, 56, 70, 1),
             child: InkWell(

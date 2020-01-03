@@ -28,13 +28,13 @@ class Auth{
   Auth({Key key , this.nameStringsession, this.dataStringsession, this.nameIntsession, this.dataIntsession, this.nameBoolsession, this.dataBoolsession,this.name ,this.username, this.password , this.getDataInt , this.getDataBool , this.getDataString});
 
 
-  proses() async {
+  Future<dynamic> proses() async {
     Fluttertoast.showToast(msg:'Proses Login');
    try{
-    final sendlogin = await http.post(noapiurl+'oauth/token', body: {
-        'grant_type': grantType,
-        'client_id': clientId,
-        'client_secret': clientsecret,
+    final sendlogin = await http.post(noapiurl+'api/login', body: {
+        // 'grant_type': grantType,
+        // 'client_id': clientId,
+        // 'client_secret': clientsecret,
         "username": username,
         "password": password,
       }, headers: {
@@ -42,18 +42,26 @@ class Auth{
       });
 
   dynamic getresponse = json.decode(sendlogin.body);
+  print(getresponse);
     if(sendlogin.statusCode == 200){
       if (getresponse['error'] == 'invalid_credentials') {
           Fluttertoast.showToast(msg:getresponse['message']);
+          return 'error';
         } else if (getresponse['error'] == 'invalid_request') {
           Fluttertoast.showToast(msg:getresponse['hint']);
-        } else if (getresponse['token_type'] == 'Bearer') {
-          session.saveString('access_token', getresponse['access_token']);
-          session.saveString('token_type', getresponse['token_type']);
+          return 'error';
+        }else if (getresponse['status'] == 'failed') {
+          Fluttertoast.showToast(msg:'Username / Password Salah');
+          return 'error';
+        } else if (getresponse['credential'] != null) {
+          session.saveString('access_token', getresponse['credential']);
+          session.saveInteger('user_id', getresponse['user_id']);
+          session.saveString('token_type', 'Bearer');
+          Fluttertoast.showToast(msg:'Token saved');
+          return 'success';
         }
-      Fluttertoast.showToast(msg:'Token saved');
       // await getuser();
-      return 'success';
+      return 'error';
     }else{
       Fluttertoast.showToast(msg:'Error Code ${sendlogin.statusCode}');
       return 'failure';
@@ -71,7 +79,7 @@ class Auth{
     return 'Something Wrong';
   }
 
-  getuser() async {
+ Future<dynamic> getuser() async {
     dynamic getresponse = await RequestGet(name: name,customrequest: '').getdata();
     // print(getresponse['cm_name']);
     if(getresponse.length > 0 ){
@@ -100,7 +108,7 @@ class Auth{
     }
   }
 
-  getsession() async {
+  Future<dynamic> getsession() async {
     Map <String,dynamic> result = new Map();
     if(getDataString != null){    
       for(var i = 0 ; i < getDataString.length;i++){
@@ -119,9 +127,12 @@ class Auth{
         result[getDataBool[i]] = await session.getBool(getDataBool[i]);
       }
     }
-
-
     return result;
+  }
+
+  Future<dynamic> logout() async {
+    await session.clear();
+    // print( await session.getString('access_token') == 'Tidak ditemukan' ? 'Tidak ditemukan' : 'error');
   }
 }
 
@@ -134,7 +145,7 @@ class RequestGet{
   String customurl;
   RequestGet({Key key , this.name , this.header , this.withbody , this.customrequest , this.customurl});
 
-  getdata() async {
+  Future<dynamic> getdata() async {
 
     if(customurl != null && customurl != ''){
       url = customurl;
@@ -180,7 +191,7 @@ class RequestPost{
   final msg;
   String customurl;
   RequestPost({Key key , this.name , this.header,this.body,this.msg , this.customurl});
-  sendrequest() async {
+  Future<dynamic> sendrequest() async {
     if(customurl != null && customurl != ''){
       url = customurl;
     }
@@ -205,8 +216,8 @@ class RequestPost{
       return dataresponse;
     }else{
       Fluttertoast.showToast(msg:'Error Code ${data.statusCode}');
-      return 'gagal';
     }
+      return 'gagal';
 
     } on SocketException catch (_) {
       Fluttertoast.showToast(msg:'Connection Timed Out',);
