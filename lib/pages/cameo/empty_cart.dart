@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class emptyCart extends StatelessWidget {
+class EmptyCart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,7 +27,7 @@ class emptyCart extends StatelessWidget {
                   buttonColor: Color(0xfffbaf18),
                   child: RaisedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/pos");
+                      Navigator.pop(context);
                     },
                     child: const Text(
                         'Tambah Sekarang',

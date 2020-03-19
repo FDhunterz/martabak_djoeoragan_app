@@ -10,7 +10,7 @@ class PembayaranSupplierPage extends StatefulWidget {
 class _PembayaranSupplierPageState extends State<PembayaranSupplierPage> {
   DateTime dates;
 
-  List _PayMethod =
+  List _payMethod =
   ["Pembayaran Tunai", "Pembayaran Transfer"];
 
   List<DropdownMenuItem<String>> _dropDownMenuItems;
@@ -25,7 +25,7 @@ class _PembayaranSupplierPageState extends State<PembayaranSupplierPage> {
 
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
-    for (String PM in _PayMethod) {
+    for (String PM in _payMethod) {
       items.add(new DropdownMenuItem(
           value: PM,
           child: new Text(PM)

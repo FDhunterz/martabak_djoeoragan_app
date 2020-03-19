@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:martabakdjoeragan_app/pages/profile.dart';
 import 'package:flutter/services.dart';
-import 'package:martabakdjoeragan_app/utils/Navigator.dart';
-import 'package:martabakdjoeragan_app/core/api.dart';
+// import 'package:martabakdjoeragan_app/utils/Navigator.dart';
+// import 'package:martabakdjoeragan_app/core/api.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -576,7 +576,7 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  popupbawah(target) async {
+  popupbawah(Widget target) async {
     await showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: Colors.white.withOpacity(0),

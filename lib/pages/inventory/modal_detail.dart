@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class ModalDetailDataStock extends StatefulWidget{
-  var name , code , stock , safety , max , leadtime , lastopname , nextopname , image , satuan;
+  final name , code , stock , safety , max , leadtime , lastopname , nextopname , image , satuan;
 
   ModalDetailDataStock({Key key , this.safety , this.code, this.leadtime , this.lastopname , this.max , this.name , this.nextopname , this.stock , this.image , this.satuan});
   @override
@@ -12,7 +12,7 @@ class ModalDetailDataStock extends StatefulWidget{
 
 class _ModalDetailDataStock extends State<ModalDetailDataStock>{
 
-  var name , code , stock , safety , max , leadtime , lastopname , nextopname , image , satuan;
+  final name , code , stock , safety , max , leadtime , lastopname , nextopname , image , satuan;
 
   _ModalDetailDataStock({Key key , this.safety , this.code, this.leadtime , this.lastopname , this.max , this.name , this.nextopname , this.stock , this.image , this.satuan});
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:martabakdjoeragan_app/main.dart';
+// import 'package:martabakdjoeragan_app/main.dart';
 import 'package:martabakdjoeragan_app/pages/dashboard.dart';
 import 'package:martabakdjoeragan_app/utils/foods.dart';
-import 'package:martabakdjoeragan_app/store/DataStore.dart';
+// import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import 'package:provider/provider.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cart_bloc.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cart.dart';
-
+import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 
 class Pointofsales extends StatefulWidget {
   Pointofsales({Key key}) : super(key: key);
@@ -19,11 +19,47 @@ class _PointofsalesState extends State<Pointofsales> {
   final TextEditingController _searchControl = new TextEditingController();
 
   @override
+  void initState() {
+    jsonToModel();
+
+    super.initState();
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  void jsonToModel() {
+    foods = <MartabakModel>[];
+    for (var data in foodX) {
+      print(data['value']);
+      foods.add(
+        MartabakModel(
+          id: data['id'],
+          name: data['name'],
+          desc: data['desc'],
+          details: data['details'],
+          img: data['img'],
+          price: data['price'],
+          sysprice: data['sysprice'].toString(),
+          qty: int.parse(data['value']),
+        ),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
+    // bloc.cart.clear();
     int totalCount = 0;
     if (bloc.cart.length > 0) {
-      totalCount = bloc.cart.values.reduce((a, b) => a + b);
+      for (int i = 0; i < bloc.cart.length; i++) {
+        totalCount += bloc.cart[i].qty;
+      }
     }
 
     return Scaffold(
@@ -91,23 +127,23 @@ class _PointofsalesState extends State<Pointofsales> {
                       ),
                       new Positioned(
                           child: new Stack(
-                            children: <Widget>[
-                              new Icon(Icons.brightness_1,
-                                  size: 20.0, color: Colors.red[700]),
-                              new Positioned(
-                                  top: 0.0,
-                                  right: 6.5,
-                                  child: new Center(
-                                    child: new Text(
-                                      '$totalCount',
-                                      style: new TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )),
-                            ],
-                          )),
+                        children: <Widget>[
+                          new Icon(Icons.brightness_1,
+                              size: 20.0, color: Colors.red[700]),
+                          new Positioned(
+                              top: 0.0,
+                              right: 6.5,
+                              child: new Center(
+                                child: new Text(
+                                  '$totalCount',
+                                  style: new TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )),
+                        ],
+                      )),
                     ],
                   ),
                 )),
@@ -118,7 +154,6 @@ class _PointofsalesState extends State<Pointofsales> {
       ),
       body: ListView(
         children: <Widget>[
-
           Padding(
             padding: EdgeInsets.all(20),
             child: Container(
@@ -128,7 +163,6 @@ class _PointofsalesState extends State<Pointofsales> {
                   Radius.circular(5.0),
                 ),
               ),
-
               child: TextField(
                 style: TextStyle(
                   fontSize: 15.0,
@@ -138,10 +172,14 @@ class _PointofsalesState extends State<Pointofsales> {
                   contentPadding: EdgeInsets.all(10.0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
-                    borderSide: BorderSide(color: Colors.white,),
+                    borderSide: BorderSide(
+                      color: Colors.white,
+                    ),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white,),
+                    borderSide: BorderSide(
+                      color: Colors.white,
+                    ),
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                   hintText: "Pencarian",
@@ -159,7 +197,6 @@ class _PointofsalesState extends State<Pointofsales> {
               ),
             ),
           ),
-
           Container(
             padding: EdgeInsets.only(top: 10, left: 20),
             height: 250,
@@ -169,8 +206,6 @@ class _PointofsalesState extends State<Pointofsales> {
               primary: false,
               itemCount: foods == null ? 0 : foods.length,
               itemBuilder: (BuildContext context, int index) {
-
-                Map food = foods.reversed.toList()[index];
                 return Padding(
                   padding: const EdgeInsets.only(right: 20),
                   child: InkWell(
@@ -183,18 +218,17 @@ class _PointofsalesState extends State<Pointofsales> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image.asset(
-                              "${food["img"]}",
+                              foods[index].img,
                               height: 178,
                               width: 140,
                               fit: BoxFit.cover,
                             ),
                           ),
-
                           SizedBox(height: 7),
                           Container(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "${food["name"]}",
+                              foods[index].name,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
@@ -203,12 +237,11 @@ class _PointofsalesState extends State<Pointofsales> {
                               textAlign: TextAlign.left,
                             ),
                           ),
-
                           SizedBox(height: 3),
                           Container(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "${food["desc"]}",
+                              foods[index].desc,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13,
@@ -218,7 +251,6 @@ class _PointofsalesState extends State<Pointofsales> {
                               textAlign: TextAlign.left,
                             ),
                           ),
-
                         ],
                       ),
                     ),
@@ -228,7 +260,6 @@ class _PointofsalesState extends State<Pointofsales> {
               },
             ),
           ),
-
           Padding(
             padding: EdgeInsets.all(20),
             child: ListView.builder(
@@ -237,112 +268,105 @@ class _PointofsalesState extends State<Pointofsales> {
               shrinkWrap: true,
               itemCount: foods == null ? 0 : foods.length,
               itemBuilder: (BuildContext context, int index) {
-                Map food = foods[index];
                 return Padding(
-                  padding: const EdgeInsets.only(bottom:15.0),
+                  padding: const EdgeInsets.only(bottom: 15.0),
                   child: InkWell(
-                    child: Container(
-                      height: 85,
+                      child: Container(
+                        height: 85,
 //                    color: Colors.red,
-                      child: Row(
-                        children: <Widget>[
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Image.asset(
-                              "${food["img"]}",
-                              height: 70,
-                              width: 70,
-                              fit: BoxFit.cover,
+                        child: Row(
+                          children: <Widget>[
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Image.asset(
+                                foods[index].img,
+                                height: 70,
+                                width: 70,
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
-
-                          SizedBox(width: 15),
-
-                          Container(
-                            height: 80,
-                            width: MediaQuery.of(context).size.width-130,
-                            child: ListView(
-                              primary: false,
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              children: <Widget>[
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "${food["name"]}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16,
-                                    ),
-                                    maxLines: 2,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-
-                                SizedBox(height: 3),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "${food["desc"]}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.blueGrey[300],
-                                    ),
-                                    maxLines: 1,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "${food["price"]}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
-                                        maxLines: 1,
-                                        textAlign: TextAlign.left,
+                            SizedBox(width: 15),
+                            Container(
+                              height: 80,
+                              width: MediaQuery.of(context).size.width - 130,
+                              child: ListView(
+                                primary: false,
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                children: <Widget>[
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      foods[index].name,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16,
                                       ),
+                                      maxLines: 2,
+                                      textAlign: TextAlign.left,
                                     ),
-                                    Container(
-                                      child: ButtonTheme(
-                                        minWidth: 25.0,
-                                        height: 25.0,
-                                        buttonColor: Color(0xfffbaf18),
-                                        child: RaisedButton(
-                                          onPressed: () {
-                                            bloc.addToCart(index);
-                                          },
-                                          child: const Text(
-                                              'Tambah',
-                                              style: TextStyle(fontSize: 13, color: Colors.white)
+                                  ),
+                                  SizedBox(height: 3),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      foods[index].desc,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        color: Colors.blueGrey[300],
+                                      ),
+                                      maxLines: 1,
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          "${foods[index].price}",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                          maxLines: 1,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                      Container(
+                                        child: ButtonTheme(
+                                          minWidth: 25.0,
+                                          height: 25.0,
+                                          buttonColor: Color(0xfffbaf18),
+                                          child: RaisedButton(
+                                            onPressed: () {
+                                              bloc.addToCart(foods[index]);
+                                            },
+                                            child: const Text('Tambah',
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: Colors.white)),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    onTap: () {
-                      bloc.addToCart(index);
-                    }
-                  ),
+                      onTap: () {
+                        bloc.addToCart(foods[index]);
+                      }),
                 );
               },
             ),
           ),
-
         ],
       ),
     );

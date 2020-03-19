@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:martabakdjoeragan_app/pages/inventory/tab_2.dart';
+// import 'package:martabakdjoeragan_app/pages/inventory/tab_2.dart';
 import 'tambah_opname.dart';
 
 TextEditingController uqty = TextEditingController();
@@ -211,8 +211,8 @@ class _IsiGudang extends State<IsiGudang>{
 }
 
 class UbahQty extends StatefulWidget{
-  var code;
-  var qty;
+  final code;
+  final qty;
   UbahQty({Key key , this.code , this.qty});
   _UbahQty createState()=> _UbahQty(code: code , qty: qty);
 }

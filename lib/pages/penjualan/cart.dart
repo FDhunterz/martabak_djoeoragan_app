@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cart_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:martabakdjoeragan_app/pages/cameo/empty_cart.dart';
-import 'package:martabakdjoeragan_app/utils/foods.dart';
+// import 'package:martabakdjoeragan_app/utils/foods.dart';
+import 'package:intl/intl.dart';
 
 class CartPage extends StatelessWidget {
   CartPage({Key key}) : super(key: key);
@@ -11,6 +12,8 @@ class CartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
     var cart = bloc.cart;
+
+    NumberFormat numberFormat = NumberFormat.simpleCurrency(decimalDigits: 2,name: 'Rp .');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -26,7 +29,7 @@ class CartPage extends StatelessWidget {
         elevation: 0.0,
         backgroundColor: Colors.white,
       ),
-      body: cart.isEmpty ? emptyCart() : ListView(
+      body: cart.isEmpty ? EmptyCart() : ListView(
         children: <Widget>[
           Padding(
               padding: EdgeInsets.all(10.0),
@@ -39,7 +42,7 @@ class CartPage extends StatelessWidget {
                       Text("Order Item(s)", style: TextStyle(fontSize: 18.0, color: Color(0xff25282b), fontWeight: FontWeight.bold),),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "/pos");
+                          Navigator.pop(context);
                         },
                         child: Text("+ Tambah", style: TextStyle(fontSize: 15.0, color: Color(0xfffbaf18),),),
                       )
@@ -59,10 +62,9 @@ class CartPage extends StatelessWidget {
                     scrollDirection: Axis.vertical,
                     itemCount: cart.length,
                     itemBuilder: (context, index) {
-                      int itemIndex = cart.keys.toList()[index];
-                      int count = cart[itemIndex];
-                      Map food = foods[itemIndex];
-                      int countPrice = foods[itemIndex]["sysprice"] * count;
+                      int count = cart[index].qty;
+                      
+                      double countPrice = double.parse(cart[index].sysprice) * count;
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom:15.0),
@@ -74,7 +76,7 @@ class CartPage extends StatelessWidget {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(5),
                                 child: Image.asset(
-                                  "images/martabak${itemIndex + 1}.jpg",
+                                  "images/martabak${cart[index].id}.jpg",
                                   height: 50,
                                   width: 50,
                                   fit: BoxFit.cover,
@@ -97,7 +99,7 @@ class CartPage extends StatelessWidget {
                                         Container(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            "${food["name"]}",
+                                            cart[index].name,
                                             style: TextStyle(
                                               fontWeight: FontWeight.w700,
                                               fontSize: 16,
@@ -115,7 +117,7 @@ class CartPage extends StatelessWidget {
                                         Container(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            "${food["price"]}",
+                                            cart[index].price,
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 14,
@@ -134,7 +136,7 @@ class CartPage extends StatelessWidget {
                                                       padding: EdgeInsets.only(left: 10.0),
                                                       child: GestureDetector(
                                                         onTap: () {
-                                                          bloc.reduceQty(itemIndex);
+                                                          bloc.reduceQty(cart[index]);
                                                         },
                                                         child: const Text(
                                                             '-',
@@ -158,7 +160,7 @@ class CartPage extends StatelessWidget {
                                                       padding: EdgeInsets.only(right: 10.0),
                                                       child: GestureDetector(
                                                         onTap: () {
-                                                          bloc.addToCart(itemIndex);
+                                                          bloc.addToCart(cart[index]);
                                                         },
                                                         child: const Text(
                                                             '+',
@@ -190,7 +192,7 @@ class CartPage extends StatelessWidget {
         ],
       ),
 
-      bottomNavigationBar: cart.isEmpty ? emptyCart() : Container(
+      bottomNavigationBar: cart.isEmpty ? EmptyCart() : Container(
         height: 270,
         margin: EdgeInsets.only(top: 10.0),
         width: MediaQuery.of(context).size.width,
@@ -225,7 +227,7 @@ class CartPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text("Price(estimated)", style: TextStyle(fontFamily: "Roboto", fontSize: 14.0, color: Color(0xff25282b), fontWeight: FontWeight.w500),),
-                        Text("10.000", style: TextStyle(fontFamily: "Roboto", fontSize: 14.0, color: Color(0xff25282b), fontWeight: FontWeight.w500),)
+                        Text(numberFormat.format(bloc.totalHarga), style: TextStyle(fontFamily: "Roboto", fontSize: 14.0, color: Color(0xff25282b), fontWeight: FontWeight.w500),)
                       ],
                     ),
                   ),
@@ -235,7 +237,7 @@ class CartPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text("PPN", style: TextStyle(fontFamily: "Roboto", fontSize: 14.0, color: Color(0xff25282b), fontWeight: FontWeight.w500),),
-                        Text("1.000", style: TextStyle(fontFamily: "Roboto", fontSize: 14.0, color: Color(0xff25282b), fontWeight: FontWeight.w500),)
+                        Text(numberFormat.format(bloc.ppn), style: TextStyle(fontFamily: "Roboto", fontSize: 14.0, color: Color(0xff25282b), fontWeight: FontWeight.w500),)
                       ],
                     ),
                   ),
@@ -254,7 +256,7 @@ class CartPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text("Total Payment", style: TextStyle(fontFamily: "Roboto", fontSize: 14.0, color: Color(0xff25282b), fontWeight: FontWeight.w500),),
-                        Text("11.000", style: TextStyle(fontFamily: "Roboto", fontSize: 14.0, color: Color(0xff25282b), fontWeight: FontWeight.w500),)
+                        Text(numberFormat.format(bloc.totalHargaPenjualan), style: TextStyle(fontFamily: "Roboto", fontSize: 14.0, color: Color(0xff25282b), fontWeight: FontWeight.w500),)
                       ],
                     ),
                   ),
@@ -269,7 +271,7 @@ class CartPage extends StatelessWidget {
                 buttonColor: Color(0xfffbaf18),
                 child: RaisedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, "/pos");
+                    Navigator.pop(context);
                   },
                   child: const Text(
                       'Order Sekarang',

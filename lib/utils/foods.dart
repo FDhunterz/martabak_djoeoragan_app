@@ -1,9 +1,12 @@
-List foods = [
+import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
+
+List foodX = [
   {
+    "id": 1,
     "name": "Martabak Coklat",
     "img": "images/martabak1.jpg",
     "price": r"Rp. 25.000.00",
-    "sysprice": 2500000,
+    "sysprice": 25000.00,
     "desc": "Meses Cerres",
     "value": "1",
     "details": "Pellentesque in ipsum id orci porta dapibus. "
@@ -17,10 +20,11 @@ List foods = [
         "Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.",
   },
   {
+    "id": 2,
     "name": "Martabak Red Velvet",
     "img": "images/martabak2.jpg",
     "price": r"Rp. 50.000.00",
-    "sysprice": 5000000,
+    "sysprice": 50000.00,
     "desc": "Red Velvet Flavor",
     "value": "1",
     "details": "Pellentesque in ipsum id orci porta dapibus. "
@@ -34,10 +38,11 @@ List foods = [
         "Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.",
   },
   {
+    "id": 3,
     "name": "Martabak Keju",
     "img": "images/martabak3.jpg",
     "price": r"Rp. 30.000.00",
-    "sysprice": 3000000,
+    "sysprice": 30000.00,
     "desc": "Keju Chedar",
     "value": "1",
     "details": "Pellentesque in ipsum id orci porta dapibus. "
@@ -51,10 +56,11 @@ List foods = [
         "Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.",
   },
   {
+    "id": 4,
     "name": "Martabak Nutela",
     "img": "images/martabak4.jpg",
     "price": r"Rp. 55.000.00",
-    "sysprice": 5500000,
+    "sysprice": 55000.00,
     "desc": "Nutela",
     "value": "1",
     "details": "Pellentesque in ipsum id orci porta dapibus. "
@@ -68,10 +74,11 @@ List foods = [
         "Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.",
   },
   {
+    "id": 5,
     "name": "Martabak Ultimate",
     "img": "images/martabak5.jpg",
     "price": r"Rp. 250.000.00",
-    "sysprice": 25000000,
+    "sysprice": 250000.00,
     "desc": "Meses, Kacang Merah, Green Tea",
     "value": "1",
     "details": "Pellentesque in ipsum id orci porta dapibus. "
@@ -85,3 +92,5 @@ List foods = [
         "Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.",
   },
 ];
+
+List<MartabakModel> foods = <MartabakModel>[];
