@@ -48,11 +48,21 @@ class _PembelianPesananPageState extends State<PembelianPesananPage> {
                       Container(
                         height: 10.0,
                       ),
-                      DateTimePickerFormField(
-                        inputType: InputType.date,
+                      DateTimeField(
+                        maxLength: 10,
                         format: DateFormat("yyyy-MM-dd"),
-                        initialDate: DateTime(2019, 1, 1),
-                        editable: false,
+                        initialValue: dates,
+                        onShowPicker: (context, currentValue) {
+                          return showDatePicker(
+                            firstDate: DateTime(
+                              DateTime.now().year,
+                            ),
+                            initialDate: currentValue ?? DateTime.now(),
+                            context: context,
+                            lastDate: DateTime(DateTime.now().year + 30),
+                            
+                          );
+                        },
                         decoration: InputDecoration(
                           labelText: 'Pilih Tanggal',
                           hasFloatingPlaceholder: false,
@@ -61,9 +71,11 @@ class _PembelianPesananPageState extends State<PembelianPesananPage> {
                                 BorderRadius.all(Radius.circular(5.0)),
                           ),
                         ),
-                        onChanged: (dt) {
-                          setState(() => dates = dt);
-                          print('Selected date: $dates');
+                        readOnly: true,
+                        onChanged: (ini) {
+                          setState(() {
+                            dates = ini;
+                          });
                         },
                       ),
                       Container(
@@ -112,7 +124,8 @@ class _PembelianPesananPageState extends State<PembelianPesananPage> {
                                   fontSize: 21.0,
                                   fontWeight: FontWeight.bold),
                             ),
-                            padding: EdgeInsets.only(left: 10.0, top:5.0, bottom: 5.0),
+                            padding: EdgeInsets.only(
+                                left: 10.0, top: 5.0, bottom: 5.0),
                           ),
                         ]),
                     Container(

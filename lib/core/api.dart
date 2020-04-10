@@ -56,6 +56,7 @@ class Auth{
         } else if (getresponse['credential'] != null) {
           session.saveString('access_token', getresponse['credential']);
           session.saveInteger('user_id', getresponse['user_id']);
+          session.saveInteger('us_perusahaan', getresponse['data']['us_perusahaan']);
           session.saveString('token_type', 'Bearer');
           Fluttertoast.showToast(msg:'Token saved');
           return 'success';
@@ -167,6 +168,9 @@ class RequestGet{
       print(dataresponse.toString());
       if(data.statusCode == 200){
       return dataresponse;
+    } else if(data.statusCode == 401){
+      Fluttertoast.showToast(msg:'Token Kedaluwarsa, silahkan login kembali');
+      return 'token expired';
     }else{
       Fluttertoast.showToast(msg:'Error Code ${data.statusCode}');
       return 'failure';

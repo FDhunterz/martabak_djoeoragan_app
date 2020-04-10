@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 // import 'package:martabakdjoeragan_app/utils/Navigator.dart';
 import '../core/api.dart';
 
-
 TextEditingController username = TextEditingController();
 TextEditingController password = TextEditingController();
-bool loading = false; 
+FocusNode usernameFocus = FocusNode();
+FocusNode passwordFocus = FocusNode();
+bool loading = false;
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -16,8 +18,9 @@ class _LoginPageState extends State<LoginPage> {
   // List getsession = ['m_name','m_username','m_id','m_phone','m_gender'];
   login() async {
     // await Auth(username: username,password: password ,name: 'login',nameStringsession: headsession , dataStringsession: getsession).getuser();
-    dynamic login = await Auth(username: username.text , password: password.text ).proses();
-    if(login == 'success'){
+    dynamic login =
+        await Auth(username: username.text, password: password.text).proses();
+    if (login == 'success') {
       Navigator.pushReplacementNamed(context, "/dashboard");
     }
 
@@ -28,33 +31,38 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final usernameField = TextField(
       controller: username,
+      focusNode: usernameFocus,
       autofocus: true,
       obscureText: false,
       style: TextStyle(
-          fontFamily: 'Roboto',
-          fontSize: 16.0,
-          color: Color(0xff25282b),
+        fontFamily: 'Roboto',
+        fontSize: 16.0,
+        color: Color(0xff25282b),
       ),
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Nama Pengguna",
-          hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.black38, fontSize: 14),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              borderSide: BorderSide(color: Colors.black38)),
-          border:
-          OutlineInputBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(5.0),
-              topRight: Radius.circular(5.0),
-              bottomRight: Radius.circular(5.0),
-              bottomLeft: Radius.circular(5.0),
-            ),
-          )
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        hintText: "Nama Pengguna",
+        hintStyle: TextStyle(
+            fontWeight: FontWeight.w300, color: Colors.black38, fontSize: 14),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            borderSide: BorderSide(color: Colors.black38)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(5.0),
+            topRight: Radius.circular(5.0),
+            bottomRight: Radius.circular(5.0),
+            bottomLeft: Radius.circular(5.0),
+          ),
+        ),
       ),
+      onEditingComplete: () {
+        FocusScope.of(context).requestFocus(passwordFocus);
+      },
     );
     final passwordField = TextField(
       controller: password,
+      focusNode: passwordFocus,
       obscureText: true,
       style: TextStyle(
         fontFamily: 'Roboto',
@@ -62,22 +70,25 @@ class _LoginPageState extends State<LoginPage> {
         color: Color(0xff25282b),
       ),
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Kata Sandi",
-          hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.black38, fontSize: 14),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              borderSide: BorderSide(color: Colors.black38)),
-          border:
-          OutlineInputBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(5.0),
-              topRight: Radius.circular(5.0),
-              bottomRight: Radius.circular(5.0),
-              bottomLeft: Radius.circular(5.0),
-            ),
-          )
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        hintText: "Kata Sandi",
+        hintStyle: TextStyle(
+            fontWeight: FontWeight.w300, color: Colors.black38, fontSize: 14),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            borderSide: BorderSide(color: Colors.black38)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(5.0),
+            topRight: Radius.circular(5.0),
+            bottomRight: Radius.circular(5.0),
+            bottomLeft: Radius.circular(5.0),
+          ),
+        ),
       ),
+      onEditingComplete: () {
+        login();
+      },
     );
     final loginButton = Material(
       elevation: 5.0,
@@ -88,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () async {
           // setState(() {
-          //   loading = true;            
+          //   loading = true;
           // });
           // await login();
           // setState(() {
@@ -98,13 +109,14 @@ class _LoginPageState extends State<LoginPage> {
           // Navigator.pushReplacementNamed(context, "/dashboard");
           login();
         },
-        child: Text("Masuk",
+        child: Text(
+          "Masuk",
           textAlign: TextAlign.center,
           style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'Roboto',
-              fontSize: 14.0,
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            fontFamily: 'Roboto',
+            fontSize: 14.0,
           ),
         ),
       ),
@@ -127,7 +139,8 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () {
               // MyNavigator.goToDashboard(context);
             },
-            child: Text("Hubungi Kami Segera",
+            child: Text(
+              "Hubungi Kami Segera",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
@@ -142,11 +155,8 @@ class _LoginPageState extends State<LoginPage> {
     );
     final footer = Text(
       "Powered by Alamraya Software v.1.0 © 2019",
-      style: TextStyle(
-        color: Colors.grey,
-        fontFamily: 'Roboto',
-        fontSize: 10.0
-      ),
+      style:
+          TextStyle(color: Colors.grey, fontFamily: 'Roboto', fontSize: 10.0),
     );
 
     return Scaffold(
@@ -172,7 +182,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-
                   Container(
                     width: double.infinity,
                     child: Row(
@@ -182,41 +191,36 @@ class _LoginPageState extends State<LoginPage> {
                         Expanded(
                           child: Container(
                             decoration: BoxDecoration(
-                              border: BorderDirectional(
-                                bottom: BorderSide(width: 1 , color: Colors.black45),
-                              )
+                                border: BorderDirectional(
+                              bottom:
+                                  BorderSide(width: 1, color: Colors.black45),
+                            )),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              'Login',
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16),
                             ),
                           ),
                         ),
-
-                        Expanded(
-                          child:  Center(
-                            child: Text('Login',
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                color: Colors.black45,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16
-                              ),
-                            ),
-                          ), 
-                        ),
-
                         Expanded(
                           child: Container(
                             decoration: BoxDecoration(
-                              border: BorderDirectional(
-                                bottom: BorderSide(width: 1 , color: Colors.black45),
-                              )
-                            ),
+                                border: BorderDirectional(
+                              bottom:
+                                  BorderSide(width: 1, color: Colors.black45),
+                            )),
                           ),
                         ),
-
-                        
-                      ],  
+                      ],
                     ),
                   ),
-
                   SizedBox(height: 20.0),
                   usernameField,
                   SizedBox(height: 15.0),
@@ -228,17 +232,16 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 15.0,
                   ),
-                adsSection,
-                SizedBox(
-                  height: 15.0,
-                ),
-                footer,
-                SizedBox(
-                  height: 1.0,
-                )
+                  adsSection,
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  footer,
+                  SizedBox(
+                    height: 1.0,
+                  )
                 ],
               ),
-
             ),
           ),
         ),

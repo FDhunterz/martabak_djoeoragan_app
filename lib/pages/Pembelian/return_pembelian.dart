@@ -11,8 +11,7 @@ class _ReturnPembelianPageState extends State<ReturnPembelianPage> {
   int _itemCount = 0;
   DateTime dates;
 
-  List _ReturnMethod =
-  ["Tukar Barang Baru", "Potong Nota"];
+  List _ReturnMethod = ["Tukar Barang Baru", "Potong Nota"];
 
   List<DropdownMenuItem<String>> _dropDownMenuItems;
   String _currentMethodRetrn;
@@ -27,10 +26,7 @@ class _ReturnPembelianPageState extends State<ReturnPembelianPage> {
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
     for (String RM in _ReturnMethod) {
-      items.add(new DropdownMenuItem(
-          value: RM,
-          child: new Text(RM)
-      ));
+      items.add(new DropdownMenuItem(value: RM, child: new Text(RM)));
     }
     return items;
   }
@@ -75,16 +71,15 @@ class _ReturnPembelianPageState extends State<ReturnPembelianPage> {
                       InputDecorator(
                         decoration: InputDecoration(
                           labelText: 'Metode Return',
-                          errorStyle: TextStyle(color: Colors.redAccent, fontSize: 16.0),
+                          errorStyle: TextStyle(
+                              color: Colors.redAccent, fontSize: 16.0),
                           hintStyle: TextStyle(fontSize: 16.0),
                           border: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.circular(5.0)
-                          ),
+                              borderRadius: BorderRadius.circular(5.0)),
                         ),
                         child: Container(
                           height: 20.0,
-                          child:DropdownButtonHideUnderline(
+                          child: DropdownButtonHideUnderline(
                             child: DropdownButton(
                               value: _currentMethodRetrn,
                               items: _dropDownMenuItems,
@@ -96,11 +91,20 @@ class _ReturnPembelianPageState extends State<ReturnPembelianPage> {
                       Container(
                         height: 10.0,
                       ),
-                      DateTimePickerFormField(
-                        inputType: InputType.date,
+                      DateTimeField(
+                        maxLength: 10,
                         format: DateFormat("yyyy-MM-dd"),
-                        initialDate: DateTime(2019, 1, 1),
-                        editable: false,
+                        initialValue: dates,
+                        onShowPicker: (context, currentValue) {
+                          return showDatePicker(
+                            firstDate: DateTime(
+                              DateTime.now().year,
+                            ),
+                            initialDate: currentValue ?? DateTime.now(),
+                            context: context,
+                            lastDate: DateTime(DateTime.now().year + 30),
+                          );
+                        },
                         decoration: InputDecoration(
                           labelText: 'Tanggal Return',
                           hasFloatingPlaceholder: false,
@@ -109,9 +113,11 @@ class _ReturnPembelianPageState extends State<ReturnPembelianPage> {
                                 BorderRadius.all(Radius.circular(5.0)),
                           ),
                         ),
-                        onChanged: (dt) {
-                          setState(() => dates = dt);
-                          print('Selected date: $dates');
+                        readOnly: true,
+                        onChanged: (ini) {
+                          setState(() {
+                            dates = ini;
+                          });
                         },
                       ),
                       Container(
@@ -160,7 +166,8 @@ class _ReturnPembelianPageState extends State<ReturnPembelianPage> {
                                   fontSize: 21.0,
                                   fontWeight: FontWeight.bold),
                             ),
-                            padding: EdgeInsets.only(left: 10.0, top:5.0, bottom: 5.0),
+                            padding: EdgeInsets.only(
+                                left: 10.0, top: 5.0, bottom: 5.0),
                           ),
                         ]),
                     Container(
@@ -301,6 +308,7 @@ class _ReturnPembelianPageState extends State<ReturnPembelianPage> {
       )),
     );
   }
+
   void changedDropDownItem(String selectedMethodR) {
     setState(() {
       _currentMethodRetrn = selectedMethodR;
