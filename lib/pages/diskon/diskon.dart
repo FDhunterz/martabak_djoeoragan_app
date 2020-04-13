@@ -89,12 +89,12 @@ class _ViewDiskonState extends State<ViewDiskon> {
         for (var data in responseJson['data1']) {
           _listModel.add(
             DiskonModel(
-              id: data['d_id'],
+              id: data['d_id'].toString(),
               akhir: data['d_akhir'],
               kode: data['d_kode'],
               nama: data['d_nama'],
               periode: data['d_periode'],
-              isActive: int.parse(data['d_isactive']),
+              isActive: data['d_isactive'].toString(),
             ),
           );
         }
@@ -112,6 +112,7 @@ class _ViewDiskonState extends State<ViewDiskon> {
         });
       } else {
         Fluttertoast.showToast(msg: 'Error Code : ${response.statusCode}');
+        Fluttertoast.showToast(msg: 'Error Code : ${response.body}');
         print(response.body);
         setState(() {
           _isError = true;
@@ -151,12 +152,12 @@ class _ViewDiskonState extends State<ViewDiskon> {
         for (var data in responseJson['data1']) {
           _listModel.add(
             DiskonModel(
-              id: data['d_id'],
+              id: data['d_id'].toString(),
               akhir: data['d_akhir'],
               kode: data['d_kode'],
               nama: data['d_nama'],
               periode: data['d_periode'],
-              isActive: int.parse(data['d_isactive']),
+              isActive: data['d_isactive'].toString(),
             ),
           );
         }
@@ -192,8 +193,8 @@ class _ViewDiskonState extends State<ViewDiskon> {
 
   showModal({
     String nama,
-    int id,
-    int isActive,
+    String id,
+    String isActive,
   }) {
     showModalBottomSheet(
       context: context,
@@ -261,18 +262,18 @@ class _ViewDiskonState extends State<ViewDiskon> {
                     onPressed: () {
                       aktifNonAktif(
                         id: id,
-                        statusAktif: isActive == 1 ? 0 : 1,
+                        statusAktif: isActive == '1' ? '0' : '1',
                       );
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Icon(
-                          isActive == 1 ? Icons.close : Icons.check,
+                          isActive == '1' ? Icons.close : Icons.check,
                           size: 16.0,
-                          color: isActive == 1 ? Colors.red : Colors.green,
+                          color: isActive == '1' ? Colors.red : Colors.green,
                         ),
-                        Text(isActive == 1 ? 'Nonaktifkan' : 'Aktifkan'),
+                        Text(isActive == '1' ? 'Nonaktifkan' : 'Aktifkan'),
                       ],
                     ),
                   ),
@@ -286,8 +287,8 @@ class _ViewDiskonState extends State<ViewDiskon> {
   }
 
   aktifNonAktif({
-    int id,
-    int statusAktif,
+    String id,
+    String statusAktif,
   }) async {
     DataStore dataStore = DataStore();
     String accessToken = await dataStore.getDataString('access_token');
@@ -337,7 +338,7 @@ class _ViewDiskonState extends State<ViewDiskon> {
     }
   }
 
-  delete(int id) {
+  delete(String id) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -536,7 +537,7 @@ class _ViewDiskonState extends State<ViewDiskon> {
                       ),
                       children: _listModel.map((data) {
                         return DiskonListTile(
-                          periode: data.periode >= 0
+                          periode: int.parse(data.periode) >= 0
                               ? '${data.periode} hari lagi'
                               : 'expired',
                           akhir:

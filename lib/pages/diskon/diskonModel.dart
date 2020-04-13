@@ -1,5 +1,5 @@
 class DiskonModel {
-  int id, idItem, isConfirm, isDouble, isActive, periode;
+  String id, idItem, isConfirm, isDouble, isActive, periode;
   String kode, nama, tipe, mulai, akhir, catatan, tanggal;
   DiskonModel({
     this.akhir,

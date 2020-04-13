@@ -53,7 +53,7 @@ int _selectedDiskon = 10;
 int _dGabung, _dKonfirmasi;
 
 class EditDiskon extends StatefulWidget {
-  final int id;
+  final String id;
   EditDiskon({
     this.id,
   });

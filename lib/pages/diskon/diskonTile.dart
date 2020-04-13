@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DiskonListTile extends StatelessWidget {
   final String kode, nama, periode, akhir;
-  final int isActive;
+  final String isActive;
   final Function onTap;
 
   DiskonListTile({
@@ -25,7 +25,7 @@ class DiskonListTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(
           width: 1.0,
-          color: isActive > 0 ? Colors.green : Colors.orange,
+          color: isActive != '0' ? Colors.green : Colors.orange,
         ),
       ),
       child: InkWell(
@@ -62,7 +62,7 @@ class DiskonListTile extends StatelessWidget {
                 border: Border(
                   top: BorderSide(
                     width: 1.0,
-                    color: isActive > 0 ? Colors.green : Colors.orange,
+                    color: isActive != '0' ? Colors.green : Colors.orange,
                   ),
                 ),
               ),
