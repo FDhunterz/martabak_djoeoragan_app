@@ -44,7 +44,7 @@ class ItemTile extends StatelessWidget {
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'widget.cart.name',
+                      item.namaItem,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 16,
@@ -95,7 +95,7 @@ class ItemTile extends StatelessWidget {
                         //     :
                         Text(
                       numberFormat.format(
-                        double.parse('0' /*widget.cart.price*/),
+                        double.parse(item.harga),
                       ),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -105,7 +105,7 @@ class ItemTile extends StatelessWidget {
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  Text('25 Qty'),
+                  Text('${item.qty} Qty'),
                 ],
               ),
             ],
