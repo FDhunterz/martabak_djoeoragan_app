@@ -14,66 +14,68 @@ class ErrorOutputWidget extends StatefulWidget {
 class _ErrorOutputWidgetState extends State<ErrorOutputWidget> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        // color: Colors.red,
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(10.0),
-        child: IntrinsicHeight(
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(
-                  bottom: 25.0,
-                ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.black54,
-                  child: Icon(
-                    Icons.close,
-                    size: 30.0,
-                    color: Colors.white,
+    return Scrollbar(
+      child: SingleChildScrollView(
+        child: Container(
+          // color: Colors.red,
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.all(10.0),
+          child: IntrinsicHeight(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(
+                    bottom: 25.0,
                   ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(
-                  bottom: 10.0,
-                ),
-                child: Text(
-                  'Error!',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(
-                  bottom: 30.0,
-                ),
-                child: Text(
-                  widget.errorMessage,
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 14.0,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: RaisedButton(
-                  child: Text(
-                    'Coba lagi',
-                    style: TextStyle(
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black54,
+                    child: Icon(
+                      Icons.close,
+                      size: 30.0,
                       color: Colors.white,
                     ),
                   ),
-                  onPressed: widget.onPress,
                 ),
-              ),
-            ],
+                Container(
+                  padding: EdgeInsets.only(
+                    bottom: 10.0,
+                  ),
+                  child: Text(
+                    'Error!',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(
+                    bottom: 30.0,
+                  ),
+                  child: Text(
+                    widget.errorMessage,
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 14.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: RaisedButton(
+                    child: Text(
+                      'Coba lagi',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: widget.onPress,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

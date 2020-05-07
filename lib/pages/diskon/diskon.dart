@@ -93,7 +93,7 @@ class _ViewDiskonState extends State<ViewDiskon> {
               akhir: data['d_akhir'],
               kode: data['d_kode'],
               nama: data['d_nama'],
-              periode: data['d_periode'],
+              periode: data['d_periode'].toString(),
               isActive: data['d_isactive'].toString(),
             ),
           );
@@ -156,7 +156,7 @@ class _ViewDiskonState extends State<ViewDiskon> {
               akhir: data['d_akhir'],
               kode: data['d_kode'],
               nama: data['d_nama'],
-              periode: data['d_periode'],
+              periode: data['d_periode'].toString(),
               isActive: data['d_isactive'].toString(),
             ),
           );

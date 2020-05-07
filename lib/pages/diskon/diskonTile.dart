@@ -49,9 +49,7 @@ class DiskonListTile extends StatelessWidget {
               child: Text(
                 periode,
                 style: TextStyle(
-                  color: periode == 'expired'
-                      ? Colors.red
-                      : Colors.blue,
+                  color: periode == 'expired' ? Colors.red : Colors.blue,
                 ),
               ),
             ),
@@ -70,6 +68,7 @@ class DiskonListTile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
                         flex: 3,
@@ -92,6 +91,7 @@ class DiskonListTile extends StatelessWidget {
                     ],
                   ),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
                         flex: 3,
@@ -133,7 +133,7 @@ class DiskonListTile extends StatelessWidget {
                     child: Text(akhir),
                   ),
                   Expanded(
-                    child: isActive == 0
+                    child: isActive == '0'
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[

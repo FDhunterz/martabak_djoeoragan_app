@@ -1,4 +1,4 @@
-import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
+
 
 List foodX = [
   {
@@ -93,4 +93,3 @@ List foodX = [
   },
 ];
 
-List<MartabakModel> foods = <MartabakModel>[];

@@ -73,7 +73,7 @@ class _TambahDiskonState extends State<TambahDiskon> {
       thousandSeparator: ',',
       decimalSeparator: '.',
     );
-    ;
+    
     _maxDiskonController = MoneyMaskedTextController(
       initialValue: 0.0,
       thousandSeparator: ',',
@@ -924,9 +924,10 @@ class _TambahDiskonState extends State<TambahDiskon> {
                                                       _isNilai = true;
 
                                                       _diskonNilaiController
-                                                          .text = _maxDiskonController.text;
+                                                              .text =
+                                                          _maxDiskonController
+                                                              .text;
                                                     });
-
                                                   }
                                                 }
                                               },
@@ -939,75 +940,81 @@ class _TambahDiskonState extends State<TambahDiskon> {
                                 ),
                               ),
                               Divider(),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 5.0,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      child: RichText(
-                                        text: TextSpan(
-                                          text: 'Nilai Maks Diskon ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                          ),
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                              text: '*',
-                                              style: TextStyle(
-                                                color: Colors.red,
+                              _selectedlistDTipe.id == 'SUB'
+                                  ? Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 5.0,
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Container(
+                                            child: RichText(
+                                              text: TextSpan(
+                                                text: 'Nilai Maks Diskon ',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                    text: '*',
+                                                    style: TextStyle(
+                                                      color: Colors.red,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      child: TextField(
-                                        controller: _maxDiskonController,
-                                        enabled: !_isNilai,
-                                        inputFormatters: [
-                                          WhitelistingTextInputFormatter
-                                              .digitsOnly,
-                                          NumberMask()
+                                          ),
+                                          Container(
+                                            child: TextField(
+                                              controller: _maxDiskonController,
+                                              enabled: !_isNilai,
+                                              inputFormatters: [
+                                                WhitelistingTextInputFormatter
+                                                    .digitsOnly,
+                                                NumberMask()
+                                              ],
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              textAlign: TextAlign.end,
+                                              decoration: InputDecoration(
+                                                errorText: _isNotValid
+                                                    ? _maxDiskonController
+                                                            .text.isEmpty
+                                                        ? 'Maksimal Diskon tidak boleh kosong isi minimal 0'
+                                                        : null
+                                                    : null,
+                                              ),
+                                              onChanged: (ini) {
+                                                if (ini.isEmpty) {
+                                                  ini = '0.00';
+                                                }
+                                                _maxDiskonController.value =
+                                                    TextEditingValue(
+                                                  text: ini,
+                                                  selection:
+                                                      _maxDiskonController
+                                                          .selection,
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          Text(
+                                            'jika diisi 0 (nol) berarti tidak ada nilai maksimal',
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              color: Colors.cyan,
+                                            ),
+                                          ),
                                         ],
-                                        keyboardType: TextInputType.number,
-                                        textAlign: TextAlign.end,
-                                        decoration: InputDecoration(
-                                          errorText: _isNotValid
-                                              ? _maxDiskonController
-                                                      .text.isEmpty
-                                                  ? 'Maksimal Diskon tidak boleh kosong isi minimal 0'
-                                                  : null
-                                              : null,
-                                        ),
-                                        onChanged: (ini) {
-                                          if (ini.isEmpty) {
-                                            ini = '0.00';
-                                          }
-                                          _maxDiskonController.value =
-                                              TextEditingValue(
-                                            text: ini,
-                                            selection:
-                                                _maxDiskonController.selection,
-                                          );
-                                        },
                                       ),
-                                    ),
-                                    Text(
-                                      'jika diisi 0 (nol) berarti tidak ada nilai maksimal',
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: Colors.cyan,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Divider(),
+                                    )
+                                  : Container(),
+                              _selectedlistDTipe.id == 'SUB' ? Divider(): Container(),
                               Container(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 5.0,
@@ -1028,6 +1035,7 @@ class _TambahDiskonState extends State<TambahDiskon> {
                                     ),
                                     Container(
                                       child: TextField(
+                                        focusNode: _catatanFocus,
                                         decoration: InputDecoration(
                                           hintText:
                                               'Contoh : Diskon 10%/Item maksimal Rp. 20,000',
