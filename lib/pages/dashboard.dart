@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'package:martabakdjoeragan_app/core/api.dart';
 import 'package:martabakdjoeragan_app/pages/profile.dart';
 import 'package:flutter/services.dart';
@@ -72,45 +73,53 @@ class _DashboardPageState extends State<DashboardPage> {
           backgroundColor: Color.fromRGBO(41, 56, 70, 1),
           title: Text('Dashboard'),
           actions: <Widget>[
-            Material(
-              // borderRadius: BorderRadius.all(Radius.circular(50.0)),
-              color: Color.fromRGBO(41, 56, 70, 1),
-              child: InkWell(
+            Tooltip(
+              message: 'Setting Session',
+              child: Material(
                 // borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                onTap: () {
-                  popupbawah(Profile());
-                },
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    // borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                color: Color.fromRGBO(41, 56, 70, 1),
+                child: InkWell(
+                  // borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                  onTap: () async {
+                    Navigator.pushNamed(context, '/comp');
+                  },
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      // borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    ),
+                    child: Icon(
+                      FontAwesomeIcons.store,
+                      size: 16.0,
+                    ),
                   ),
-                  child: Icon(Icons.person),
                 ),
               ),
             ),
-            // Material(
-            //   // borderRadius: BorderRadius.all(Radius.circular(50.0)),
-            //   color: Color.fromRGBO(41, 56, 70, 1),
-            //   child: InkWell(
-            //     // borderRadius: BorderRadius.all(Radius.circular(50.0)),
-            //     onTap: () async {
-            //       await Auth().logout();
-            //       Navigator.pushReplacementNamed(context, '/splash');
-            //     },
-            //     child: Container(
-            //       width: 50,
-            //       height: 50,
-            //       decoration: BoxDecoration(
-            //         color: Colors.transparent,
-            //         // borderRadius: BorderRadius.all(Radius.circular(50.0)),
-            //       ),
-            //       child: Icon(Icons.exit_to_app),
-            //     ),
-            //   ),
-            // ),
+            Tooltip(
+              message: 'Profile',
+              child: Material(
+                // borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                color: Color.fromRGBO(41, 56, 70, 1),
+                child: InkWell(
+                  // borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                  onTap: () {
+                    popupbawah(Profile());
+                  },
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      // borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    ),
+                    child: Icon(Icons.person),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
         body: Container(

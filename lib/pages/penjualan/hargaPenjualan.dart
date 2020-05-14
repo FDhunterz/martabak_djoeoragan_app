@@ -112,9 +112,11 @@ class _CariHargaPenjualanState extends State<CariHargaPenjualan> {
                       text: ini,
                       selection: cariController.selection,
                     );
-
+setState(() {
+  
                     listHargaPenjualan = bloc.cariHargaPenjualan(ini);
-                    bloc.notifyListeners();
+});
+  
                   },
                 )
               : Text(

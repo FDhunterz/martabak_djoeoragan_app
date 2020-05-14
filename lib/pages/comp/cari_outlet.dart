@@ -1,71 +1,70 @@
-// import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:warungislamibogorandroid/penjualan/kasir/tambah_penjualan.dart';
-
-// import 'package:http/http.dart' as http;
-// import 'package:martabakdjoeragan_app/core/env.dart';
-import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
-import 'package:martabakdjoeragan_app/pages/penjualan/kuponWidget.dart';
-// import 'package:martabakdjoeragan_app/store/DataStore.dart';
-// import 'package:martabakdjoeragan_app/utils/errorWidget.dart';
+import 'package:martabakdjoeragan_app/pages/comp/comp_bloc.dart';
+import 'package:martabakdjoeragan_app/pages/comp/comp_model.dart';
 import 'dart:async';
 
-import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 import 'package:provider/provider.dart';
 
-KuponBelanja kuponState;
+Outlet outletState;
 bool _isCari, _isLoading;
+List<Outlet> listOutlet, listOutletX;
 
 String tokenType, accessToken;
 Map<String, String> requestHeaders = Map();
-GlobalKey<ScaffoldState> _scaffoldKeyKuponBelanja;
 
 FocusNode cariFocus;
 TextEditingController cariController;
-KasirBloc bloc;
+CompBloc bloc;
 
-class CariKupon extends StatefulWidget {
-  final KuponBelanja kupon;
+class CariOutlet extends StatefulWidget {
+  final Outlet outlet;
 
-  CariKupon({this.kupon});
+  CariOutlet({this.outlet});
 
   @override
-  _CariKuponState createState() => _CariKuponState();
+  _CariOutletState createState() => _CariOutletState();
 }
 
-class _CariKuponState extends State<CariKupon> {
+class _CariOutletState extends State<CariOutlet> {
+  GlobalKey<ScaffoldState> _scaffoldKeyOutlet = GlobalKey<ScaffoldState>();
+
   Timer timer;
   int delayRequest;
 
-  cariKuponBelanja() {}
+  cariOutlet() {}
 
-  getKuponBelanja() async {
+  getOutlet() async {
     setState(() {
       _isLoading = true;
     });
 
-    // listKuponBelanja = bloc.kupon;
-    setState(() {
-      _isLoading = false;
+    CompBloc blocX = Provider.of<CompBloc>(context);
+
+    listOutletX = blocX.listOutlet(filterByCabang: blocX.selectedCabang);
+    listOutlet = listOutletX;
+    Timer(Duration(seconds: 1), () {
+      setState(() {
+        _isLoading = false;
+      });
     });
   }
 
   @override
   void initState() {
+    listOutlet = List<Outlet>();
+    listOutletX = List<Outlet>();
+    // getOutlet();
     delayRequest = 0;
-    _scaffoldKeyKuponBelanja = GlobalKey<ScaffoldState>();
     _isCari = false;
     _isLoading = false;
-    // getKuponBelanja();
-    kuponState = widget.kupon == null
-        ? KuponBelanja(
+    // getOutlet();
+    outletState = widget.outlet == null
+        ? Outlet(
             id: '',
             nama: '',
           )
-        : widget.kupon;
+        : widget.outlet;
 
     cariFocus = FocusNode();
     cariController = TextEditingController();
@@ -81,17 +80,18 @@ class _CariKuponState extends State<CariKupon> {
 
   @override
   Widget build(BuildContext context) {
-    bloc = Provider.of<KasirBloc>(context);
-    List<KuponBelanja> listKuponBelanja;
-
-    listKuponBelanja = bloc.cariKupon(cariController.text);
+    bloc = Provider.of<CompBloc>(context);
+    List<Outlet> listOutlet = bloc.cariOutlet(
+      cariController.text,
+      filterByCabang: bloc.selectedCabang,
+    );
 
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        key: _scaffoldKeyKuponBelanja,
+        key: _scaffoldKeyOutlet,
         appBar: AppBar(
           backgroundColor: _isCari ? Colors.white : Colors.orange[300],
           iconTheme: _isCari
@@ -101,8 +101,7 @@ class _CariKuponState extends State<CariKupon> {
               : null,
           title: _isCari == true
               ? TextField(
-                  decoration: InputDecoration(
-                      hintText: 'Cari Nama/Nominal/Persen/Catatan'),
+                  decoration: InputDecoration(hintText: 'Cari Nama'),
                   controller: cariController,
                   autofocus: true,
                   focusNode: cariFocus,
@@ -112,11 +111,15 @@ class _CariKuponState extends State<CariKupon> {
                       selection: cariController.selection,
                     );
                     setState(() {
-                      listKuponBelanja = bloc.cariKupon(ini);
+                      bloc.cariOutlet(
+                        ini,
+                        filterByCabang: bloc.selectedCabang,
+                      );
                     });
+                    // bloc.notifyListeners();
                   },
                 )
-              : Text(kuponState != null ? kuponState.nama : ''),
+              : Text('Pilih Outlet'),
           actions: <Widget>[
             _isCari == false
                 ? IconButton(
@@ -137,12 +140,13 @@ class _CariKuponState extends State<CariKupon> {
                   )
                 : IconButton(
                     onPressed: () {
-                      KasirBloc bloc = Provider.of<KasirBloc>(context);
                       setState(() {
                         _isCari = false;
                         cariController.clear();
-                        listKuponBelanja = bloc.kupon;
+                        bloc.cariOutlet(cariController.text,
+                            filterByCabang: bloc.selectedCabang);
                       });
+                      // bloc.notifyListeners();
                     },
                     icon: Icon(Icons.close),
                   )
@@ -154,21 +158,23 @@ class _CariKuponState extends State<CariKupon> {
               )
             : Scrollbar(
                 child: ListView.builder(
-                  itemCount: listKuponBelanja.length,
+                  itemCount: listOutlet.length,
                   itemBuilder: (BuildContext context, int i) => Container(
-                    child: KuponListTile(
-                      persen: listKuponBelanja[i].dPersen,
-                      nama: listKuponBelanja[i].nama,
-                      catatan: listKuponBelanja[i].catatan,
-                      maxDiskon: listKuponBelanja[i].dMaxDiskon,
-                      isDouble: listKuponBelanja[i].dIsDouble,
-                      selected: listKuponBelanja[i].selected,
-                      disabled: listKuponBelanja[i].disabled,
-                      nominal: listKuponBelanja[i].nominal,
+                    child: ListTile(
+                      title: Text(
+                        listOutlet[i].nama,
+                        style: TextStyle(
+                          color: bloc.selectedOutlet != null
+                              ? bloc.selectedOutlet.id == listOutlet[i].id
+                                  ? Colors.green
+                                  : Colors.black
+                              : Colors.black,
+                        ),
+                      ),
                       onTap: () {
-                        if (listKuponBelanja[i].disabled != '1') {
-                          bloc.updateKupon(listKuponBelanja[i]);
-                        }
+                        setState(() {
+                          bloc.setSelectedOutlet(listOutlet[i]);
+                        });
                       },
                     ),
                   ),
@@ -176,11 +182,11 @@ class _CariKuponState extends State<CariKupon> {
               ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            if (kuponState != null) {
-              Navigator.pop(context, kuponState);
+            if (outletState != null) {
+              Navigator.pop(context, outletState);
               print('selected');
             } else {
-              Fluttertoast.showToast(msg: 'Pilih KuponBelanja terlebih dahulu');
+              Fluttertoast.showToast(msg: 'Pilih Outlet terlebih dahulu');
             }
           },
           icon: Icon(Icons.arrow_back),

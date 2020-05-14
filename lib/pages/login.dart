@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:martabakdjoeragan_app/store/DataStore.dart';
 // import 'package:martabakdjoeragan_app/utils/Navigator.dart';
 import '../core/api.dart';
 
@@ -21,7 +24,23 @@ class _LoginPageState extends State<LoginPage> {
     dynamic login =
         await Auth(username: username.text, password: password.text).proses();
     if (login == 'success') {
-      Navigator.pushReplacementNamed(context, "/dashboard");
+      List head = ['access_token'];
+      dynamic login = await Auth(getDataString: head).getsession();
+
+      DataStore store = DataStore();
+
+      String comp = await store.getDataString('comp');
+
+      if (login['access_token'] != 'Tidak ditemukan' &&
+          comp != 'Tidak ditemukan') {
+        Timer(Duration(seconds: 2),
+            () => Navigator.pushReplacementNamed(context, "/dashboard"));
+      } else if (comp == 'Tidak ditemukan' &&
+          login['access_token'] != 'Tidak ditemukan') {
+        Timer(Duration(seconds: 2),
+            () => Navigator.pushReplacementNamed(context, "/comp"));
+      }
+      // Navigator.pushReplacementNamed(context, "/dashboard");
     }
 
     loading = false;

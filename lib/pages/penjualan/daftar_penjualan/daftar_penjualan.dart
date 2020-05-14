@@ -181,11 +181,11 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
             color: Color(0xff25282b),
           ),
           textTheme: TextTheme(
-            title: TextStyle(
-              color: Colors.black,
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-            ),
+            // title: TextStyle(
+            //   color: Colors.black,
+            //   fontSize: 18.0,
+            //   fontWeight: FontWeight.bold,
+            // ),
           ),
           title: _isSearch
               ? TextField(
@@ -200,10 +200,8 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
                         text: ini,
                         selection: _cariController.selection,
                       );
+                      listNota = bloc.listFilteredNota(ini);
                     });
-
-                    listNota = bloc.listFilteredNota(ini);
-                    bloc.notifyListeners();
                   },
                 )
               : Text('Daftar Nota Kasir'),
@@ -214,9 +212,8 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
                       setState(() {
                         _cariController.clear();
                         _isSearch = false;
+                        listNota = bloc.listFilteredNota(_cariController.text);
                       });
-                      listNota = bloc.listFilteredNota(_cariController.text);
-                      bloc.notifyListeners();
                     },
                     icon: Icon(Icons.close),
                   )

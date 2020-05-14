@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:martabakdjoeragan_app/pages/comp/comp.dart';
+import 'package:martabakdjoeragan_app/pages/comp/comp_bloc.dart';
 import 'package:martabakdjoeragan_app/pages/dashboard.dart';
 import 'package:martabakdjoeragan_app/pages/diskon/diskon.dart';
 import 'package:martabakdjoeragan_app/pages/diskon/tambahDiskon.dart';
@@ -26,6 +28,7 @@ var routes = <String, WidgetBuilder>{
   "/splash": (BuildContext context) => SplashScreen(),
   "/diskon": (BuildContext context) => ViewDiskon(),
   "/tambah_diskon": (BuildContext context) => TambahDiskon(),
+  '/comp': (BuildContext context) => PilihCabangOutlet(),
 };
 
 void main() => runApp(MyApp());
@@ -36,6 +39,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<KasirBloc>(builder: (context) => KasirBloc()),
+        ChangeNotifierProvider<CompBloc>(builder: (context) => CompBloc()),
         ChangeNotifierProvider<DaftarPenjualanBloc>(
             builder: (context) => DaftarPenjualanBloc()),
       ],

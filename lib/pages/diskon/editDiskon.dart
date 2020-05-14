@@ -1122,6 +1122,7 @@ class _EditDiskonState extends State<EditDiskon> {
                                     Container(
                                       child: TextField(
                                         controller: _catatanController,
+                                        focusNode: _catatanFocus,
                                         decoration: InputDecoration(
                                           hintText:
                                               'Contoh : Diskon 10%/Item maksimal Rp. 20,000',

@@ -153,7 +153,7 @@ class KasirBloc with ChangeNotifier {
     notifyListeners();
   }
 
-  void unsetSelectedHargaPenjualan(){
+  void unsetSelectedHargaPenjualan() {
     this._selectedHargaPenjualan = null;
     notifyListeners();
   }
@@ -168,7 +168,8 @@ class KasirBloc with ChangeNotifier {
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: Text('Peringatan!'),
-          content: Text('Item yang ada dikeranjang akan dihapus! \n\nApa anda yakin ingin mengganti Kelompok Harga?'),
+          content: Text(
+              'Item yang ada dikeranjang akan dihapus! \n\nApa anda yakin ingin mengganti Kelompok Harga?'),
           actions: <Widget>[
             FlatButton(
               onPressed: () {
@@ -216,9 +217,8 @@ class KasirBloc with ChangeNotifier {
     return filter;
   }
 
-  /**
-   *  cek apakah totalPenjualan melebihi Minimal Pembelian Kupon. 
-   */
+  // cek apakah totalPenjualan melebihi Minimal Pembelian Kupon.
+
   void isKuponPass() {
     for (var data in _kupon) {
       if (double.parse(data.kategoriHarga) <= this.totalHargaPenjualan) {
@@ -231,10 +231,9 @@ class KasirBloc with ChangeNotifier {
     notifyListeners();
   }
 
-  /**
-   * update kupon yang dipilih
-   * dan mengecek kupon bisa double atau tidak
-   */
+  // update kupon yang dipilih
+  // dan mengecek kupon bisa double atau tidak
+
   void updateKupon(KuponBelanja kuponX) {
     for (var data in _kupon) {
       if (data.id == kuponX.id) {
@@ -313,6 +312,7 @@ class KasirBloc with ChangeNotifier {
     this.totalHarga;
     this.totalHargaPenjualan;
     this.ppn;
+    this.isKuponPass();
     _cart.clear();
     notifyListeners();
   }

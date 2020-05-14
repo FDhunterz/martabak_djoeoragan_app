@@ -39,11 +39,11 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
           color: Color(0xff25282b),
         ),
         textTheme: TextTheme(
-          title: TextStyle(
-            color: Colors.white,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-          ),
+          // title: TextStyle(
+          //   color: Colors.white,
+          //   fontSize: 18.0,
+          //   fontWeight: FontWeight.bold,
+          // ),
         ),
       ),
       backgroundColor: Colors.grey[300],

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/daftar_penjualan.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/hargaPenjualan.dart';
@@ -353,6 +354,31 @@ class _PointofsalesState extends State<Pointofsales> {
             ),
           ),
           actions: <Widget>[
+            Tooltip(
+              message: 'Setting Session',
+              child: Material(
+                // borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                color: Colors.transparent,
+                child: InkWell(
+                  // borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                  onTap: () async {
+                    Navigator.pushNamed(context, '/comp');
+                  },
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      // borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    ),
+                    child: Icon(
+                      FontAwesomeIcons.store,
+                      size: 16.0,
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Padding(
               padding: EdgeInsets.all(10.0),
               child: Container(
@@ -470,7 +496,7 @@ class _PointofsalesState extends State<Pointofsales> {
                             color: Colors.orange,
                             textColor: Colors.white,
                             onPressed: () async {
-                              HargaPenjualan hargaY = await Navigator.push(
+                              await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (BuildContext context) =>
@@ -503,17 +529,17 @@ class _PointofsalesState extends State<Pointofsales> {
                                     text: bloc.selectedHargaPenjualan != null
                                         ? bloc.selectedHargaPenjualan.nama
                                         : '',
-                                    children:
-                                        bloc.selectedHargaPenjualan != null
-                                            ? null
-                                            : [
-                                                TextSpan(
-                                                  text: '( Pilih Kelompok Harga )',
-                                                  style: TextStyle(
-                                                    fontStyle: FontStyle.italic,
-                                                  ),
-                                                ),
-                                              ],
+                                    children: bloc.selectedHargaPenjualan !=
+                                            null
+                                        ? null
+                                        : [
+                                            TextSpan(
+                                              text: '( Pilih Kelompok Harga )',
+                                              style: TextStyle(
+                                                fontStyle: FontStyle.italic,
+                                              ),
+                                            ),
+                                          ],
                                   ),
                                 )
                               ],

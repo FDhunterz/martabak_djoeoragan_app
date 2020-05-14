@@ -38,6 +38,7 @@ class _CartPageState extends State<CartPage> {
     DataStore dataStore = DataStore();
     String accessToken = await dataStore.getDataString('access_token');
     int perusahaan = await dataStore.getDataInteger('us_perusahaan');
+    String comp = await dataStore.getDataString('comp');
 
     requestHeaders['Accept'] = 'application/json';
     requestHeaders['Authorization'] = 'Bearer $accessToken';
@@ -63,11 +64,13 @@ class _CartPageState extends State<CartPage> {
       formSerialize['pkdt_item'].add(data.id);
       formSerialize['pkdt_qty'].add(data.qty);
       formSerialize['pkdt_harga_item'].add(data.sysprice);
-      formSerialize['pkdt_diskon'].add(data.diskon);
+      formSerialize['pkdt_diskon']
+          .add(data.diskon != null ? data.diskon : 0.toString());
     }
 
     formSerialize['pk_diskon_plus'] = bloc.totalDiskon;
     formSerialize['platform'] = 'android';
+    formSerialize['outlet'] = comp;
 
     try {
       final response = await http.post(
@@ -84,6 +87,9 @@ class _CartPageState extends State<CartPage> {
 
         if (responseJson['status'] == 'success') {
           Fluttertoast.showToast(msg: responseJson['text']);
+          bloc.clearCart();
+          bloc.unsetCustomer();
+          Navigator.pop(context);
         } else if (responseJson['status'] == 'error') {
           Fluttertoast.showToast(msg: responseJson['text']);
         } else {
