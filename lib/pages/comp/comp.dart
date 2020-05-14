@@ -16,7 +16,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 bool _isError, _isLoading;
-String _errorMessage;
+String _errorMessage, comp;
 Map<String, String> requestHeaders = Map();
 
 class PilihCabangOutlet extends StatefulWidget {
@@ -37,6 +37,12 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
 
     requestHeaders['Accept'] = 'application/json';
     requestHeaders['Authorization'] = 'Bearer $accessToken';
+
+    String compX = await dataStore.getDataString('comp');
+
+    setState(() {
+      comp = compX;
+    });
 
     try {
       final response = await http.get(
@@ -107,6 +113,7 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
   void initState() {
     _isLoading = true;
     _isError = false;
+    comp = null;
     getResource();
     super.initState();
   }
@@ -156,29 +163,61 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
               : SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: RichText(
-                          text: TextSpan(
-                            text: 'Sebelum anda memulai, ',
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(
-                                  text:
-                                      'tentukan terlebih dahulu beberapa informasi terkait '),
-                              TextSpan(
-                                text: 'login ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                      comp != 'Tidak ditemukan'
+                          ? Container(
+                              padding: EdgeInsets.all(10.0),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: 'Jika anda ',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: 'diberi wewenang ',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    TextSpan(text: 'untuk dapat '),
+                                    TextSpan(
+                                      text:
+                                          'mengelola lebih dari satu cabang/outlet. ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                        text:
+                                            'anda bisa mengganti cabang/outlet yang ingin anda kelola tersebut melalui form dibawah ini :'),
+                                  ],
                                 ),
                               ),
-                              TextSpan(text: 'anda dibawah ini :'),
-                            ],
-                          ),
-                        ),
-                      ),
+                            )
+                          : Container(
+                              padding: EdgeInsets.all(10.0),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: 'Sebelum anda memulai, ',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                        text:
+                                            'tentukan terlebih dahulu beberapa informasi terkait '),
+                                    TextSpan(
+                                      text: 'login ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    TextSpan(text: 'anda dibawah ini :'),
+                                  ],
+                                ),
+                              ),
+                            ),
                       Container(
                         padding: EdgeInsets.all(10.0),
                         margin: EdgeInsets.all(5.0),
