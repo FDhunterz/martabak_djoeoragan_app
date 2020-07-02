@@ -251,10 +251,10 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 15.0,
                   ),
-                  adsSection,
-                  SizedBox(
-                    height: 15.0,
-                  ),
+                  // adsSection,
+                  // SizedBox(
+                  //   height: 15.0,
+                  // ),
                   footer,
                   SizedBox(
                     height: 1.0,
