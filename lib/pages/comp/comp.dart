@@ -158,7 +158,9 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
           : _isError
               ? ErrorOutputWidget(
                   errorMessage: _errorMessage,
-                  onPress: () {},
+                  onPress: () {
+                    getResource();
+                  },
                 )
               : SingleChildScrollView(
                   child: Column(
