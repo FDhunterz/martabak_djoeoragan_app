@@ -30,10 +30,10 @@ class KuponListTile extends StatefulWidget {
 
 class _KuponListTileState extends State<KuponListTile> {
   NumberFormat _numberFormat = NumberFormat.decimalPattern(
-    // name: 'Rp. ',
-    // decimalDigits: 2,
+      // name: 'Rp. ',
+      // decimalDigits: 2,
 
-  );
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +123,8 @@ class _KuponListTileState extends State<KuponListTile> {
                               height: 50.0,
                               child: Center(
                                 child: Text(
-                                  _numberFormat.format(double.parse(widget.nominal)),
+                                  _numberFormat
+                                      .format(double.parse(widget.nominal)),
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 10.0,
@@ -148,16 +149,28 @@ class _KuponListTileState extends State<KuponListTile> {
                             ),
                           ),
                           Container(
-                            child: Text(
-                              widget.catatan,
-                              style: TextStyle(
-                                color: widget.disabled == '0'
-                                    ? Colors.black
-                                    : Colors.grey[400],
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
+                            child:
+                                widget.catatan == '' || widget.catatan == null
+                                    ? Text(
+                                        'Tidak ada Catatan',
+                                        style: TextStyle(
+                                          color: widget.disabled == '0'
+                                              ? Colors.grey
+                                              : Colors.grey[400],
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      )
+                                    : Text(
+                                        widget.catatan,
+                                        style: TextStyle(
+                                          color: widget.disabled == '0'
+                                              ? Colors.black
+                                              : Colors.grey[400],
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
                           ),
                         ],
                       ),

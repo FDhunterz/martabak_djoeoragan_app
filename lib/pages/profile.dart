@@ -240,7 +240,7 @@ class _Profile extends State<Profile> {
                           color: Colors.red,
                           padding: EdgeInsets.symmetric(vertical: 10),
                           onPressed: () async {
-                            await Auth().logout();
+                            await Auth().logout(context);
                             Navigator.pushReplacementNamed(context, '/splash');
                           },
                           child: Text(

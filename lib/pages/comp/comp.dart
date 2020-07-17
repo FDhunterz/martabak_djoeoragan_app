@@ -138,7 +138,7 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
         actions: <Widget>[
           FlatButton.icon(
             onPressed: () async {
-              await Auth().logout();
+              await Auth().logout(context);
               Navigator.pushReplacementNamed(context, '/splash');
             },
             textColor: Colors.white,

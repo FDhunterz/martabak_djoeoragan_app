@@ -156,10 +156,14 @@ class Auth {
     return result;
   }
 
-  Future<dynamic> logout() async {
+  Future<dynamic> logout(BuildContext context) async {
     await session.clear();
-    // print( await session.getString('access_token') == 'Tidak ditemukan' ? 'Tidak ditemukan' : 'error');
-    // Navigator.pushNamedAndRemoveUntil(context, newRouteName, predicate)
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/login',
+      (Route<dynamic> route) => false, // hapus semua route
+    );
   }
 }
 
