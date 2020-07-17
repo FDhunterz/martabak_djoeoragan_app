@@ -20,10 +20,16 @@ class _LoginPageState extends State<LoginPage> {
   // List headsession = ['nama','username','id','nomor','jenis'];
   // List getsession = ['m_name','m_username','m_id','m_phone','m_gender'];
   login() async {
+    setState(() {
+      loading = true;
+    });
     // await Auth(username: username,password: password ,name: 'login',nameStringsession: headsession , dataStringsession: getsession).getuser();
     dynamic login =
         await Auth(username: username.text, password: password.text).proses();
     if (login == 'success') {
+      setState(() {
+        loading = false;
+      });
       List head = ['access_token'];
       dynamic login = await Auth(getDataString: head).getsession();
 
@@ -105,9 +111,11 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-      onEditingComplete: () {
-        login();
-      },
+      onEditingComplete: loading
+          ? null
+          : () {
+              login();
+            },
     );
     final loginButton = Material(
       elevation: 5.0,
@@ -116,20 +124,22 @@ class _LoginPageState extends State<LoginPage> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () async {
-          // setState(() {
-          //   loading = true;
-          // });
-          // await login();
-          // setState(() {
-          //   loading = false;
-          // });
-          // Navigator.pushReplacementNamed(context, "/pos");
-          // Navigator.pushReplacementNamed(context, "/dashboard");
-          login();
-        },
+        onPressed: loading
+            ? null
+            : () async {
+                // setState(() {
+                //   loading = true;
+                // });
+                // await login();
+                // setState(() {
+                //   loading = false;
+                // });
+                // Navigator.pushReplacementNamed(context, "/pos");
+                // Navigator.pushReplacementNamed(context, "/dashboard");
+                login();
+              },
         child: Text(
-          "Masuk",
+          loading ? 'Sedang Memproses ..' : "Masuk",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,

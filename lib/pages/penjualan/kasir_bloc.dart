@@ -10,6 +10,7 @@ class KasirBloc with ChangeNotifier {
   Customer _selectedCustomer;
   double _total = 0;
   double _ppn = 0;
+  double _settingPpn = 0;
 
   // get list barang yg ditambahkan ke keranjang
   List<MartabakModel> get cart => _cart;
@@ -73,9 +74,19 @@ class KasirBloc with ChangeNotifier {
     return totalDiskon;
   }
 
+  double get getSettingPpn {
+    return _settingPpn;
+  }
+
+  void settingPPN(double persenPpn) {
+    _settingPpn = persenPpn;
+
+    notifyListeners();
+  }
+
   // get ppn
   double get ppn {
-    _ppn = _total * 0.1;
+    _ppn = _total * (_settingPpn / 100);
 
     return _ppn;
   }
@@ -110,7 +121,7 @@ class KasirBloc with ChangeNotifier {
       }
     }
 
-    totalPenjualan = (_total * 0.1) + _total - totalDiskon;
+    totalPenjualan = (_total * (_settingPpn / 100)) + _total - totalDiskon;
 
     return totalPenjualan;
   }
@@ -245,6 +256,8 @@ class KasirBloc with ChangeNotifier {
       } else if (data.dIsDouble == '0' &&
           data.id != kuponX.id &&
           data.selected == '1') {
+        data.selected = '0';
+      } else if (data.dIsDouble == '1' && kuponX.dIsDouble == '0') {
         data.selected = '0';
       }
     }

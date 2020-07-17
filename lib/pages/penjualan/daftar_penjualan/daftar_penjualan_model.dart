@@ -34,7 +34,15 @@ class NotaPenjualan {
 }
 
 class Item {
-  String penjualanKasir, nomor, idItem, namaItem, qty, harga, diskon, total;
+  String penjualanKasir,
+      nomor,
+      idItem,
+      namaItem,
+      qty,
+      harga,
+      diskon,
+      total,
+      gambar;
 
   Item({
     this.harga,
@@ -45,5 +53,6 @@ class Item {
     this.penjualanKasir,
     this.qty,
     this.total,
+    this.gambar,
   });
 }

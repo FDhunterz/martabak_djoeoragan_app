@@ -89,7 +89,7 @@ class _CartPageState extends State<CartPage> {
           Fluttertoast.showToast(msg: responseJson['text']);
           bloc.clearCart();
           bloc.unsetCustomer();
-          Navigator.pop(context);
+          Navigator.pop(context, true);
         } else if (responseJson['status'] == 'error') {
           Fluttertoast.showToast(msg: responseJson['text']);
         } else {
@@ -470,20 +470,28 @@ class _CartPageState extends State<CartPage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(
-                                        "PPN(10%)",
+                                        "PPN(${bloc.getSettingPpn}%)",
                                         style: TextStyle(
-                                            fontFamily: "Roboto",
-                                            fontSize: 14.0,
-                                            color: Color(0xff25282b),
-                                            fontWeight: FontWeight.w500),
+                                          fontFamily: "Roboto",
+                                          fontSize: 14.0,
+                                          color: Color(0xff25282b),
+                                          fontWeight: FontWeight.w500,
+                                          decoration: bloc.getSettingPpn == 0
+                                              ? TextDecoration.lineThrough
+                                              : null,
+                                        ),
                                       ),
                                       Text(
                                         numberFormat.format(bloc.ppn),
                                         style: TextStyle(
-                                            fontFamily: "Roboto",
-                                            fontSize: 14.0,
-                                            color: Color(0xff25282b),
-                                            fontWeight: FontWeight.w500),
+                                          fontFamily: "Roboto",
+                                          fontSize: 14.0,
+                                          color: Color(0xff25282b),
+                                          fontWeight: FontWeight.w500,
+                                          decoration: bloc.getSettingPpn == 0
+                                              ? TextDecoration.lineThrough
+                                              : null,
+                                        ),
                                       )
                                     ],
                                   ),
@@ -598,11 +606,15 @@ class _CartPageState extends State<CartPage> {
                                       selection:
                                           _jumlahBayarController.selection,
                                     );
+                                    print(ini);
 
+                                    _kembalian = bloc.totalHargaPenjualan -
+                                        double.parse(ini.replaceAll(',', ''));
                                     setState(() {
-                                      _kembalian = bloc.totalHargaPenjualan -
-                                          double.parse(ini.replaceAll(',', ''));
+                                      _kembalian = _kembalian;
                                     });
+                                    // print(_kembalian);
+                                    // print(_kembalian *= -1);
                                   },
                                 ),
                               ],

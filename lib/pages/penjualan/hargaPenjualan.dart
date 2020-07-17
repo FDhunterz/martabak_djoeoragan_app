@@ -112,15 +112,12 @@ class _CariHargaPenjualanState extends State<CariHargaPenjualan> {
                       text: ini,
                       selection: cariController.selection,
                     );
-setState(() {
-  
-                    listHargaPenjualan = bloc.cariHargaPenjualan(ini);
-});
-  
+                    setState(() {
+                      listHargaPenjualan = bloc.cariHargaPenjualan(ini);
+                    });
                   },
                 )
-              : Text(
-                  hargaPenjualanState != null ? hargaPenjualanState.nama : ''),
+              : Text('Pilih Golongan Harga'),
           actions: <Widget>[
             _isCari == false
                 ? IconButton(

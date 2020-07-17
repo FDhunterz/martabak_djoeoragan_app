@@ -4,6 +4,9 @@ String noapiurl = 'http://martabak.alamraya.site/';
 // String url = 'http://192.168.1.55/git/martabak_djoeragan/api/';
 // String noapiurl = 'http://192.168.1.55/git/martabak_djoeragan/';
 
+// # Lepi
+// String url = 'http://192.168.100.13/git/martabak_djoeragan/api/';
+// String noapiurl = 'http://192.168.100.13/git/martabak_djoeragan/';
 
 // Custom api / Laravel Passport
 String key = "";

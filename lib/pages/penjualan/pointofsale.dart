@@ -218,10 +218,18 @@ class _PointofsalesState extends State<Pointofsales> {
             );
           }
 
+          blocX.settingPPN(
+            double.parse(
+              responseJson['setting_ppn']['hs_pajak_kasir'].toString(),
+            ),
+          );
+
           setState(() {
             _isLoading = false;
             _isError = false;
           });
+
+          navigatorKePengaturanHarga();
         } else if (responseX.statusCode == 401) {
           Fluttertoast.showToast(
             msg: 'Token kedaluwarsa, silahkan login kembali',
@@ -326,6 +334,17 @@ class _PointofsalesState extends State<Pointofsales> {
     }
   }
 
+  void navigatorKePengaturanHarga() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => CariHargaPenjualan(),
+      ),
+    );
+
+    resetItemSetelahGantiGroupHarga();
+  }
+
   @override
   Widget build(BuildContext context) {
     bloc = Provider.of<KasirBloc>(context);
@@ -385,11 +404,15 @@ class _PointofsalesState extends State<Pointofsales> {
                 height: 150.0,
                 width: 30.0,
                 child: InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(
+                  onTap: () async {
+                    dynamic cart = await Navigator.pushNamed(
                       context,
                       '/cart_pos',
                     );
+
+                    if (cart == true) {
+                      resource();
+                    }
                   },
                   child: Stack(
                     children: <Widget>[
@@ -495,16 +518,8 @@ class _PointofsalesState extends State<Pointofsales> {
                           child: FlatButton(
                             color: Colors.orange,
                             textColor: Colors.white,
-                            onPressed: () async {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      CariHargaPenjualan(),
-                                ),
-                              );
-
-                              resetItemSetelahGantiGroupHarga();
+                            onPressed: () {
+                              navigatorKePengaturanHarga();
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,

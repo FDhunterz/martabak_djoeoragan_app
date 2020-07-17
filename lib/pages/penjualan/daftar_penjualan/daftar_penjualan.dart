@@ -35,6 +35,7 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
 
     int perusahaan = await store.getDataInteger('us_perusahaan');
     String accessToken = await store.getDataString('access_token');
+    String outlet = await store.getDataString('comp');
 
     // print(perusahaan);
 
@@ -46,7 +47,7 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
 
     try {
       final response = await http.get(
-        '${url}penjualan/kasir/get/nota?cabangs=$perusahaan&outlet=1&periode=$dateParse',
+        '${url}penjualan/kasir/get/nota?cabangs=$perusahaan&outlet=$outlet&periode=$dateParse',
         headers: requestHeaders,
       );
 
@@ -68,6 +69,7 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
                 penjualanKasir: item['pkdt_penjualan_kasir'].toString(),
                 qty: item['pkdt_qty'].toString(),
                 total: item['pkdt_total'].toString(),
+                gambar: item['gambar'].toString(),
               ),
             );
           }
@@ -181,12 +183,12 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
             color: Color(0xff25282b),
           ),
           textTheme: TextTheme(
-            // title: TextStyle(
-            //   color: Colors.black,
-            //   fontSize: 18.0,
-            //   fontWeight: FontWeight.bold,
-            // ),
-          ),
+              // title: TextStyle(
+              //   color: Colors.black,
+              //   fontSize: 18.0,
+              //   fontWeight: FontWeight.bold,
+              // ),
+              ),
           title: _isSearch
               ? TextField(
                   autofocus: true,
