@@ -18,6 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     List head = ['access_token'];
     dynamic login = await Auth(getDataString: head).getsession();
 
+    // ignore: unused_local_variable
     DataStore store = DataStore();
 
     CompBloc bloc = Provider.of<CompBloc>(context);

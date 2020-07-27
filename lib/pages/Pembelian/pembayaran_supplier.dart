@@ -83,7 +83,6 @@ class _PembayaranSupplierPageState extends State<PembayaranSupplierPage> {
                         },
                         decoration: InputDecoration(
                           labelText: 'Tanggal Pembayaran',
-                          hasFloatingPlaceholder: false,
                           border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(5.0)),

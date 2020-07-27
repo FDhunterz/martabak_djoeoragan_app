@@ -65,7 +65,6 @@ class _PemesananPembelianPageState extends State<PemesananPembelianPage> {
                         },
                         decoration: InputDecoration(
                           labelText: 'Pilih Tanggal',
-                          hasFloatingPlaceholder: false,
                           border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(5.0)),
@@ -78,7 +77,6 @@ class _PemesananPembelianPageState extends State<PemesananPembelianPage> {
                           });
                         },
                       ),
-                      
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[

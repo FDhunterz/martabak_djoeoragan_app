@@ -106,17 +106,12 @@ class _CariOutletState extends State<CariOutlet> {
                   autofocus: true,
                   focusNode: cariFocus,
                   onChanged: (ini) {
-                    cariController.value = TextEditingValue(
-                      text: ini,
-                      selection: cariController.selection,
-                    );
                     setState(() {
-                      bloc.cariOutlet(
-                        ini,
-                        filterByCabang: bloc.selectedCabang,
+                      cariController.value = TextEditingValue(
+                        text: ini,
+                        selection: cariController.selection,
                       );
                     });
-                    // bloc.notifyListeners();
                   },
                 )
               : Text('Pilih Outlet'),
@@ -143,8 +138,6 @@ class _CariOutletState extends State<CariOutlet> {
                       setState(() {
                         _isCari = false;
                         cariController.clear();
-                        bloc.cariOutlet(cariController.text,
-                            filterByCabang: bloc.selectedCabang);
                       });
                       // bloc.notifyListeners();
                     },
@@ -172,9 +165,8 @@ class _CariOutletState extends State<CariOutlet> {
                         ),
                       ),
                       onTap: () {
-                        setState(() {
-                          bloc.setSelectedOutlet(listOutlet[i]);
-                        });
+                        bloc.setSelectedOutlet(listOutlet[i]);
+                        Navigator.pop(context, outletState);
                       },
                     ),
                   ),

@@ -8,6 +8,7 @@ class PembelianPesananPage extends StatefulWidget {
 }
 
 class _PembelianPesananPageState extends State<PembelianPesananPage> {
+  // ignore: unused_field
   int _itemCount = 0;
   DateTime dates;
 
@@ -60,12 +61,10 @@ class _PembelianPesananPageState extends State<PembelianPesananPage> {
                             initialDate: currentValue ?? DateTime.now(),
                             context: context,
                             lastDate: DateTime(DateTime.now().year + 30),
-                            
                           );
                         },
                         decoration: InputDecoration(
                           labelText: 'Pilih Tanggal',
-                          hasFloatingPlaceholder: false,
                           border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(5.0)),

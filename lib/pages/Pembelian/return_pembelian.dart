@@ -8,9 +8,11 @@ class ReturnPembelianPage extends StatefulWidget {
 }
 
 class _ReturnPembelianPageState extends State<ReturnPembelianPage> {
+  // ignore: unused_field
   int _itemCount = 0;
   DateTime dates;
 
+  // ignore: non_constant_identifier_names
   List _ReturnMethod = ["Tukar Barang Baru", "Potong Nota"];
 
   List<DropdownMenuItem<String>> _dropDownMenuItems;
@@ -107,7 +109,6 @@ class _ReturnPembelianPageState extends State<ReturnPembelianPage> {
                         },
                         decoration: InputDecoration(
                           labelText: 'Tanggal Return',
-                          hasFloatingPlaceholder: false,
                           border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(5.0)),

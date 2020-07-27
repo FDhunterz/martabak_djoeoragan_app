@@ -15,6 +15,7 @@ import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:convert';
+import 'pointofsale_tile.dart';
 
 List<MartabakModel> foods, foodsBackup;
 String _errorMessage, _perusahaan;
@@ -530,7 +531,10 @@ class _PointofsalesState extends State<Pointofsales> {
                                   padding: EdgeInsets.symmetric(
                                     horizontal: 10.0,
                                   ),
-                                  child: Icon(Icons.table_chart),
+                                  child: Icon(
+                                    FontAwesomeIcons.tags,
+                                    size: 17.0,
+                                  ),
                                 ),
                                 RichText(
                                   text: TextSpan(
@@ -650,67 +654,7 @@ class _PointofsalesState extends State<Pointofsales> {
                               children: foods.length != 0
                                   ? foods.map(
                                       (MartabakModel foods) {
-                                        return Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 20),
-                                          child: InkWell(
-                                            child: Container(
-                                              // height: 250,
-                                              width: 160,
-                                              child: Column(
-                                                children: <Widget>[
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    child: FadeInImage
-                                                        .assetNetwork(
-                                                      image:
-                                                          '${noapiurl}storage/app/public/project/upload/1/item/${foods.id}/${foods.img}',
-                                                      placeholder: foods.img,
-                                                      height: 178,
-                                                      width: 160,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 7),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      foods.name,
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 15,
-                                                      ),
-                                                      maxLines: 2,
-                                                      textAlign: TextAlign.left,
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 3),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      foods.desc,
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 13,
-                                                        color: Colors
-                                                            .blueGrey[300],
-                                                      ),
-                                                      maxLines: 1,
-                                                      textAlign: TextAlign.left,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            onTap: null,
-                                          ),
-                                        );
+                                        return POSTileVertical();
                                       },
                                     ).toList()
                                   : [],

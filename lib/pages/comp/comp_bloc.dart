@@ -85,7 +85,7 @@ class CompBloc with ChangeNotifier {
         }
       }
     }
-    notifyListeners();
+    // notifyListeners();
     return a;
   }
 }

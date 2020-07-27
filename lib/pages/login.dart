@@ -150,6 +150,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+    // ignore: unused_local_variable
     final adsSection = Material(
       color: Colors.white,
       child: Column(
