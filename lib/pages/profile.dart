@@ -239,9 +239,40 @@ class _Profile extends State<Profile> {
                         child: RaisedButton(
                           color: Colors.red,
                           padding: EdgeInsets.symmetric(vertical: 10),
-                          onPressed: () async {
-                            await Auth().logout(context);
-                            Navigator.pushReplacementNamed(context, '/splash');
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                backgroundColor: Color(0xfff85f73),
+                                contentTextStyle: TextStyle(
+                                  color: Colors.white,
+                                ),
+                                titleTextStyle: TextStyle(
+                                  color: Colors.white,
+                                ),
+                                title: Text('Peringatan!'),
+                                content: Text(
+                                    'Apa anda ingin keluar dari aplikasi?'),
+                                actions: <Widget>[
+                                  RaisedButton(
+                                    onPressed: () async {
+                                      await Auth().logout(context);
+                                    },
+                                    child: Text('Ya'),
+                                    color: Colors.blue,
+                                    textColor: Colors.white,
+                                  ),
+                                  RaisedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('Tidak'),
+                                    color: Colors.white,
+                                    textColor: Colors.black,
+                                  ),
+                                ],
+                              ),
+                            );
                           },
                           child: Text(
                             'Logout',

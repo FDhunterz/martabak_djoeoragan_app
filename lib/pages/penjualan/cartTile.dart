@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +20,8 @@ class CartTile extends StatefulWidget {
 }
 
 class _CartTileState extends State<CartTile> {
-  NumberFormat numberFormat = NumberFormat.simpleCurrency(decimalDigits: 0,name: 'Rp. ');
+  NumberFormat numberFormat =
+      NumberFormat.simpleCurrency(decimalDigits: 0, name: 'Rp. ');
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +46,7 @@ class _CartTileState extends State<CartTile> {
             Container(
               height: 80,
               width: MediaQuery.of(context).size.width - 90,
-              child: ListView(
-                primary: false,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
+              child: Column(
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,27 +114,26 @@ class _CartTileState extends State<CartTile> {
                               ),
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Card(
                             color: Colors.white,
                             child: Row(
                               children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(left: 10.0),
-                                  child: GestureDetector(
-                                    onTap: widget.onReduce,
-                                    child: Text(
-                                      '-',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Color(0xfffbaf18),
-                                      ),
+                                InkWell(
+                                  onTap: widget.onReduce,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Icon(
+                                      FontAwesomeIcons.minus,
+                                      size: 15,
+                                      color: Colors.orange,
                                     ),
                                   ),
                                 ),
                                 Padding(
-                                  padding:
-                                      EdgeInsets.only(right: 15.0, left: 15.0),
+                                  padding: EdgeInsets.all(7),
                                   child: Text(
                                     widget.cart.qty.toString(),
                                     style: TextStyle(
@@ -146,16 +144,14 @@ class _CartTileState extends State<CartTile> {
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 10.0),
-                                  child: GestureDetector(
-                                    onTap: widget.onIncrease,
-                                    child: Text(
-                                      '+',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Color(0xfffbaf18),
-                                      ),
+                                InkWell(
+                                  onTap: widget.onIncrease,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Icon(
+                                      FontAwesomeIcons.plus,
+                                      size: 15,
+                                      color: Colors.orange,
                                     ),
                                   ),
                                 ),

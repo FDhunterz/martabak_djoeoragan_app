@@ -19,7 +19,7 @@ import 'package:http/http.dart' as http;
 
 Map<String, String> requestHeaders = Map();
 GlobalKey<ScaffoldState> _scaffoldKeyCart;
-TextEditingController _jumlahBayarController;
+TextEditingController _jumlahBayarController, _catatanController;
 double _kembalian;
 bool _isSendRequest;
 
@@ -127,6 +127,7 @@ class _CartPageState extends State<CartPage> {
     _jumlahBayarController = TextEditingController(
       text: 0.toString(),
     );
+    _catatanController = TextEditingController();
     _isSendRequest = false;
     _kembalian = 0;
     super.initState();
@@ -176,9 +177,13 @@ class _CartPageState extends State<CartPage> {
           backgroundColor: Colors.white,
         ),
         body: cart.isEmpty
-            ? Container(
-                color: Colors.white,
-                child: EmptyCart(),
+            ? SingleChildScrollView(
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  padding: EdgeInsets.only(bottom: 50),
+                  color: Colors.white,
+                  child: EmptyCart(),
+                ),
               )
             : SingleChildScrollView(
                 child: Column(
@@ -200,7 +205,7 @@ class _CartPageState extends State<CartPage> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                GestureDetector(
+                                InkWell(
                                   onTap: () {
                                     Navigator.pop(context);
                                   },
@@ -258,12 +263,13 @@ class _CartPageState extends State<CartPage> {
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 12.0,
+                                  fontFamily: 'Maison Neue',
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: '*',
+                                    text: '(Optional)',
                                     style: TextStyle(
-                                      color: Colors.red,
+                                      color: Colors.grey,
                                     ),
                                   )
                                 ],
@@ -318,10 +324,11 @@ class _CartPageState extends State<CartPage> {
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 12.0,
+                                  fontFamily: 'Maison Neue',
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: '*',
+                                    text: '',
                                     style: TextStyle(
                                       color: Colors.red,
                                     ),
@@ -351,10 +358,11 @@ class _CartPageState extends State<CartPage> {
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 12.0,
+                                  fontFamily: 'Maison Neue',
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: '*',
+                                    text: '',
                                     style: TextStyle(
                                       color: Colors.red,
                                     ),
@@ -375,6 +383,42 @@ class _CartPageState extends State<CartPage> {
                                 : Text(
                                     selectedCustomer.alamat,
                                   ),
+                          ),
+                          Container(
+                            child: RichText(
+                              text: TextSpan(
+                                text: 'Catatan ',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.0,
+                                  fontFamily: 'Maison Neue',
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: '',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: TextField(
+                              minLines: 2,
+                              maxLines: 4,
+                              controller: _catatanController,
+                              onChanged: (ini) {
+                                setState(() {
+                                  _catatanController.value = TextEditingValue(
+                                    text: ini,
+                                    selection: _catatanController.selection,
+                                  );
+                                });
+                              },
+                            ),
                           ),
                         ],
                       ),

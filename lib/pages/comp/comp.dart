@@ -139,7 +139,6 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
           FlatButton.icon(
             onPressed: () async {
               await Auth().logout(context);
-              Navigator.pushReplacementNamed(context, '/splash');
             },
             textColor: Colors.white,
             icon: Icon(Icons.exit_to_app),
@@ -188,6 +187,8 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
                                     text: 'Jika anda ',
                                     style: TextStyle(
                                       color: Colors.black,
+                                      fontFamily: 'Maison Neue',
+                                      height: 1.5,
                                     ),
                                     children: [
                                       TextSpan(
@@ -290,7 +291,9 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
                                   ),
                                 ],
                               ),
-                              Divider(),
+                              Divider(
+                                height: 30,
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
@@ -313,10 +316,12 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
                                           ),
                                         ),
                                       ),
-                                      Text(
-                                        'Outlet yang digunakan untuk login',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                      Container(
+                                        child: Text(
+                                          'Outlet yang digunakan untuk login',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -362,6 +367,8 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
                               text: 'Form pilihan diatas hanya akan ',
                               style: TextStyle(
                                 color: Colors.black,
+                                height: 1.5,
+                                fontFamily: 'Maison Neue',
                               ),
                               children: [
                                 TextSpan(

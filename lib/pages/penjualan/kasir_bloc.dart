@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
@@ -6,11 +8,20 @@ class KasirBloc with ChangeNotifier {
   List<MartabakModel> _cart = <MartabakModel>[];
   List<KuponBelanja> _kupon = List<KuponBelanja>();
   List<HargaPenjualan> _listHarga = List<HargaPenjualan>();
+  List<MartabakModel> _list = List<MartabakModel>();
+  List<KategoriItem> _kategori = List<KategoriItem>();
+  KategoriItem _selectedKategori;
   HargaPenjualan _selectedHargaPenjualan;
   Customer _selectedCustomer;
   double _total = 0;
   double _ppn = 0;
   double _settingPpn = 0;
+  String _encodedRequest;
+
+  // get list kategori item
+  List<KategoriItem> get listKategori => _kategori;
+
+  KategoriItem get getSelectedKategoriItem => _selectedKategori;
 
   // get list barang yg ditambahkan ke keranjang
   List<MartabakModel> get cart => _cart;
@@ -124,6 +135,139 @@ class KasirBloc with ChangeNotifier {
     totalPenjualan = (_total * (_settingPpn / 100)) + _total - totalDiskon;
 
     return totalPenjualan;
+  }
+
+  void setEncodedRequest(String encoded) {
+    _encodedRequest = encoded;
+    notifyListeners();
+  }
+
+  void resetItemSetelahGantiGroupHarga({
+    @required Function onStart,
+    @required Function onFinish,
+    @required Function(String) onError,
+  }) {
+    onStart();
+    try {
+      var responseJson = jsonDecode(_encodedRequest);
+
+      _list = List<MartabakModel>();
+      for (var data in responseJson['item']) {
+        var diskonX;
+        var priceX;
+
+        if (this.selectedHargaPenjualan != null) {
+          if (this.selectedHargaPenjualan.id == '99999') {
+            diskonX = data['diskon'] != null
+                ? data['diskon']['diskon'].toString()
+                : null;
+            priceX = data['i_harga_jual'].toString();
+          } else {
+            diskonX = null;
+
+            priceX = data['i_harga_jual'].toString();
+
+            for (var dataS in data['harga_jual']) {
+              if (data['i_id'].toString() == dataS['ghdt_item'].toString()) {
+                priceX = dataS['ghdt_harga'].toString();
+              }
+            }
+          }
+        } else {
+          diskonX = data['diskon'] != null
+              ? data['diskon']['diskon'].toString()
+              : null;
+
+          priceX = data['i_harga_jual'].toString();
+        }
+
+        _list.add(
+          MartabakModel(
+            id: int.parse(data['i_id'].toString()),
+            name: data['i_nama'],
+            img: data['i_gambar1'],
+            price: priceX,
+            sysprice: priceX,
+            desc: data['i_kode'],
+            idKategoriItem: data['i_kategori'].toString(),
+            qty: 1,
+            details: data['i_kode'],
+            diskon: diskonX,
+          ),
+        );
+      }
+
+      Future.delayed(const Duration(milliseconds: 500), () {
+        // Here you can write your code
+
+        onFinish();
+      });
+    } catch (e) {
+      onError(e.toString());
+    }
+    notifyListeners();
+  }
+
+  List<MartabakModel> cariItem(String text) {
+    List<MartabakModel> _listD = List<MartabakModel>();
+    List<MartabakModel> _listF = List<MartabakModel>();
+
+    if (_selectedKategori != null) {
+      if (_selectedKategori.id == 'all') {
+        _listD = _list;
+        print('if 1');
+      } else {
+        print('else 1');
+        for (var data in _list) {
+          print(data.idKategoriItem);
+          print(_selectedKategori.id);
+          if (data.idKategoriItem == _selectedKategori.id) {
+            _listD.add(data);
+          }
+        }
+      }
+    } else {
+      _listD = _list;
+      print('else 2');
+    }
+
+    for (var dataF in _listD) {
+      if (dataF.name.toLowerCase().contains(text.toLowerCase())) {
+        _listF.add(dataF);
+      }
+    }
+
+    return _listF;
+  }
+
+  // set kategori item yang dipilih
+  void setSelectedKategori(KategoriItem kategori) {
+    _selectedKategori = kategori;
+    notifyListeners();
+  }
+
+  // clear List Kategori Item
+  void clearListKategori() {
+    _kategori.clear();
+    notifyListeners();
+  }
+
+  // add Kategori Item
+  void addKategori(KategoriItem kategori) {
+    _kategori.add(kategori);
+    notifyListeners();
+  }
+
+  // clear List Item Kasir
+  void clearListItem() {
+    _list.clear();
+    notifyListeners();
+  }
+
+  // add List Item Kasir
+  void addItem(MartabakModel martabak) {
+    _list.add(martabak);
+    notifyListeners();
   }
 
   void addKupon({

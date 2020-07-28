@@ -216,3 +216,61 @@ class POSTileVertical extends StatelessWidget {
     );
   }
 }
+
+class MenuTile extends StatelessWidget {
+  final String tooltip, namaMenu;
+  final Function onTap;
+  final IconData icon;
+
+  MenuTile({
+    this.icon,
+    this.namaMenu,
+    this.onTap,
+    this.tooltip,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: Colors.transparent,
+        textStyle: TextStyle(
+          color: Colors.white,
+        ),
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            width: 70,
+            margin: EdgeInsets.all(5),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  child: Icon(
+                    icon,
+                    size: 18.0,
+                    color: Colors.white,
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    namaMenu,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

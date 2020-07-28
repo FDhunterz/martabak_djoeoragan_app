@@ -164,6 +164,7 @@ class _CariHargaPenjualanState extends State<CariHargaPenjualan> {
                           context: context,
                           hargaX: listHargaPenjualan[i],
                         );
+                        Navigator.pop(context, listHargaPenjualan[i]);
                       },
                     ),
                   ),

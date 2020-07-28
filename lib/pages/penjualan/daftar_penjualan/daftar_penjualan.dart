@@ -183,12 +183,12 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
             color: Color(0xff25282b),
           ),
           textTheme: TextTheme(
-              // title: TextStyle(
-              //   color: Colors.black,
-              //   fontSize: 18.0,
-              //   fontWeight: FontWeight.bold,
-              // ),
-              ),
+            headline6: TextStyle(
+              color: Colors.black,
+              fontSize: 18.0,
+              // fontWeight: FontWeight.bold,
+            ),
+          ),
           title: _isSearch
               ? TextField(
                   autofocus: true,

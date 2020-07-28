@@ -56,13 +56,20 @@ class MyApp extends StatelessWidget {
 
 ThemeData buildDarkTheme() {
   final ThemeData base = ThemeData(
-      // fontFamily: 'TitilliumWeb',
-      );
+    fontFamily: 'Maison Neue',
+  );
   return base.copyWith(
     primaryColor: Color(0xff25282b),
     accentColor: Color(0xfffbaf18),
     scaffoldBackgroundColor: Colors.white,
     buttonColor: Color(0xfffbaf18),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Color(0xfffbaf18),
+      foregroundColor: Colors.white,
+      hoverColor: Color(0xffffdc97),
+      focusColor: Color(0xffffdc97),
+      splashColor: Color(0xffffdc97),
+    ),
     // hintColor: Color(0xfffbaf18),
 
     inputDecorationTheme: InputDecorationTheme(

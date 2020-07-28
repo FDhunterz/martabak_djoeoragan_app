@@ -1,5 +1,13 @@
 class MartabakModel {
-  String name, img, price, sysprice, desc, details, diskon, diskonDariKupon;
+  String name,
+      img,
+      price,
+      sysprice,
+      desc,
+      details,
+      diskon,
+      diskonDariKupon,
+      idKategoriItem;
   int qty, id;
   List<HargaPenjualanPerItem> listHargaPenjualan;
 
@@ -15,6 +23,7 @@ class MartabakModel {
     this.diskon,
     this.diskonDariKupon,
     this.listHargaPenjualan,
+    this.idKategoriItem,
   });
 }
 
@@ -94,4 +103,16 @@ class KuponBelanja {
     this.nominal,
     this.selected,
   });
+}
+
+class KategoriItem {
+  String id, text;
+  KategoriItem({
+    this.id,
+    this.text,
+  });
+
+  bool operator ==(Object other) => other is KategoriItem && other.id == id;
+
+  int get hashCode => id.hashCode;
 }
