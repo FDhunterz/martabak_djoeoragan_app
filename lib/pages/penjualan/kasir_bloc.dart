@@ -17,6 +17,7 @@ class KasirBloc with ChangeNotifier {
   double _ppn = 0;
   double _settingPpn = 0;
   String _encodedRequest;
+  TextEditingController _catatanController = TextEditingController();
 
   // get list kategori item
   List<KategoriItem> get listKategori => _kategori;
@@ -37,6 +38,18 @@ class KasirBloc with ChangeNotifier {
 
   // get listHarga
   List<HargaPenjualan> get listHarga => _listHarga;
+
+  TextEditingController get catatanController => _catatanController;
+
+  int get totalQtyKeranjang {
+    int total = 0;
+
+    for (var data in _cart) {
+      total += data.qty;
+    }
+
+    return total;
+  }
 
   // get total harga asli (belum ditambah ppn dan dikurangi diskon)
   double get totalHarga {
@@ -215,9 +228,9 @@ class KasirBloc with ChangeNotifier {
     if (_selectedKategori != null) {
       if (_selectedKategori.id == 'all') {
         _listD = _list;
-        print('if 1');
+        // print('if 1');
       } else {
-        print('else 1');
+        // print('else 1');
         for (var data in _list) {
           print(data.idKategoriItem);
           print(_selectedKategori.id);
@@ -228,7 +241,7 @@ class KasirBloc with ChangeNotifier {
       }
     } else {
       _listD = _list;
-      print('else 2');
+      // print('else 2');
     }
 
     for (var dataF in _listD) {

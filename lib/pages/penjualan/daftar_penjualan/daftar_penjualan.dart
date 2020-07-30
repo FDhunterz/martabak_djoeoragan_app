@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/daftar_penjualan_bloc.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/daftar_penjualan_loading.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/daftar_penjualan_model.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/detail_penjualan.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
@@ -230,8 +231,19 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
           ],
         ),
         body: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
+            ? SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    DaftarPenjualanLoading(),
+                    Divider(),
+                    DaftarPenjualanLoading(),
+                    Divider(),
+                    DaftarPenjualanLoading(),
+                    Divider(),
+                    DaftarPenjualanLoading(),
+                    Divider(),
+                  ],
+                ),
               )
             : _isError
                 ? ErrorOutputWidget(

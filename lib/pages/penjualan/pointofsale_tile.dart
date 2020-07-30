@@ -96,98 +96,109 @@ class POSTileVertical extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'images/martabak1.jpg',
-                  image:
-                      '${noapiurl}storage/app/public/project/upload/1/item/$id/$gambar',
-                  height: 70,
-                  width: 70,
-                  fit: BoxFit.cover,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'images/martabak1.jpg',
+                    image:
+                        '${noapiurl}storage/app/public/project/upload/1/item/$id/$gambar',
+                    height: 70,
+                    width: 70,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-              SizedBox(width: 15),
-              Container(
-                width: MediaQuery.of(context).size.width - 130,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        nama,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
+              SizedBox(width: 10),
+              Expanded(
+                child: Container(
+                  width: MediaQuery.of(context).size.width - 130,
+                  margin: EdgeInsets.all(5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          nama,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
+                          maxLines: 2,
+                          textAlign: TextAlign.left,
                         ),
-                        maxLines: 2,
-                        textAlign: TextAlign.left,
                       ),
-                    ),
-                    SizedBox(height: 3),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        desc,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          color: Colors.blueGrey[300],
+                      SizedBox(height: 3),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          desc,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Colors.blueGrey[300],
+                          ),
+                          maxLines: 1,
+                          textAlign: TextAlign.left,
                         ),
-                        maxLines: 1,
-                        textAlign: TextAlign.left,
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: diskon != null
-                              ? Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Text(
+                      SizedBox(height: 3),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: diskon != null
+                                ? Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text(
+                                        _numberFormat.format(
+                                          double.parse(harga),
+                                        ),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                          color: Colors.grey,
+                                        ),
+                                        maxLines: 1,
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      Text(
+                                        _numberFormat.format(
+                                          double.parse(harga) -
+                                              double.parse(diskon),
+                                        ),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                        maxLines: 1,
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ],
+                                  )
+                                : Container(
+                                    child: Text(
                                       _numberFormat.format(
                                         double.parse(harga),
                                       ),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
-                                        decoration: TextDecoration.lineThrough,
-                                        color: Colors.grey,
                                       ),
                                       maxLines: 1,
                                       textAlign: TextAlign.left,
                                     ),
-                                    Text(
-                                      _numberFormat.format(
-                                        double.parse(harga) -
-                                            double.parse(diskon),
-                                      ),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                      maxLines: 1,
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ],
-                                )
-                              : Text(
-                                  _numberFormat.format(
-                                    double.parse(harga),
                                   ),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                  maxLines: 1,
-                                  textAlign: TextAlign.left,
-                                ),
-                        ),
-                        Container(
-                          child: ButtonTheme(
+                          ),
+                          ButtonTheme(
                             minWidth: 25.0,
                             height: 25.0,
                             buttonColor: Color(0xfffbaf18),
@@ -202,10 +213,10 @@ class POSTileVertical extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

@@ -20,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   // List headsession = ['nama','username','id','nomor','jenis'];
   // List getsession = ['m_name','m_username','m_id','m_phone','m_gender'];
   login() async {
+    FocusScope.of(context).unfocus();
     setState(() {
       loading = true;
     });
@@ -27,9 +28,6 @@ class _LoginPageState extends State<LoginPage> {
     dynamic login =
         await Auth(username: username.text, password: password.text).proses();
     if (login == 'success') {
-      setState(() {
-        loading = false;
-      });
       List head = ['access_token'];
       dynamic login = await Auth(getDataString: head).getsession();
 
@@ -46,6 +44,10 @@ class _LoginPageState extends State<LoginPage> {
         Timer(Duration(seconds: 2),
             () => Navigator.pushReplacementNamed(context, "/comp"));
       }
+
+      setState(() {
+        loading = false;
+      });
       // Navigator.pushReplacementNamed(context, "/dashboard");
     }
 

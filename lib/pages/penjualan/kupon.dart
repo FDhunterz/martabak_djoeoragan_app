@@ -25,7 +25,7 @@ GlobalKey<ScaffoldState> _scaffoldKeyKuponBelanja;
 
 FocusNode cariFocus;
 TextEditingController cariController;
-KasirBloc bloc;
+// KasirBloc bloc;
 
 class CariKupon extends StatefulWidget {
   final KuponBelanja kupon;
@@ -81,7 +81,7 @@ class _CariKuponState extends State<CariKupon> {
 
   @override
   Widget build(BuildContext context) {
-    bloc = Provider.of<KasirBloc>(context);
+    KasirBloc bloc = Provider.of<KasirBloc>(context);
     List<KuponBelanja> listKuponBelanja;
 
     listKuponBelanja = bloc.cariKupon(cariController.text);

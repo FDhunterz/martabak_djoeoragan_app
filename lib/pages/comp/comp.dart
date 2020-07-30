@@ -9,6 +9,7 @@ import 'package:martabakdjoeragan_app/core/env.dart';
 // import 'package:martabakdjoeragan_app/pages/comp/cari_cabang.dart';
 import 'package:martabakdjoeragan_app/pages/comp/cari_outlet.dart';
 import 'package:martabakdjoeragan_app/pages/comp/comp_bloc.dart';
+import 'package:martabakdjoeragan_app/pages/comp/comp_loading.dart';
 import 'package:martabakdjoeragan_app/pages/comp/comp_model.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import 'package:martabakdjoeragan_app/utils/errorWidget.dart';
@@ -146,23 +147,37 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          if (bloc.selectedOutlet != null) {
-            DataStore store = DataStore();
-            store.setDataString('comp', bloc.selectedOutlet.id);
-            Navigator.pushReplacementNamed(context, '/pos');
-          } else {
-            Fluttertoast.showToast(msg: 'Pilih Outlet terlebih dahulu');
-          }
-        },
-        label: Text('Simpan Informasi'),
-        icon: Icon(Icons.save),
-        backgroundColor: Colors.teal,
-      ),
+      floatingActionButton: _isLoading
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () {
+                if (bloc.selectedOutlet != null) {
+                  DataStore store = DataStore();
+                  store.setDataString('comp', bloc.selectedOutlet.id);
+                  Navigator.pushReplacementNamed(context, '/pos');
+                } else {
+                  Fluttertoast.showToast(msg: 'Pilih Outlet terlebih dahulu');
+                }
+              },
+              label: Text('Simpan Informasi'),
+              icon: Icon(Icons.save),
+              backgroundColor: Colors.teal,
+            ),
       body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
+          ? SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 5.0,
+                ),
+                child: Column(
+                  children: <Widget>[
+                    CompHeaderLoading(),
+                    CompContentLoading(),
+                    CompFooterLoading(),
+                  ],
+                ),
+              ),
             )
           : _isError
               ? ErrorOutputWidget(
@@ -271,6 +286,7 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
                                     //   );
                                     // },
                                     child: Container(
+                                      margin: EdgeInsets.only(top: 5),
                                       width: MediaQuery.of(context).size.width,
                                       child: Row(
                                         children: <Widget>[
@@ -338,7 +354,12 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
                                     },
                                     child: Container(
                                       width: MediaQuery.of(context).size.width,
+                                      margin: EdgeInsets.only(top: 5),
                                       child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Expanded(
                                             child: Text(

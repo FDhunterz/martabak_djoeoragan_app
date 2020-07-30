@@ -7,6 +7,9 @@ import 'package:martabakdjoeragan_app/core/api.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/daftar_penjualan.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/hargaPenjualan.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/pointofsales_loading.dart';
+// ignore: unused_import
+import 'package:martabakdjoeragan_app/pages/penjualan/tesLoading.dart';
 
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import 'package:martabakdjoeragan_app/utils/errorWidget.dart';
@@ -438,7 +441,7 @@ class _PointofsalesState extends State<Pointofsales> {
                             ),
                             child: Center(
                               child: Text(
-                                bloc.cart.length.toString(),
+                                bloc.totalQtyKeranjang.toString(),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 12.0,
@@ -458,8 +461,25 @@ class _PointofsalesState extends State<Pointofsales> {
             backgroundColor: Colors.white,
           ),
           body: _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
+              ? SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      FiturPOSLoading(),
+                      SearchLoading(),
+                      Divider(),
+                      Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            POSTileVerticalLoading(),
+                            POSTileVerticalLoading(),
+                            POSTileVerticalLoading(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 )
               : _isError
                   ? ErrorOutputWidget(
@@ -556,6 +576,20 @@ class _PointofsalesState extends State<Pointofsales> {
                                           Navigator.pushNamed(context, '/comp');
                                         },
                                       ),
+                                      // MenuTile(
+                                      //   icon: FontAwesomeIcons.clock,
+                                      //   namaMenu: 'Shimmer Loading',
+                                      //   onTap: () {
+                                      //     Navigator.push(
+                                      //       context,
+                                      //       MaterialPageRoute(
+                                      //         builder: (BuildContext context) =>
+                                      //             TesLoading(),
+                                      //       ),
+                                      //     );
+                                      //   },
+                                      //   tooltip: 'Loading',
+                                      // ),
                                     ],
                                   ),
                                 ),
@@ -644,6 +678,8 @@ class _PointofsalesState extends State<Pointofsales> {
                                   ),
                                 ),
                                 DropdownButton(
+                                  isDense: true,
+                                  underline: Container(),
                                   items: bloc.listKategori
                                       .map(
                                         (e) => DropdownMenuItem(
