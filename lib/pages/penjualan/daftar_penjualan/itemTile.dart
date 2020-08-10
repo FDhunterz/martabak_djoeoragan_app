@@ -61,7 +61,7 @@ class ItemTile extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     alignment: Alignment.centerLeft,
-                    child: item.diskon != null
+                    child: double.parse(item.diskon) != 0
                         ? Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[

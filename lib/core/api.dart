@@ -25,46 +25,61 @@ class Auth {
   List nameBoolsession;
   List dataBoolsession;
 
-  Auth(
-      {Key key,
-      this.nameStringsession,
-      this.dataStringsession,
-      this.nameIntsession,
-      this.dataIntsession,
-      this.nameBoolsession,
-      this.dataBoolsession,
-      this.name,
-      this.username,
-      this.password,
-      this.getDataInt,
-      this.getDataBool,
-      this.getDataString});
+  Auth({
+    Key key,
+    this.nameStringsession,
+    this.dataStringsession,
+    this.nameIntsession,
+    this.dataIntsession,
+    this.nameBoolsession,
+    this.dataBoolsession,
+    this.name,
+    this.username,
+    this.password,
+    this.getDataInt,
+    this.getDataBool,
+    this.getDataString,
+  });
 
-  Future<dynamic> proses() async {
-    Fluttertoast.showToast(msg: 'Proses Login');
+  Future<Map<String, dynamic>> proses() async {
+    // Fluttertoast.showToast(msg: 'Proses Login');
+    print('${url}login');
     try {
-      final sendlogin = await http.post(noapiurl + 'api/login', body: {
-        // 'grant_type': grantType,
-        // 'client_id': clientId,
-        // 'client_secret': clientsecret,
-        "username": username,
-        "password": password,
-      }, headers: {
-        'Accept': 'application/json',
-      });
+      final sendlogin = await http.post(
+        '${url}login',
+        body: {
+          // 'grant_type': grantType,
+          // 'client_id': clientId,
+          // 'client_secret': clientsecret,
+          "username": username,
+          "password": password,
+        },
+        headers: {
+          'Accept': 'application/json',
+        },
+      );
 
-      dynamic getresponse = json.decode(sendlogin.body);
-      print(getresponse);
       if (sendlogin.statusCode == 200) {
+        dynamic getresponse = json.decode(sendlogin.body);
+        print(getresponse);
         if (getresponse['error'] == 'invalid_credentials') {
           Fluttertoast.showToast(msg: getresponse['message']);
-          return 'error';
+          return {
+            'status': 'error',
+            'message': 'invalid credentials',
+          };
         } else if (getresponse['error'] == 'invalid_request') {
           Fluttertoast.showToast(msg: getresponse['hint']);
-          return 'error';
+          return {
+            'status': 'error',
+            'message': getresponse['hint'],
+          };
         } else if (getresponse['status'] == 'failed') {
           Fluttertoast.showToast(msg: 'Username / Password Salah');
-          return 'error';
+          return {
+            'status': 'error',
+            'message': 'Username / Password salah',
+          };
         } else if (getresponse['credential'] != null) {
           session.saveString('access_token', getresponse['credential']);
           session.saveInteger('user_id', getresponse['user_id']);
@@ -72,25 +87,43 @@ class Auth {
               int.parse(getresponse['data']['us_perusahaan'].toString()));
           session.saveString('token_type', 'Bearer');
           Fluttertoast.showToast(msg: 'Token saved');
-          return 'success';
+          return {
+            'status': 'success',
+          };
         }
         // await getuser();
-        return 'error';
+        return {
+          'status': 'error',
+          'message': sendlogin.body,
+        };
       } else {
         Fluttertoast.showToast(msg: 'Error Code ${sendlogin.statusCode}');
-        return 'failure';
+        return {
+          'status': 'error',
+          'message': 'Error Code ${sendlogin.statusCode}',
+        };
       }
     } on SocketException catch (_) {
-      Fluttertoast.showToast(msg: 'Connection Timed Out');
+      Fluttertoast.showToast(
+          msg: 'tidak bisa mengakes ke host, koneksi ditolak');
+      return {
+        'status': 'error',
+        'message': 'tidak bisa mengakses ke host, koneksi ditolak',
+      };
     } on TimeoutException catch (_) {
       Fluttertoast.showToast(msg: 'Request Timeout, try again');
+      return {
+        'status': 'error',
+        'message': 'Request Timeout, try again',
+      };
     } catch (e) {
       Fluttertoast.showToast(msg: '$e');
-      // Fluttertoast.showToast(msg:e.toString(),
-      //   position: ToastPosition.bottom,
-      // );
+      print(e);
+      return {
+        'status': 'error',
+        'message': e.toString(),
+      };
     }
-    return 'Something Wrong';
   }
 
   Future<dynamic> getuser() async {
@@ -174,13 +207,14 @@ class RequestGet {
   bool withbody;
   final header;
   String customurl;
-  RequestGet(
-      {Key key,
-      this.name,
-      this.header,
-      this.withbody,
-      this.customrequest,
-      this.customurl});
+  RequestGet({
+    Key key,
+    this.name,
+    this.header,
+    this.withbody,
+    this.customrequest,
+    this.customurl,
+  });
 
   Future<dynamic> getdata() async {
     if (customurl != null && customurl != '') {

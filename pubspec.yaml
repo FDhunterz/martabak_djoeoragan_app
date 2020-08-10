@@ -35,6 +35,10 @@ dependencies:
   loading:
   flutter_masked_text: ^0.8.0
   month_picker_dialog: ^0.3.2
+  escposprinter:
+    git:
+        url: https://github.com/marcusfelix/esc-pos-printer-flutter.git
+        ref: master
 
 dev_dependencies:
   flutter_test:
@@ -131,4 +135,7 @@ flutter:
           weight : 700
         - asset : fonts/Maison Neue/MaisonNeue-BookItalic.otf
           style : italic
+    - family: PrintIcon
+      fonts: 
+        - asset: fonts/PrintIcon.ttf
         

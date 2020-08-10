@@ -112,7 +112,7 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     child: Text(
-                      widget.nota.customer,
+                      widget.nota.customer ?? 'Tidak diketahui',
                     ),
                   ),
                   Divider(),
@@ -131,7 +131,7 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     child: Text(
-                      widget.nota.telpon,
+                      widget.nota.telpon ?? '-',
                     ),
                   ),
                   Divider(),
@@ -150,7 +150,7 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     child: Text(
-                      widget.nota.alamat,
+                      widget.nota.alamat ?? '-',
                     ),
                   ),
                   Divider(),

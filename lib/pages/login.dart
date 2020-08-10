@@ -10,6 +10,7 @@ TextEditingController password = TextEditingController();
 FocusNode usernameFocus = FocusNode();
 FocusNode passwordFocus = FocusNode();
 bool loading = false;
+String _message = '';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,17 +18,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // List headsession = ['nama','username','id','nomor','jenis'];
-  // List getsession = ['m_name','m_username','m_id','m_phone','m_gender'];
   login() async {
     FocusScope.of(context).unfocus();
     setState(() {
+      _message = '';
       loading = true;
     });
-    // await Auth(username: username,password: password ,name: 'login',nameStringsession: headsession , dataStringsession: getsession).getuser();
-    dynamic login =
+
+    Map<String, dynamic> loginX =
         await Auth(username: username.text, password: password.text).proses();
-    if (login == 'success') {
+    if (loginX['status'] == 'success') {
       List head = ['access_token'];
       dynamic login = await Auth(getDataString: head).getsession();
 
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       if (login['access_token'] != 'Tidak ditemukan' &&
           comp != 'Tidak ditemukan') {
         Timer(Duration(seconds: 2),
-            () => Navigator.pushReplacementNamed(context, "/dashboard"));
+            () => Navigator.pushReplacementNamed(context, "/pos"));
       } else if (comp == 'Tidak ditemukan' &&
           login['access_token'] != 'Tidak ditemukan') {
         Timer(Duration(seconds: 2),
@@ -48,14 +48,24 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         loading = false;
       });
-      // Navigator.pushReplacementNamed(context, "/dashboard");
+    } else {
+      setState(() {
+        _message = loginX['message'];
+      });
     }
-
-    loading = false;
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final _errorWidget = Text(
+      _message,
+      style: TextStyle(
+        color: Colors.red,
+      ),
+    );
     final usernameField = TextField(
       controller: username,
       focusNode: usernameFocus,
@@ -260,6 +270,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 15.0,
                   ),
+                  _errorWidget,
                   loginButton,
                   SizedBox(
                     height: 15.0,

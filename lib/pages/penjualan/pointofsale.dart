@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:martabakdjoeragan_app/core/api.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/cariPrint.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/daftar_penjualan.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/hargaPenjualan.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/pointofsales_loading.dart';
@@ -13,17 +14,21 @@ import 'package:martabakdjoeragan_app/pages/penjualan/tesLoading.dart';
 
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import 'package:martabakdjoeragan_app/utils/errorWidget.dart';
+// ignore: unused_import
+import 'package:martabakdjoeragan_app/utils/print_icon/print_icon_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'pointofsale_tile.dart';
+import 'dart:async';
 
 // List<MartabakModel> foods, foodsBackup;
 String _errorMessage, _perusahaan;
 Map<String, String> requestHeaders = Map();
 bool _isError, _isLoading, _isCari;
+DateTime backbuttonpressedTime;
 
 // String dataResponseItem, dataResponseResource;
 
@@ -313,38 +318,23 @@ class _PointofsalesState extends State<Pointofsales> {
     // bloc.cart.clear();
 
     return WillPopScope(
-      onWillPop: () => showDialog<bool>(
-        context: context,
-        builder: (c) => AlertDialog(
-          backgroundColor: Color(0xfff85f73),
-          contentTextStyle: TextStyle(
-            color: Colors.white,
-          ),
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-          ),
-          title: Text('Peringatan!'),
-          content: Text('Apa anda ingin keluar dari aplikasi?'),
-          actions: <Widget>[
-            RaisedButton(
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-              child: Text('Ya'),
-              color: Colors.blue,
-              textColor: Colors.white,
-            ),
-            RaisedButton(
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-              child: Text('Tidak'),
-              color: Colors.white,
-              textColor: Colors.black,
-            ),
-          ],
-        ),
-      ),
+      onWillPop: () async {
+        DateTime currentTime = DateTime.now();
+        //Statement 1 Or statement2
+        bool backButton = backbuttonpressedTime == null ||
+            currentTime.difference(backbuttonpressedTime) >
+                Duration(seconds: 3);
+        if (backButton) {
+          backbuttonpressedTime = currentTime;
+          Fluttertoast.showToast(
+            msg: "Tekan lagi untuk keluar dari aplikasi",
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+          );
+          return false;
+        }
+        return true;
+      },
       child: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -362,48 +352,6 @@ class _PointofsalesState extends State<Pointofsales> {
               ),
             ),
             actions: <Widget>[
-              FlatButton.icon(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (c) => AlertDialog(
-                      backgroundColor: Color(0xfff85f73),
-                      contentTextStyle: TextStyle(
-                        color: Colors.white,
-                      ),
-                      titleTextStyle: TextStyle(
-                        color: Colors.white,
-                      ),
-                      title: Text('Peringatan!'),
-                      content: Text('Apa anda ingin keluar dari aplikasi?'),
-                      actions: <Widget>[
-                        RaisedButton(
-                          onPressed: () async {
-                            await Auth().logout(context);
-                          },
-                          child: Text('Ya'),
-                          color: Colors.blue,
-                          textColor: Colors.white,
-                        ),
-                        RaisedButton(
-                          onPressed: () {
-                            Navigator.pop(context, false);
-                          },
-                          child: Text('Tidak'),
-                          color: Colors.white,
-                          textColor: Colors.black,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                textColor: Colors.black,
-                icon: Icon(
-                  Icons.exit_to_app,
-                  color: Colors.black,
-                ),
-                label: Text('Logout'),
-              ),
               Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Container(
@@ -455,7 +403,68 @@ class _PointofsalesState extends State<Pointofsales> {
                     ),
                   ),
                 ),
-              )
+              ),
+              PopupMenuButton(
+                tooltip: 'Pengaturan',
+                icon: Icon(FontAwesomeIcons.ellipsisV),
+                itemBuilder: (BuildContext context) =>
+                    ['Daftar Perangkat USB', 'Logout']
+                        .map(
+                          (e) => PopupMenuItem(
+                            child: Text(e),
+                            value: e,
+                          ),
+                        )
+                        .toList(),
+                onSelected: (ini) {
+                  switch (ini) {
+                    case 'Logout':
+                      showDialog(
+                        context: context,
+                        builder: (c) => AlertDialog(
+                          backgroundColor: Color(0xfff85f73),
+                          contentTextStyle: TextStyle(
+                            color: Colors.white,
+                          ),
+                          titleTextStyle: TextStyle(
+                            color: Colors.white,
+                          ),
+                          title: Text('Peringatan!'),
+                          content: Text('Apa anda ingin keluar dari aplikasi?'),
+                          actions: <Widget>[
+                            RaisedButton(
+                              onPressed: () async {
+                                await Auth().logout(context);
+                              },
+                              child: Text('Ya'),
+                              color: Colors.blue,
+                              textColor: Colors.white,
+                            ),
+                            RaisedButton(
+                              onPressed: () {
+                                Navigator.pop(context, false);
+                              },
+                              child: Text('Tidak'),
+                              color: Colors.white,
+                              textColor: Colors.black,
+                            ),
+                          ],
+                        ),
+                      );
+
+                      break;
+                    case 'Daftar Perangkat USB':
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => CariPrint(),
+                        ),
+                      );
+                      break;
+                    default:
+                  }
+                },
+              ),
             ],
             elevation: 0.0,
             backgroundColor: Colors.white,
@@ -576,20 +585,6 @@ class _PointofsalesState extends State<Pointofsales> {
                                           Navigator.pushNamed(context, '/comp');
                                         },
                                       ),
-                                      // MenuTile(
-                                      //   icon: FontAwesomeIcons.clock,
-                                      //   namaMenu: 'Shimmer Loading',
-                                      //   onTap: () {
-                                      //     Navigator.push(
-                                      //       context,
-                                      //       MaterialPageRoute(
-                                      //         builder: (BuildContext context) =>
-                                      //             TesLoading(),
-                                      //       ),
-                                      //     );
-                                      //   },
-                                      //   tooltip: 'Loading',
-                                      // ),
                                     ],
                                   ),
                                 ),

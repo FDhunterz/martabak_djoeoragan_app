@@ -17,30 +17,39 @@ class KasirBloc with ChangeNotifier {
   double _ppn = 0;
   double _settingPpn = 0;
   String _encodedRequest;
+
+  TextEditingController _jumlahBayarController = TextEditingController(
+    text: 0.toString(),
+  );
+  double kembalian = 0;
   TextEditingController _catatanController = TextEditingController();
 
-  // get list kategori item
+  TextEditingController get jumlahBayarController => _jumlahBayarController;
+
+  /// get list kategori item
   List<KategoriItem> get listKategori => _kategori;
 
   KategoriItem get getSelectedKategoriItem => _selectedKategori;
 
-  // get list barang yg ditambahkan ke keranjang
+  /// get list barang yg ditambahkan ke keranjang
   List<MartabakModel> get cart => _cart;
 
-  // get list kupon
+  /// get list kupon
   List<KuponBelanja> get kupon => _kupon;
 
-  // get customer yang dipilih
+  /// get customer yang dipilih
   Customer get selectedCustomer => _selectedCustomer;
 
-  // get harga penjualan yang dipilih
+  /// get harga penjualan yang dipilih
   HargaPenjualan get selectedHargaPenjualan => _selectedHargaPenjualan;
 
-  // get listHarga
+  /// get listHarga
   List<HargaPenjualan> get listHarga => _listHarga;
 
+  /// get catatanController
   TextEditingController get catatanController => _catatanController;
 
+  /// total kuantitas keranjang
   int get totalQtyKeranjang {
     int total = 0;
 
@@ -51,7 +60,7 @@ class KasirBloc with ChangeNotifier {
     return total;
   }
 
-  // get total harga asli (belum ditambah ppn dan dikurangi diskon)
+  /// get total harga asli (belum ditambah ppn dan dikurangi diskon)
   double get totalHarga {
     double totalX = 0;
 
@@ -66,7 +75,7 @@ class KasirBloc with ChangeNotifier {
     return totalX;
   }
 
-  // get diskon
+  /// get diskon
   double get totalDiskon {
     double totalDiskon = 0;
     List<KuponBelanja> _kuponX = this._kupon;
@@ -98,24 +107,26 @@ class KasirBloc with ChangeNotifier {
     return totalDiskon;
   }
 
+  /// get setting ppn
   double get getSettingPpn {
     return _settingPpn;
   }
 
+  /// men set variabel settingPpn
   void settingPPN(double persenPpn) {
     _settingPpn = persenPpn;
 
     notifyListeners();
   }
 
-  // get ppn
+  /// get ppn
   double get ppn {
     _ppn = _total * (_settingPpn / 100);
 
     return _ppn;
   }
 
-  // get total harga penjualan beserta diskon dan ppn
+  /// get total harga penjualan beserta diskon dan ppn
   double get totalHargaPenjualan {
     double totalPenjualan = 0;
     List<KuponBelanja> _kuponX = this._kupon;
@@ -253,31 +264,31 @@ class KasirBloc with ChangeNotifier {
     return _listF;
   }
 
-  // set kategori item yang dipilih
+  /// set kategori item yang dipilih
   void setSelectedKategori(KategoriItem kategori) {
     _selectedKategori = kategori;
     notifyListeners();
   }
 
-  // clear List Kategori Item
+  /// clear List Kategori Item
   void clearListKategori() {
     _kategori.clear();
     notifyListeners();
   }
 
-  // add Kategori Item
+  /// add Kategori Item
   void addKategori(KategoriItem kategori) {
     _kategori.add(kategori);
     notifyListeners();
   }
 
-  // clear List Item Kasir
+  /// clear List Item Kasir
   void clearListItem() {
     _list.clear();
     notifyListeners();
   }
 
-  // add List Item Kasir
+  /// add List Item Kasir
   void addItem(MartabakModel martabak) {
     _list.add(martabak);
     notifyListeners();
@@ -309,13 +320,13 @@ class KasirBloc with ChangeNotifier {
     return filter;
   }
 
-  // add HargaPenjualan
+  /// add HargaPenjualan
   void addHargaPenjualan(HargaPenjualan hargaX) {
     _listHarga.add(hargaX);
     notifyListeners();
   }
 
-  // clear harga penjualan
+  /// clear harga penjualan
   void clearHargaPenjualan() {
     _listHarga = List<HargaPenjualan>();
     notifyListeners();
@@ -326,7 +337,7 @@ class KasirBloc with ChangeNotifier {
     notifyListeners();
   }
 
-  // set harga penjualan yang dipilih
+  /// set harga penjualan yang dipilih
   void setHargaPenjualan({
     @required HargaPenjualan hargaX,
     @required BuildContext context,
@@ -385,8 +396,7 @@ class KasirBloc with ChangeNotifier {
     return filter;
   }
 
-  // cek apakah totalPenjualan melebihi Minimal Pembelian Kupon.
-
+  /// cek apakah totalPenjualan melebihi Minimal Pembelian Kupon.
   void isKuponPass() {
     for (var data in _kupon) {
       if (double.parse(data.kategoriHarga) <= this.totalHargaPenjualan) {
@@ -399,9 +409,8 @@ class KasirBloc with ChangeNotifier {
     notifyListeners();
   }
 
-  // update kupon yang dipilih
-  // dan mengecek kupon bisa double atau tidak
-
+  /// update kupon yang dipilih
+  /// dan mengecek kupon bisa double atau tidak
   void updateKupon(KuponBelanja kuponX) {
     for (var data in _kupon) {
       if (data.id == kuponX.id) {

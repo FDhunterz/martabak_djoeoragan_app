@@ -78,6 +78,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.7"
+  escposprinter:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: "4bd7e856ead3fb8be12ef31a36cd9514ab5b0973"
+      url: "https://github.com/marcusfelix/esc-pos-printer-flutter.git"
+    source: git
+    version: "0.0.1"
   fl_chart:
     dependency: "direct main"
     description:

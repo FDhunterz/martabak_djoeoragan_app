@@ -266,7 +266,8 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
                                     children: <Widget>[
                                       ListTile(
                                         title: Text(f.nota),
-                                        subtitle: Text(f.customer),
+                                        subtitle: Text(
+                                            f.customer ?? 'Tidak diketahui'),
                                         trailing: Text(
                                             DateFormat('dd MMMM yyyy').format(
                                                 DateTime.parse(f.tanggal))),

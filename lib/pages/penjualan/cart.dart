@@ -17,11 +17,12 @@ import 'package:martabakdjoeragan_app/pages/cameo/empty_cart.dart';
 // import 'package:martabakdjoeragan_app/utils/foods.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+// ignore: unused_import
+import 'package:escposprinter/escposprinter.dart';
 
 Map<String, String> requestHeaders = Map();
 GlobalKey<ScaffoldState> _scaffoldKeyCart;
-TextEditingController _jumlahBayarController;
-double _kembalian, offset;
+double offset;
 bool _isSendRequest;
 String _errorMessage;
 ScrollController _scrollController;
@@ -34,6 +35,9 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  NumberFormat _numberFormat =
+      NumberFormat.simpleCurrency(decimalDigits: 2, name: 'Rp. ');
+
   void simpanKasir() async {
     setState(() {
       _isSendRequest = true;
@@ -58,7 +62,7 @@ class _CartPageState extends State<CartPage> {
       formSerialize['c_alamat'] = blocX.selectedCustomer.alamat;
     }
 
-    formSerialize['pk_bayar'] = _jumlahBayarController.text;
+    formSerialize['pk_bayar'] = blocX.jumlahBayarController.text;
     formSerialize['p_harga'] = blocX.selectedHargaPenjualan.id;
 
     formSerialize['pkdt_item'] = List();
@@ -134,9 +138,6 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     _scaffoldKeyCart = GlobalKey<ScaffoldState>();
-    _jumlahBayarController = TextEditingController(
-      text: 0.toString(),
-    );
     _scrollController = ScrollController(
       keepScrollOffset: true,
     );
@@ -163,7 +164,6 @@ class _CartPageState extends State<CartPage> {
       }
     });
     _isSendRequest = false;
-    _kembalian = 0;
     _errorMessage = '';
     super.initState();
   }
@@ -185,11 +185,6 @@ class _CartPageState extends State<CartPage> {
         kuponEnable += 1;
       }
     }
-
-    NumberFormat numberFormat = NumberFormat.simpleCurrency(
-      decimalDigits: 0,
-      name: 'Rp. ',
-    );
 
     return GestureDetector(
       onTap: () {
@@ -547,7 +542,7 @@ class _CartPageState extends State<CartPage> {
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                          numberFormat.format(bloc.totalHarga),
+                                          _numberFormat.format(bloc.totalHarga),
                                           style: TextStyle(
                                               fontFamily: "Roboto",
                                               fontSize: 14.0,
@@ -576,7 +571,7 @@ class _CartPageState extends State<CartPage> {
                                           ),
                                         ),
                                         Text(
-                                          numberFormat.format(bloc.ppn),
+                                          _numberFormat.format(bloc.ppn),
                                           style: TextStyle(
                                             fontFamily: "Roboto",
                                             fontSize: 14.0,
@@ -605,7 +600,8 @@ class _CartPageState extends State<CartPage> {
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                          numberFormat.format(bloc.totalDiskon),
+                                          _numberFormat
+                                              .format(bloc.totalDiskon),
                                           style: TextStyle(
                                               fontFamily: "Roboto",
                                               fontSize: 14.0,
@@ -634,7 +630,7 @@ class _CartPageState extends State<CartPage> {
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                          numberFormat
+                                          _numberFormat
                                               .format(bloc.totalHargaPenjualan),
                                           style: TextStyle(
                                               fontFamily: "Roboto",
@@ -684,7 +680,7 @@ class _CartPageState extends State<CartPage> {
                                     ),
                                   ),
                                   TextField(
-                                    controller: _jumlahBayarController,
+                                    controller: bloc.jumlahBayarController,
                                     textAlign: TextAlign.end,
                                     inputFormatters: [
                                       WhitelistingTextInputFormatter.digitsOnly,
@@ -695,19 +691,19 @@ class _CartPageState extends State<CartPage> {
                                       if (ini.isEmpty) {
                                         ini = 0.toString();
                                       }
-                                      _jumlahBayarController.value =
+                                      bloc.jumlahBayarController.value =
                                           TextEditingValue(
                                         text: ini,
-                                        selection:
-                                            _jumlahBayarController.selection,
+                                        selection: bloc
+                                            .jumlahBayarController.selection,
                                       );
                                       print(ini);
 
-                                      _kembalian = bloc.totalHargaPenjualan -
+                                      bloc.kembalian = bloc
+                                              .totalHargaPenjualan -
                                           double.parse(ini.replaceAll(',', ''));
-                                      setState(() {
-                                        _kembalian = _kembalian;
-                                      });
+                                      print(bloc.kembalian);
+
                                       // print(_kembalian);
                                       // print(_kembalian *= -1);
                                     },
@@ -730,9 +726,10 @@ class _CartPageState extends State<CartPage> {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    _kembalian < 0
-                                        ? numberFormat.format(_kembalian *= -1)
-                                        : '(${numberFormat.format(_kembalian)})',
+                                    bloc.kembalian < 0
+                                        ? _numberFormat
+                                            .format(bloc.kembalian *= -1)
+                                        : '(${_numberFormat.format(bloc.kembalian)})',
                                     style: TextStyle(
                                         fontFamily: "Roboto",
                                         fontSize: 14.0,
@@ -763,9 +760,9 @@ class _CartPageState extends State<CartPage> {
                                             //       msg:
                                             //           'Pilih Customer terlebih dahulu');
                                           } else if (bloc.totalHargaPenjualan >
-                                              double.parse(
-                                                  _jumlahBayarController.text
-                                                      .replaceAll(',', ''))) {
+                                              double.parse(bloc
+                                                  .jumlahBayarController.text
+                                                  .replaceAll(',', ''))) {
                                             Fluttertoast.showToast(
                                                 msg:
                                                     'Nominal Pembayaran kurang');
