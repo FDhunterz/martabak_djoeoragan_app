@@ -103,7 +103,8 @@ class _CariPrintState extends State<CariPrint> {
           "----------------------------------------------\n");
 
       for (var data in blocX.cart) {
-        double diskons = double.parse(data.diskon != null ? data.diskon : '0');
+        double diskons =
+            double.parse(data.diskon != null ? data.diskon : '0') * data.qty;
 
         await Escposprinter.printText("${data.name.padRight(46, ' ')}\n");
 
@@ -119,7 +120,7 @@ class _CariPrintState extends State<CariPrint> {
         await Escposprinter.printText("\n\n");
 
         subDiskon += diskons;
-        totalK += double.parse(data.price) * data.qty;
+        totalK += double.parse(data.price) * data.qty - diskons;
         totalQty += data.qty;
       }
 

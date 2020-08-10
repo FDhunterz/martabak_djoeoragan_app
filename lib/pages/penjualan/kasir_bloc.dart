@@ -103,8 +103,12 @@ class KasirBloc with ChangeNotifier {
         }
       }
     }
-
-    return totalDiskon;
+    double diskonItem = 0;
+    for (var data in _cart) {
+      diskonItem +=
+          double.parse(data.diskon != null ? data.diskon : '0') * data.qty;
+    }
+    return totalDiskon + diskonItem;
   }
 
   /// get setting ppn
