@@ -434,11 +434,13 @@ class KasirBloc with ChangeNotifier {
     notifyListeners();
   }
 
+  /// menyimpan variabel customer yang dipilih
   void setCustomer(Customer customerX) {
     _selectedCustomer = customerX;
     notifyListeners();
   }
 
+  /// menghapus customer yang dipilih
   void unsetCustomer() {
     _selectedCustomer = null;
     notifyListeners();

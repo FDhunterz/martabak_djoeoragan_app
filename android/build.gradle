@@ -24,6 +24,19 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
+// build flutter com.android.builder.internal.aapt.v2.Aapt2Exception: Android resource linking failed
+subprojects {
+    afterEvaluate {project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileSdkVersion 28
+                buildToolsVersion '29.0.2'
+            }
+        }
+    }
+}
+// end build flutter
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

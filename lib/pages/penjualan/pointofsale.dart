@@ -327,8 +327,8 @@ class _PointofsalesState extends State<Pointofsales> {
         if (backButton) {
           backbuttonpressedTime = currentTime;
           Fluttertoast.showToast(
-            msg: "Tekan lagi untuk keluar dari aplikasi",
-            backgroundColor: Colors.black,
+            msg: "Tekan lagi untuk keluar",
+            backgroundColor: Colors.black54,
             textColor: Colors.white,
           );
           return false;

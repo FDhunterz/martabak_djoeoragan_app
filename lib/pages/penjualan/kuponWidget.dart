@@ -31,7 +31,7 @@ class KuponListTile extends StatefulWidget {
 class _KuponListTileState extends State<KuponListTile> {
   NumberFormat _numberFormat = NumberFormat.decimalPattern(
       // name: 'Rp. ',
-      // decimalDigits: 2,
+      // decimalDigits: 0,
 
       );
 

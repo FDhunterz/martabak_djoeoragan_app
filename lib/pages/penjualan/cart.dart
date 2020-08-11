@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cartTile.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/customer.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/escpos_function.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kupon.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
@@ -36,7 +37,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   NumberFormat _numberFormat =
-      NumberFormat.simpleCurrency(decimalDigits: 2, name: 'Rp. ');
+      NumberFormat.simpleCurrency(decimalDigits: 0, name: 'Rp. ');
 
   void simpanKasir() async {
     setState(() {
@@ -96,10 +97,12 @@ class _CartPageState extends State<CartPage> {
         var responseJson = jsonDecode(response.body);
 
         if (responseJson['status'] == 'success') {
+          await printKasir(responseJson['data']['nota'], context);
           Fluttertoast.showToast(msg: responseJson['text']);
           blocX.clearCart();
           blocX.unsetCustomer();
           blocX.catatanController.clear();
+          blocX.jumlahBayarController.text = '0';
           Navigator.pop(context, true);
         } else if (responseJson['status'] == 'error') {
           Fluttertoast.showToast(msg: responseJson['text']);
@@ -349,10 +352,20 @@ class _CartPageState extends State<CartPage> {
                                               selectedCustomer.namaCustomer,
                                             ),
                                     ),
-                                    Icon(
-                                      Icons.chevron_right,
-                                      color: Colors.blue,
-                                    )
+                                    selectedCustomer != null
+                                        ? InkWell(
+                                            onTap: () {
+                                              bloc.unsetCustomer();
+                                            },
+                                            child: Icon(
+                                              Icons.close,
+                                              color: Colors.red,
+                                            ),
+                                          )
+                                        : Icon(
+                                            Icons.chevron_right,
+                                            color: Colors.blue,
+                                          )
                                   ],
                                 ),
                               ),
@@ -542,7 +555,8 @@ class _CartPageState extends State<CartPage> {
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                          _numberFormat.format(bloc.totalHarga),
+                                          _numberFormat.format(
+                                              bloc.totalHarga.ceilToDouble()),
                                           style: TextStyle(
                                               fontFamily: "Roboto",
                                               fontSize: 14.0,
@@ -571,7 +585,8 @@ class _CartPageState extends State<CartPage> {
                                           ),
                                         ),
                                         Text(
-                                          _numberFormat.format(bloc.ppn),
+                                          _numberFormat
+                                              .format(bloc.ppn.ceilToDouble()),
                                           style: TextStyle(
                                             fontFamily: "Roboto",
                                             fontSize: 14.0,
@@ -600,8 +615,8 @@ class _CartPageState extends State<CartPage> {
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                          _numberFormat
-                                              .format(bloc.totalDiskon),
+                                          _numberFormat.format(
+                                              bloc.totalDiskon.ceilToDouble()),
                                           style: TextStyle(
                                               fontFamily: "Roboto",
                                               fontSize: 14.0,
@@ -630,8 +645,9 @@ class _CartPageState extends State<CartPage> {
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                          _numberFormat
-                                              .format(bloc.totalHargaPenjualan),
+                                          _numberFormat.format(bloc
+                                              .totalHargaPenjualan
+                                              .ceilToDouble()),
                                           style: TextStyle(
                                               fontFamily: "Roboto",
                                               fontSize: 14.0,
@@ -727,9 +743,10 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                   Text(
                                     bloc.kembalian < 0
-                                        ? _numberFormat
-                                            .format(bloc.kembalian *= -1)
-                                        : '(${_numberFormat.format(bloc.kembalian)})',
+                                        ? _numberFormat.format(
+                                            (bloc.kembalian *= -1)
+                                                .ceilToDouble())
+                                        : '(${_numberFormat.format((bloc.kembalian).ceilToDouble())})',
                                     style: TextStyle(
                                         fontFamily: "Roboto",
                                         fontSize: 14.0,
@@ -761,8 +778,10 @@ class _CartPageState extends State<CartPage> {
                                             //           'Pilih Customer terlebih dahulu');
                                           } else if (bloc.totalHargaPenjualan >
                                               double.parse(bloc
-                                                  .jumlahBayarController.text
-                                                  .replaceAll(',', ''))) {
+                                                      .jumlahBayarController
+                                                      .text
+                                                      .replaceAll(',', ''))
+                                                  .ceilToDouble()) {
                                             Fluttertoast.showToast(
                                                 msg:
                                                     'Nominal Pembayaran kurang');

@@ -76,7 +76,7 @@ class POSTileVertical extends StatelessWidget {
   final Function onIncrease;
 
   final NumberFormat _numberFormat =
-      NumberFormat.simpleCurrency(decimalDigits: 2, name: 'Rp. ');
+      NumberFormat.simpleCurrency(decimalDigits: 0, name: 'Rp. ');
 
   POSTileVertical({
     this.desc,

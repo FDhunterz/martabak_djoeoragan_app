@@ -258,7 +258,8 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
                         getNota();
                         return Future.value('');
                       },
-                      child: Column(
+                      child: ListView(
+                        padding: EdgeInsets.only(bottom: 100),
                         children: listNota.length != 0
                             ? listNota
                                 .map(
