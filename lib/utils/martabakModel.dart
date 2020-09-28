@@ -10,6 +10,8 @@ class MartabakModel {
       idKategoriItem;
   int qty, id;
   List<HargaPenjualanPerItem> listHargaPenjualan;
+  List<ToppingMartabakModel> listTopping;
+  List<MartabakVarianModel> listVarian;
 
   MartabakModel({
     this.name,
@@ -24,6 +26,8 @@ class MartabakModel {
     this.diskonDariKupon,
     this.listHargaPenjualan,
     this.idKategoriItem,
+    this.listTopping,
+    this.listVarian,
   });
 }
 
@@ -115,4 +119,43 @@ class KategoriItem {
   bool operator ==(Object other) => other is KategoriItem && other.id == id;
 
   int get hashCode => id.hashCode;
+}
+
+class MartabakVarianModel {
+  String idVarian, namaVarian;
+  double hargaVarian;
+  bool isSelected;
+
+  MartabakVarianModel({
+    this.hargaVarian,
+    this.idVarian,
+    this.namaVarian,
+    this.isSelected,
+  });
+}
+
+class ToppingMartabakModel {
+  String idTopping, namaTopping;
+  List<DetailToppingMartabakModel> listTopping;
+
+  ToppingMartabakModel({
+    this.idTopping,
+    this.namaTopping,
+    this.listTopping,
+  });
+}
+
+class DetailToppingMartabakModel {
+  String idTopping, namaTopping, idDetailTopping, nomorTopping;
+  bool isSelected;
+  double hargaTopping;
+
+  DetailToppingMartabakModel({
+    this.hargaTopping,
+    this.idTopping,
+    this.isSelected,
+    this.namaTopping,
+    this.idDetailTopping,
+    this.nomorTopping,
+  });
 }

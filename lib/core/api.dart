@@ -83,8 +83,18 @@ class Auth {
         } else if (getresponse['credential'] != null) {
           session.saveString('access_token', getresponse['credential']);
           session.saveInteger('user_id', getresponse['user_id']);
-          session.saveInteger('us_perusahaan',
-              int.parse(getresponse['data']['us_perusahaan'].toString()));
+          session.saveInteger(
+            'us_holding',
+            int.parse(getresponse['data']['us_holding'].toString()),
+          );
+          session.saveInteger(
+            'us_pegawai',
+            int.parse(getresponse['data']['us_perusahaan'].toString()),
+          );
+          session.saveInteger(
+            'us_perusahaan',
+            int.parse(getresponse['data']['us_perusahaan'].toString()),
+          );
           session.saveString('token_type', 'Bearer');
           Fluttertoast.showToast(msg: 'Token saved');
           return {

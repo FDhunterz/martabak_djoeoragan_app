@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:intl/intl.dart';
+import 'package:martabakdjoeragan_app/pages/ImageToFile/ImageToFile.dart';
+import 'package:martabakdjoeragan_app/store/DataStore.dart';
+import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
+import 'package:network_to_file_image/network_to_file_image.dart';
 
-class POSTileHorizontal extends StatelessWidget {
+class POSTileHorizontal extends StatefulWidget {
   final String id, nama, gambar, desc;
   final Function onTap;
 
@@ -13,6 +17,29 @@ class POSTileHorizontal extends StatelessWidget {
     this.nama,
     this.onTap,
   });
+
+  @override
+  _POSTileHorizontalState createState() => _POSTileHorizontalState();
+}
+
+class _POSTileHorizontalState extends State<POSTileHorizontal> {
+  String holding;
+
+  void getHolding() async {
+    DataStore store = DataStore();
+
+    int holdingX = await store.getDataInteger('us_holding');
+
+    setState(() {
+      holding = holdingX.toString();
+    });
+  }
+
+  @override
+  void initState() {
+    getHolding();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +53,38 @@ class POSTileHorizontal extends StatelessWidget {
             children: <Widget>[
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: FadeInImage.assetNetwork(
-                  image:
-                      '${noapiurl}storage/app/public/project/upload/1/item/$id/$gambar',
-                  placeholder: 'images/martabak1.jpg',
-                  height: 178,
-                  width: 160,
+                child: Image(
+                  height: 70,
+                  width: 70,
                   fit: BoxFit.cover,
+                  errorBuilder: (BuildContext context, Object exception,
+                      StackTrace stackTrace) {
+                    // Appropriate logging or analytics, e.g.
+                    // myAnalytics.recordError(
+                    //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
+                    //   exception,
+                    //   stackTrace,
+                    // );
+                    return Image.asset(
+                      'images/martabak1.jpg',
+                      height: 70,
+                      width: 70,
+                      fit: BoxFit.cover,
+                    );
+                  },
+                  image: NetworkToFileImage(
+                    url:
+                        '${noapiurl}storage/app/public/project/upload/$holding/item/${widget.id}/${widget.gambar}',
+                    file: fileFromDocsDir(widget.gambar),
+                    debug: true,
+                  ),
                 ),
               ),
               SizedBox(height: 7),
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  nama,
+                  widget.nama,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
@@ -52,7 +97,7 @@ class POSTileHorizontal extends StatelessWidget {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  desc,
+                  widget.desc,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
@@ -65,18 +110,16 @@ class POSTileHorizontal extends StatelessWidget {
             ],
           ),
         ),
-        onTap: onTap,
+        onTap: widget.onTap,
       ),
     );
   }
 }
 
-class POSTileVertical extends StatelessWidget {
+class POSTileVertical extends StatefulWidget {
   final String id, nama, gambar, desc, diskon, harga;
-  final Function onIncrease;
-
-  final NumberFormat _numberFormat =
-      NumberFormat.simpleCurrency(decimalDigits: 0, name: 'Rp. ');
+  final Function onTap;
+  final List<MartabakVarianModel> listVarian;
 
   POSTileVertical({
     this.desc,
@@ -85,8 +128,36 @@ class POSTileVertical extends StatelessWidget {
     this.harga,
     this.id,
     this.nama,
-    this.onIncrease,
+    this.onTap,
+    this.listVarian,
   });
+
+  @override
+  _POSTileVerticalState createState() => _POSTileVerticalState();
+}
+
+class _POSTileVerticalState extends State<POSTileVertical> {
+  final NumberFormat _numberFormat =
+      NumberFormat.simpleCurrency(decimalDigits: 0, name: 'Rp. ');
+
+  String holding;
+
+  void getHolding() async {
+    DataStore store = DataStore();
+
+    int holdingX = await store.getDataInteger('us_holding');
+
+    setState(() {
+      holding = holdingX.toString();
+    });
+  }
+
+  @override
+  void initState() {
+    getHolding();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -100,13 +171,31 @@ class POSTileVertical extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
-                  child: FadeInImage.assetNetwork(
-                    placeholder: 'images/martabak1.jpg',
-                    image:
-                        '${noapiurl}storage/app/public/project/upload/1/item/$id/$gambar',
+                  child: Image(
                     height: 70,
                     width: 70,
                     fit: BoxFit.cover,
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace stackTrace) {
+                      // Appropriate logging or analytics, e.g.
+                      // myAnalytics.recordError(
+                      //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
+                      //   exception,
+                      //   stackTrace,
+                      // );
+                      return Image.asset(
+                        'images/martabak1.jpg',
+                        height: 70,
+                        width: 70,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                    image: NetworkToFileImage(
+                      url:
+                          '${noapiurl}storage/app/public/project/upload/$holding/item/${widget.id}/${widget.gambar}',
+                      file: fileFromDocsDir(widget.gambar),
+                      debug: true,
+                    ),
                   ),
                 ),
               ),
@@ -122,7 +211,7 @@ class POSTileVertical extends StatelessWidget {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          nama,
+                          widget.nama,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 16,
@@ -135,7 +224,7 @@ class POSTileVertical extends StatelessWidget {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          desc,
+                          widget.desc,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
@@ -152,13 +241,13 @@ class POSTileVertical extends StatelessWidget {
                         children: <Widget>[
                           Container(
                             alignment: Alignment.centerLeft,
-                            child: diskon != null
+                            child: widget.diskon != null
                                 ? Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Text(
                                         _numberFormat.format(
-                                          double.parse(harga),
+                                          double.parse(widget.harga),
                                         ),
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -172,8 +261,8 @@ class POSTileVertical extends StatelessWidget {
                                       ),
                                       Text(
                                         _numberFormat.format(
-                                          double.parse(harga) -
-                                              double.parse(diskon),
+                                          double.parse(widget.harga) -
+                                              double.parse(widget.diskon),
                                         ),
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -187,7 +276,7 @@ class POSTileVertical extends StatelessWidget {
                                 : Container(
                                     child: Text(
                                       _numberFormat.format(
-                                        double.parse(harga),
+                                        double.parse(widget.harga),
                                       ),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -198,21 +287,41 @@ class POSTileVertical extends StatelessWidget {
                                     ),
                                   ),
                           ),
-                          ButtonTheme(
-                            minWidth: 25.0,
-                            height: 25.0,
-                            buttonColor: Color(0xfffbaf18),
-                            child: RaisedButton(
-                              onPressed: onIncrease,
-                              child: const Text(
-                                'Tambah',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.white,
+                          widget.listVarian.length != 0
+                              // ignore: dead_code
+                              ? Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 3,
+                                    horizontal: 15,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xfffbaf18),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Text(
+                                    '${widget.listVarian.length} varian',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              // ignore: dead_code
+                              : Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 3,
+                                    horizontal: 15,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xff76273c),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Text(
+                                    'Tambah',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ],
@@ -222,7 +331,7 @@ class POSTileVertical extends StatelessWidget {
             ],
           ),
         ),
-        onTap: onIncrease,
+        onTap: widget.onTap,
       ),
     );
   }

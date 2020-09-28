@@ -1,11 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:martabakdjoeragan_app/core/api.dart';
+import 'package:martabakdjoeragan_app/core/custom_sendrequest.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
+import 'package:martabakdjoeragan_app/core/storage.dart';
+import 'package:martabakdjoeragan_app/pages/CekKoneksi/cek_koneksi.dart';
 // import 'package:martabakdjoeragan_app/pages/comp/cari_cabang.dart';
 import 'package:martabakdjoeragan_app/pages/comp/cari_outlet.dart';
 import 'package:martabakdjoeragan_app/pages/comp/comp_bloc.dart';
@@ -13,7 +18,6 @@ import 'package:martabakdjoeragan_app/pages/comp/comp_loading.dart';
 import 'package:martabakdjoeragan_app/pages/comp/comp_model.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import 'package:martabakdjoeragan_app/utils/errorWidget.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 bool _isError, _isLoading;
@@ -28,105 +32,190 @@ class PilihCabangOutlet extends StatefulWidget {
 
 class PilihCabangOutletState extends State<PilihCabangOutlet> {
   GlobalKey<ScaffoldState> _scaffoldKeyComp = GlobalKey<ScaffoldState>();
+  CekKoneksi cekKoneksi = CekKoneksi.instance;
 
-  void getResource() async {
-    setState(() {
-      _isLoading = true;
-      _isError = false;
-    });
-    DataStore dataStore = DataStore();
-    String accessToken = await dataStore.getDataString('access_token');
-
-    requestHeaders['Accept'] = 'application/json';
-    requestHeaders['Authorization'] = 'Bearer $accessToken';
-
-    comp = await dataStore.getDataString('comp');
-    // CompBloc bloc = Provider.of<CompBloc>(context);
-    // String compX = bloc.selectedOutlet != null
-    //     ? bloc.selectedOutlet.id
-    //     : 'Tidak ditemukan';
-
-    try {
-      final response = await http.get(
-        '${url}setting/session/resource',
-        headers: requestHeaders,
-      );
-
-      if (response.statusCode == 200) {
-        var responseJson = jsonDecode(response.body);
-
-        print(responseJson);
-
-        CompBloc bloc = Provider.of<CompBloc>(context);
-
-        bloc.clearListCabang();
-        bloc.clearListOutlet();
-
-        for (var c in responseJson['cabang']) {
-          bloc.addCabang(
-            Cabang(
-              id: c['id'].toString(),
-              nama: c['text'],
-            ),
-          );
-        }
-
-        for (var o in responseJson['outlet']) {
-          bloc.addOutlet(
-            Outlet(
-              id: o['id'].toString(),
-              nama: o['text'],
-              idCabang: o['o_perusahaan'].toString(),
-            ),
-          );
-        }
-
-        if (bloc.selectedCabang == null) {
-          bloc.setSelectedCabang(
-            Cabang(
-              id: responseJson['cabang_pegawai']['p_id'].toString(),
-              nama: responseJson['cabang_pegawai']['p_nama'],
-            ),
-          );
-        }
-
-        setState(() {
-          _isLoading = false;
-          _isError = false;
-        });
-      } else if (response.statusCode == 401) {
-        Fluttertoast.showToast(
-            msg: 'Token Kedaluwarsa, silahkan login kembali');
-        setState(() {
-          _isLoading = false;
-          _isError = true;
-          _errorMessage = 'Token Kedaluwarsa, silahkan login kembali';
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-          _isError = true;
-          _errorMessage = response.body;
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _errorMessage = e.toString();
-        _isError = true;
-        _isLoading = false;
-      });
-      Fluttertoast.showToast(msg: e.toString());
-      print(e);
-    }
-  }
+  Map<String, dynamic> statusKoneksi = {
+    'type': ConnectivityResult.none,
+    'isOnline': false,
+  };
 
   @override
   void initState() {
     _isLoading = true;
     _isError = false;
     comp = null;
-    getResource();
+    _errorMessage = '';
+    cekKoneksi.initialise();
+    cekKoneksi.myStream.listen((event) {
+      print(event);
+
+      /// event @return
+      /// {
+      ///   'type': ConnectivityResult.none | ConnectivityResult.mobile | ConnectivityResult.wifi,
+      ///   'isOnline' : bool,
+      /// };
+      setState(() {
+        statusKoneksi = event;
+      });
+    });
+    Timer(
+      Duration(seconds: 1),
+      () {
+        getResource();
+      },
+    );
     super.initState();
+  }
+
+  getResource() async {
+    DataStore dataStore = DataStore();
+
+    String accessToken = await dataStore.getDataString('access_token');
+
+    requestHeaders['Accept'] = 'application/json';
+    requestHeaders['Authorization'] = 'Bearer $accessToken';
+    CustomSendRequest customhttp = CustomSendRequest.initialize;
+    String namaFile = 'session-resource.json';
+
+    void _kelolaResponseSessionResource(String json) async {
+      var responseJson = jsonDecode(json);
+
+      print(responseJson);
+
+      CompBloc bloc = Provider.of<CompBloc>(context);
+
+      bloc.clearListCabang();
+      bloc.clearListOutlet();
+
+      for (var c in responseJson['cabang']) {
+        bloc.addCabang(
+          Cabang(
+            id: c['id'].toString(),
+            nama: c['text'],
+          ),
+        );
+      }
+
+      for (var o in responseJson['outlet']) {
+        bloc.addOutlet(
+          Outlet(
+            id: o['id'].toString(),
+            nama: o['text'],
+            idCabang: o['o_perusahaan'].toString(),
+          ),
+        );
+      }
+
+      if (bloc.selectedCabang == null) {
+        bloc.setSelectedCabang(
+          Cabang(
+            id: responseJson['cabang_pegawai']['p_id'].toString(),
+            nama: responseJson['cabang_pegawai']['p_nama'],
+          ),
+        );
+      }
+
+      comp = await dataStore.getDataString('comp');
+
+      /// set otomatis outlet dipilih
+      if (comp != 'Tidak ditemukan') {
+        for (var data in bloc.listOutlet(filterByCabang: bloc.selectedCabang)) {
+          if (comp == data.id) {
+            bloc.setSelectedOutlet(data);
+            break;
+          }
+        }
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    }
+
+    customhttp.get(
+      '${url}setting/session/resource',
+      headers: requestHeaders,
+      isOnline: statusKoneksi['isOnline'],
+      namaFile: namaFile,
+      onBeforeSend: () {
+        setState(() {
+          _isError = false;
+          _isLoading = true;
+          _errorMessage = '';
+        });
+      },
+      onComplete: () {
+        setState(() {
+          _isLoading = false;
+        });
+      },
+      onErrorCatch: (e) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e;
+        });
+        showError();
+      },
+      onSuccess: (ini) async {
+        PenyimpananKu storage = PenyimpananKu();
+
+        storage.tulisBerkas(ini, namaFile);
+
+        _kelolaResponseSessionResource(ini);
+      },
+      onUnknownStatusCode: (statusCode) {
+        setState(() {
+          _errorMessage = 'Error Code : $statusCode';
+        });
+        showError();
+      },
+      onUseLocalFile: (ini) async {
+        if (ini.isEmpty) {
+          setState(() {
+            _isLoading = false;
+            _isError = true;
+            _errorMessage =
+                'Aplikasi baru diinstall pertama kali. Silahkan hubungkan perangkat ke jaringan internet untuk menjalakan aplikasi ke mode offline';
+          });
+        } else {
+          _kelolaResponseSessionResource(ini);
+        }
+      },
+    );
+  }
+
+  void showError() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text('Error'),
+        content: Text(_errorMessage),
+        actions: <Widget>[
+          RaisedButton(
+            child: Text('Coba Lagi'),
+            color: Colors.orange,
+            onPressed: () {
+              Navigator.pop(context);
+              getResource();
+            },
+            textColor: Colors.white,
+          ),
+          RaisedButton(
+            child: Text('Tutup'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            textColor: Colors.black,
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   @override
@@ -149,20 +238,23 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
       ),
       floatingActionButton: _isLoading
           ? null
-          : FloatingActionButton.extended(
-              onPressed: () {
-                if (bloc.selectedOutlet != null) {
-                  DataStore store = DataStore();
-                  store.setDataString('comp', bloc.selectedOutlet.id);
-                  Navigator.pushReplacementNamed(context, '/pos');
-                } else {
-                  Fluttertoast.showToast(msg: 'Pilih Outlet terlebih dahulu');
-                }
-              },
-              label: Text('Simpan Informasi'),
-              icon: Icon(Icons.save),
-              backgroundColor: Colors.teal,
-            ),
+          : _isError
+              ? null
+              : FloatingActionButton.extended(
+                  onPressed: () {
+                    if (bloc.selectedOutlet != null) {
+                      DataStore store = DataStore();
+                      store.setDataString('comp', bloc.selectedOutlet.id);
+                      Navigator.pushReplacementNamed(context, '/pos');
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: 'Pilih Outlet terlebih dahulu');
+                    }
+                  },
+                  label: Text('Simpan Informasi'),
+                  icon: Icon(Icons.save),
+                  backgroundColor: Colors.teal,
+                ),
       body: _isLoading
           ? SingleChildScrollView(
               child: Container(

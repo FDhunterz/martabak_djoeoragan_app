@@ -68,7 +68,7 @@ class _ErrorOutputWidgetState extends State<ErrorOutputWidget> {
                     child: Text(
                       'Coba lagi',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                     onPressed: widget.onPress,

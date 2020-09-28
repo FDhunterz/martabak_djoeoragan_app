@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:martabakdjoeragan_app/core/api.dart';
+// ignore: unused_import
 import 'package:martabakdjoeragan_app/pages/comp/comp_bloc.dart';
 // import 'package:martabakdjoeragan_app/utils/Navigator.dart';
 
 import 'dart:async';
 
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
+// ignore: unused_import
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -21,11 +23,12 @@ class _SplashScreenState extends State<SplashScreen> {
     // ignore: unused_local_variable
     DataStore store = DataStore();
 
-    CompBloc bloc = Provider.of<CompBloc>(context);
+    // CompBloc bloc = Provider.of<CompBloc>(context);
 
-    String comp = bloc.selectedOutlet != null
-        ? bloc.selectedOutlet.id
-        : 'Tidak ditemukan';
+    String comp = await store.getDataString('comp');
+    // String comp = bloc.selectedOutlet != null
+    //     ? bloc.selectedOutlet.id
+    //     : 'Tidak ditemukan';
 
     print(login['access_token']);
     if (login['access_token'] != 'Tidak ditemukan' &&

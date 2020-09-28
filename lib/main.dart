@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:martabakdjoeragan_app/pages/ImageToFile/ImageToFile.dart';
 import 'package:martabakdjoeragan_app/pages/comp/comp.dart';
 import 'package:martabakdjoeragan_app/pages/comp/comp_bloc.dart';
 import 'package:martabakdjoeragan_app/pages/dashboard.dart';
@@ -12,6 +13,7 @@ import 'package:martabakdjoeragan_app/pages/master.dart';
 import 'package:martabakdjoeragan_app/pages/Pembelian/pembelian.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/pointofsale.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'pages/inventory/inventory.dart';
 import 'pages/inventory/tambah_opname.dart';
@@ -31,7 +33,12 @@ var routes = <String, WidgetBuilder>{
   '/comp': (BuildContext context) => PilihCabangOutlet(),
 };
 
-void main() => runApp(MyApp());
+void main() async {
+  // You should get the Application Documents Directory only once.
+  WidgetsFlutterBinding.ensureInitialized();
+  appDocsDir = await getApplicationDocumentsDirectory();
+  return runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

@@ -10,6 +10,7 @@ import 'package:martabakdjoeragan_app/pages/penjualan/customer.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/escpos_function.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kupon.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/pointofsale_topping.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 import 'package:martabakdjoeragan_app/utils/numberMask.dart';
@@ -273,19 +274,59 @@ class _CartPageState extends State<CartPage> {
                               width: MediaQuery.of(context).size.width,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
-                                children: cart.map(
-                                  (cart) {
-                                    return CartTile(
-                                      cart: cart,
-                                      onIncrease: () {
-                                        bloc.addToCart(cart);
+                                children: cart
+                                    .asMap()
+                                    .map(
+                                      (i, cart) {
+                                        return MapEntry(
+                                          i,
+                                          CartTile(
+                                            cart: cart,
+                                            onTap: () async {
+                                              Map a = await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          PilihTopping(
+                                                    // listTopping:
+                                                    //     cart.listTopping,
+                                                    // namaItem: cart.name,
+                                                    // listVarian: cart.listVarian,
+                                                    // qty: cart.qty,
+                                                    martabak: cart,
+                                                    tipe: TipeTombol.edit,
+                                                    index: i,
+                                                  ),
+                                                ),
+                                              );
+
+                                              if (a != null) {
+                                                cart.qty = a['qty'];
+                                                cart.listTopping =
+                                                    a['listTopping'];
+                                                cart.listVarian =
+                                                    a['listVarian'];
+
+                                                if (a['tipe'] ==
+                                                    TipeTombol.edit) {
+                                                  bloc.editCart(cart, i);
+                                                }
+                                              }
+                                            },
+                                            onIncrease: () {
+                                              bloc.increaseQtyCartItemByIndex(
+                                                  i);
+                                            },
+                                            onReduce: () {
+                                              bloc.reduceQtyByIndex(i);
+                                            },
+                                          ),
+                                        );
                                       },
-                                      onReduce: () {
-                                        bloc.reduceQty(cart);
-                                      },
-                                    );
-                                  },
-                                ).toList(),
+                                    )
+                                    .values
+                                    .toList(),
                               ),
                             ),
                           ],

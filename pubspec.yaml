@@ -33,8 +33,12 @@ dependencies:
   shimmer:
   fl_chart: ^0.6.0
   loading:
+  path_provider: ^1.4.4
+  network_to_file_image: ^2.3.3
+  connectivity:
   flutter_masked_text: ^0.8.0
   month_picker_dialog: ^0.3.2
+  collection: any
   escposprinter:
     git:
         url: https://github.com/marcusfelix/esc-pos-printer-flutter.git

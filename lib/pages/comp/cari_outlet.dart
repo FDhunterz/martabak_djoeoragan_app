@@ -164,7 +164,7 @@ class _CariOutletState extends State<CariOutlet> {
                               : Colors.black,
                         ),
                       ),
-                      onTap: () {
+                      onTap: () async {
                         bloc.setSelectedOutlet(listOutlet[i]);
                         Navigator.pop(context, outletState);
                       },

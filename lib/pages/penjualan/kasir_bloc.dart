@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/pointofsale_topping.dart';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 
 class KasirBloc with ChangeNotifier {
@@ -209,6 +211,42 @@ class KasirBloc with ChangeNotifier {
           priceX = data['i_harga_jual'].toString();
         }
 
+        List<ToppingMartabakModel> _listY = List<ToppingMartabakModel>();
+        List<MartabakVarianModel> _listZ = List<MartabakVarianModel>();
+        for (var dataY in data['modifier']) {
+          List<DetailToppingMartabakModel> _listAA = List();
+          for (var dataYD in dataY['modifier']['detail']) {
+            _listAA.add(
+              DetailToppingMartabakModel(
+                idTopping: dataYD['mddt_modifier'].toString(),
+                hargaTopping: double.parse(dataYD['mddt_harga'].toString()),
+                idDetailTopping: dataYD['mddt_id'].toString(),
+                isSelected: false,
+                namaTopping: dataYD['mddt_nama'],
+                nomorTopping: dataYD['mddt_nomor'].toString(),
+              ),
+            );
+          }
+          _listY.add(
+            ToppingMartabakModel(
+              idTopping: dataY['modifier']['m_id'].toString(),
+              namaTopping: dataY['modifier']['m_nama'],
+              listTopping: _listAA,
+            ),
+          );
+        }
+
+        for (var dataZ in data['varian']) {
+          _listZ.add(
+            MartabakVarianModel(
+              idVarian: dataZ['iv_id'].toString(),
+              hargaVarian: double.parse(dataZ['iv_harga'].toString()),
+              isSelected: false,
+              namaVarian: dataZ['iv_nama'],
+            ),
+          );
+        }
+
         _list.add(
           MartabakModel(
             id: int.parse(data['i_id'].toString()),
@@ -221,6 +259,8 @@ class KasirBloc with ChangeNotifier {
             qty: 1,
             details: data['i_kode'],
             diskon: diskonX,
+            listTopping: _listY,
+            listVarian: _listZ,
           ),
         );
       }
@@ -446,10 +486,82 @@ class KasirBloc with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _bandingToppingKeranjangDenganToppingItemDipilih(
+    MartabakModel model,
+    int i,
+  ) {
+    List<bool> _listA = List<bool>();
+    List<bool> _listB = List<bool>();
+
+    for (int j = 0; j < _cart[i].listTopping.length; j++) {
+      var dataK = _cart[i].listTopping[j];
+      var dataKX = model.listTopping[j];
+      for (int k = 0; k < dataK.listTopping.length; k++) {
+        var dataKD = dataK.listTopping[k];
+        var dataKDX = dataKX.listTopping[k];
+
+        _listA.add(dataKD.isSelected);
+        _listB.add(dataKDX.isSelected);
+      }
+    }
+
+    print(_listA);
+    print(_listB);
+    if (IterableEquality().equals(_listA, _listB)) {
+      return true;
+    }
+
+    return false;
+  }
+
   void addToCart(MartabakModel model) {
     bool isTidakAda = true;
     for (int i = 0; i < _cart.length; i++) {
-      if (_cart[i].id == model.id) {
+      if (model.listVarian.length != 0 &&
+          model.listTopping.length != 0 &&
+          _cart[i].id == model.id &&
+          IterableEquality().equals(
+              _cart[i].listVarian.map((e) => e.isSelected).toList(),
+              model.listVarian.map((e) => e.isSelected).toList()) &&
+          _bandingToppingKeranjangDenganToppingItemDipilih(model, i)) {
+        _cart[i].qty += model.qty;
+        isTidakAda = false;
+        this.totalHarga;
+        this.totalHargaPenjualan;
+        this.ppn;
+        this.isKuponPass();
+        notifyListeners();
+
+        print('true 1');
+        break;
+      } else if (model.listVarian.length != 0 &&
+          _cart[i].id == model.id &&
+          IterableEquality().equals(
+              _cart[i].listVarian.map((e) => e.isSelected).toList(),
+              model.listVarian.map((e) => e.isSelected).toList())) {
+        _cart[i].qty += model.qty;
+        isTidakAda = false;
+        this.totalHarga;
+        this.totalHargaPenjualan;
+        this.ppn;
+        this.isKuponPass();
+        notifyListeners();
+        print('true 2');
+        break;
+      } else if (model.listTopping.length != 0 &&
+          _cart[i].id == model.id &&
+          _bandingToppingKeranjangDenganToppingItemDipilih(model, i)) {
+        _cart[i].qty += model.qty;
+        isTidakAda = false;
+        this.totalHarga;
+        this.totalHargaPenjualan;
+        this.ppn;
+        this.isKuponPass();
+        notifyListeners();
+        print('true 3');
+        break;
+      } else if (_cart[i].id == model.id) {
+        print('else 4');
         _cart[i].qty += 1;
         isTidakAda = false;
         this.totalHarga;
@@ -463,6 +575,7 @@ class KasirBloc with ChangeNotifier {
 
     if (this.selectedHargaPenjualan != null) {
       if (isTidakAda) {
+        print('tidak ada');
         _cart.add(model);
         this.totalHarga;
         this.totalHargaPenjualan;
@@ -473,6 +586,90 @@ class KasirBloc with ChangeNotifier {
     } else {
       Fluttertoast.showToast(msg: 'Pilih Group Harga terlebih dahulu');
     }
+  }
+
+  void editCart(MartabakModel model, int i) {
+    bool isTidakAda = true;
+    if (model.listVarian.length != 0 && model.listTopping.length != 0) {
+      if (_cart[i].id == model.id &&
+          _cart[i]
+              .listTopping
+              .any((modelX) => model.listTopping.contains(modelX)) &&
+          _cart[i]
+              .listVarian
+              .any((element) => model.listVarian.contains(element))) {
+        _cart[i].qty = model.qty;
+        isTidakAda = false;
+        this.totalHarga;
+        this.totalHargaPenjualan;
+        this.ppn;
+        this.isKuponPass();
+        notifyListeners();
+      }
+    } else if (model.listVarian.length != 0) {
+      if (_cart[i].id == model.id &&
+          _cart[i]
+              .listVarian
+              .any((element) => model.listVarian.contains(element))) {
+        _cart[i].qty = model.qty;
+        isTidakAda = false;
+        this.totalHarga;
+        this.totalHargaPenjualan;
+        this.ppn;
+        this.isKuponPass();
+        notifyListeners();
+      }
+    } else if (model.listTopping.length != 0) {
+      if (_cart[i].id == model.id &&
+          _cart[i]
+              .listTopping
+              .any((modelX) => model.listTopping.contains(modelX))) {
+        _cart[i].qty = model.qty;
+        isTidakAda = false;
+        this.totalHarga;
+        this.totalHargaPenjualan;
+        this.ppn;
+        this.isKuponPass();
+        notifyListeners();
+      }
+    } else {
+      if (_cart[i].id == model.id) {
+        _cart[i].qty = model.qty;
+        isTidakAda = false;
+        this.totalHarga;
+        this.totalHargaPenjualan;
+        this.ppn;
+        this.isKuponPass();
+        notifyListeners();
+      }
+    }
+
+    // if (this.selectedHargaPenjualan != null) {
+    //   if (isTidakAda) {
+    //     _cart.add(model);
+    //     this.totalHarga;
+    //     this.totalHargaPenjualan;
+    //     this.ppn;
+    //     this.isKuponPass();
+    //     notifyListeners();
+    //   }
+    // } else {
+    //   Fluttertoast.showToast(msg: 'Pilih Group Harga terlebih dahulu');
+    // }
+  }
+
+  void deleteCart(int index) {
+    _cart.removeAt(index);
+    notifyListeners();
+  }
+
+  void increaseQtyCartItemByIndex(int i) {
+    _cart[i].qty += 1;
+    this.totalHarga;
+    this.totalHargaPenjualan;
+    this.ppn;
+    this.isKuponPass();
+    notifyListeners();
   }
 
   void reduceQty(MartabakModel model) {
@@ -486,6 +683,20 @@ class KasirBloc with ChangeNotifier {
         break;
       }
     }
+    this.totalHarga;
+    this.totalHargaPenjualan;
+    this.ppn;
+    this.isKuponPass();
+    notifyListeners();
+  }
+
+  void reduceQtyByIndex(int i) {
+    if (_cart[i].qty == 1) {
+      _cart.removeAt(i);
+    } else {
+      _cart[i].qty -= 1;
+    }
+
     this.totalHarga;
     this.totalHargaPenjualan;
     this.ppn;
