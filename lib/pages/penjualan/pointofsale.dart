@@ -611,6 +611,7 @@ class _PointofsalesState extends State<Pointofsales> {
 
     List<MartabakModel> _listItem =
         List.from(bloc.cariItem(cariController.text));
+    // List<MartabakModel> _listItem = List.from(bloc.listItem);
 
     return WillPopScope(
       onWillPop: () async {
@@ -986,113 +987,124 @@ class _PointofsalesState extends State<Pointofsales> {
                           height: 20.0,
                           thickness: 1,
                         ),
-                        Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: _listItem.length != 0
-                                ? _listItem
-                                    .map(
-                                      (MartabakModel e) => POSTileVertical(
-                                        id: e.id.toString(),
-                                        desc: e.desc,
-                                        gambar: e.img,
-                                        nama: e.name,
-                                        diskon: e.diskon,
-                                        harga: e.price,
-                                        listVarian: e.listVarian,
-                                        onTap: () async {
-                                          // List<MartabakVarianModel> _listA =
-                                          //     new List<MartabakVarianModel>();
-                                          // List<ToppingMartabakModel> _listB =
-                                          //     new List<ToppingMartabakModel>();
+                        Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: _listItem.length,
+                            itemBuilder: (BuildContext context, int i) =>
+                                POSTileVertical(
+                              id: _listItem[i].id.toString(),
+                              desc: _listItem[i].desc,
+                              gambar: _listItem[i].img,
+                              nama: _listItem[i].name,
+                              diskon: _listItem[i].diskon,
+                              harga: _listItem[i].price,
+                              listVarian: _listItem[i].listVarian,
+                              onTap: () async {
+                                // List<MartabakVarianModel> _listA =
+                                //     new List<MartabakVarianModel>();
+                                // List<ToppingMartabakModel> _listB =
+                                //     new List<ToppingMartabakModel>();
 
-                                          if (e.listTopping.length != 0 ||
-                                              e.listVarian.length != 0) {
-                                            MartabakModel b = new MartabakModel(
-                                              id: e.id,
-                                              name: e.name,
-                                              img: e.img,
-                                              price: e.price,
-                                              sysprice: e.sysprice,
-                                              desc: e.desc,
-                                              idKategoriItem: e.idKategoriItem,
-                                              qty: e.qty,
-                                              details: e.details,
-                                              diskon: e.diskon,
-                                              listTopping:
-                                                  List.from(e.listTopping),
-                                              listVarian:
-                                                  List.from(e.listVarian),
-                                            );
+                                if (_listItem[i].listTopping.length != 0 ||
+                                    _listItem[i].listVarian.length != 0) {
+                                  MartabakModel b = new MartabakModel(
+                                    id: _listItem[i].id,
+                                    name: _listItem[i].name,
+                                    img: _listItem[i].img,
+                                    price: _listItem[i].price,
+                                    sysprice: _listItem[i].sysprice,
+                                    desc: _listItem[i].desc,
+                                    idKategoriItem: _listItem[i].idKategoriItem,
+                                    qty: _listItem[i].qty,
+                                    details: _listItem[i].details,
+                                    diskon: _listItem[i].diskon,
+                                    listTopping: _listItem[i].listTopping,
+                                    listVarian: _listItem[i].listVarian,
+                                  );
+                                  print('#item-sebelum-listVarian');
+                                  print(_listItem[i]
+                                      .listVarian
+                                      .map((e) => e.isSelected)
+                                      .toList());
+                                  print('------');
+                                  print('#item-sebelum-listTopping');
 
-                                            print(e.listVarian
-                                                .map((e) => e.isSelected)
-                                                .toList());
+                                  print(_listItem[i]
+                                      .listTopping
+                                      .map((e) => e.listTopping
+                                          .map((ed) => ed.isSelected)
+                                          .toList())
+                                      .toList());
+                                  print('------');
+                                  print('------');
+                                  print('------');
 
-                                            print(e.listTopping
-                                                .map((e) => e.listTopping
-                                                    .map((ed) => ed.isSelected)
-                                                    .toList())
-                                                .toList());
-
-                                            Map a = await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                fullscreenDialog: false,
-                                                maintainState: true,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        PilihTopping(
-                                                  // listTopping: _listB,
-                                                  // listVarian: _listA,
-                                                  // namaItem: e.name,
-                                                  // qty: e.qty,
-                                                  // key: Key(e.id.toString()),
-                                                  martabak: b,
-                                                  tipe: TipeTombol.tambah,
-                                                ),
-                                              ),
-                                            );
-
-                                            print(b.listVarian
-                                                .map((e) => e.isSelected)
-                                                .toList());
-
-                                            print(b.listTopping
-                                                .map((e) => e.listTopping
-                                                    .map((ed) => ed.isSelected)
-                                                    .toList())
-                                                .toList());
-
-                                            print(a);
-
-                                            if (a != null) {
-                                              print('changed');
-                                              b.qty = a['qty'];
-                                              b.listTopping = a['listTopping'];
-                                              b.listVarian = a['listVarian'];
-
-                                              if (a['tipe'] ==
-                                                  TipeTombol.tambah) {
-                                                bloc.addToCart(b);
-                                              }
-                                            }
-                                          } else {
-                                            bloc.addToCart(e);
-                                          }
-                                        },
+                                  Map a = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      fullscreenDialog: false,
+                                      maintainState: true,
+                                      builder: (BuildContext context) =>
+                                          PilihTopping(
+                                        martabak: _listItem[i],
+                                        tipe: TipeTombol.tambah,
                                       ),
-                                    )
-                                    .toList()
-                                : <Widget>[
-                                    ListTile(
-                                      title: Text(
-                                        'Tidak ada Data',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ],
+                                    ),
+                                  );
+                                  print('#b-sesudah-listVarian');
+                                  print(b.listVarian
+                                      .map((e) => e.isSelected)
+                                      .toList());
+                                  print('======');
+
+                                  print('#b-sesudah-listTopping');
+
+                                  print(b.listTopping
+                                      .map((e) => e.listTopping
+                                          .map((ed) => ed.isSelected)
+                                          .toList())
+                                      .toList());
+                                  print('======');
+
+                                  print('#item-sesudah-listVarian');
+
+                                  print(_listItem[i]
+                                      .listVarian
+                                      .map((e) => e.isSelected)
+                                      .toList());
+                                  print('======');
+
+                                  print('#item-sesudah-listTopping');
+
+                                  print(_listItem[i]
+                                      .listTopping
+                                      .map((e) => e.listTopping
+                                          .map((ed) => ed.isSelected)
+                                          .toList())
+                                      .toList());
+                                  print('======');
+
+                                  print('#a');
+                                  print(a);
+                                  print('======');
+
+                                  if (a != null) {
+                                    print('changed');
+                                    b.qty = a['qty'];
+                                    b.listTopping = a['listTopping'];
+                                    b.listVarian = a['listVarian'];
+
+                                    if (a['tipe'] == TipeTombol.tambah) {
+                                      bloc.addToCart(b);
+                                    }
+                                  }
+                                } else {
+                                  bloc.addToCart(_listItem[i]);
+                                }
+                              },
+                            ),
                           ),
                         ),
                       ],

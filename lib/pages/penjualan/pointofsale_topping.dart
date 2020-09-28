@@ -13,10 +13,10 @@ enum TipeTombol {
 }
 
 class PilihTopping extends StatefulWidget {
-  final String namaItem;
-  final List<MartabakVarianModel> listVarian;
-  final List<ToppingMartabakModel> listTopping;
-  final int qty;
+  // final String namaItem;
+  // final List<MartabakVarianModel> listVarian;
+  // final List<ToppingMartabakModel> listTopping;
+  // final int qty;
   final MartabakModel martabak;
 
   /// Jika @params tipe = TipeTombol.edit, maka @params index wajib di isi
@@ -24,10 +24,10 @@ class PilihTopping extends StatefulWidget {
   final TipeTombol tipe;
   PilihTopping({
     this.martabak,
-    this.qty,
-    this.listTopping,
-    this.listVarian,
-    this.namaItem,
+    // this.qty,
+    // this.listTopping,
+    // this.listVarian,
+    // this.namaItem,
     this.index,
     @required this.tipe,
     Key key,
@@ -39,6 +39,11 @@ class PilihTopping extends StatefulWidget {
 class _PilihToppingState extends State<PilihTopping> {
   TextEditingController qtyController;
   FocusNode qtyFocus;
+
+  List<ToppingMartabakModel> _listTopping = List<ToppingMartabakModel>();
+
+  List<MartabakVarianModel> _listVarian = List<MartabakVarianModel>();
+
   @override
   void initState() {
     qtyController = TextEditingController(
@@ -46,8 +51,18 @@ class _PilihToppingState extends State<PilihTopping> {
           widget.tipe == TipeTombol.edit ? widget.martabak.qty.toString() : '1',
     );
     qtyFocus = FocusNode();
+    _listTopping = List<ToppingMartabakModel>.from(widget.martabak.listTopping);
+    _listVarian = List<MartabakVarianModel>.from(widget.martabak.listVarian);
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _listTopping = List<ToppingMartabakModel>();
+
+    _listVarian = List<MartabakVarianModel>();
+    super.dispose();
   }
 
   @override
@@ -59,11 +74,12 @@ class _PilihToppingState extends State<PilihTopping> {
 
   @override
   Widget build(BuildContext context) {
-    KasirBloc bloc = Provider.of<KasirBloc>(context);
-    List<ToppingMartabakModel> _listTopping =
-        List.from(widget.martabak.listTopping);
-    List<MartabakVarianModel> _listVarian =
-        List.from(widget.martabak.listVarian);
+    // print(_listTopping
+    //     .map((e) => e.listTopping.map((ed) => ed.isSelected).toList())
+    //     .toList());
+    // print(widget.martabak.listTopping
+    //     .map((e) => e.listTopping.map((ed) => ed.isSelected).toList())
+    //     .toList());
 
     return GestureDetector(
       onTap: () {
@@ -93,6 +109,9 @@ class _PilihToppingState extends State<PilihTopping> {
                               color: Colors.red,
                               textColor: Colors.white,
                               onPressed: () {
+                                KasirBloc bloc =
+                                    Provider.of<KasirBloc>(context);
+
                                 bloc.deleteCart(widget.index);
                                 Navigator.popUntil(
                                   context,

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:martabakdjoeragan_app/pages/penjualan/pointofsale_topping.dart';
+// import 'package:martabakdjoeragan_app/pages/penjualan/pointofsale_topping.dart';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 
 class KasirBloc with ChangeNotifier {
@@ -29,15 +29,20 @@ class KasirBloc with ChangeNotifier {
   TextEditingController get jumlahBayarController => _jumlahBayarController;
 
   /// get list kategori item
-  List<KategoriItem> get listKategori => _kategori;
+  UnmodifiableListView<KategoriItem> get listKategori =>
+      UnmodifiableListView(_kategori);
 
   KategoriItem get getSelectedKategoriItem => _selectedKategori;
 
   /// get list barang yg ditambahkan ke keranjang
-  List<MartabakModel> get cart => _cart;
+  UnmodifiableListView<MartabakModel> get cart => UnmodifiableListView(_cart);
 
   /// get list kupon
-  List<KuponBelanja> get kupon => _kupon;
+  UnmodifiableListView<KuponBelanja> get kupon => UnmodifiableListView(_kupon);
+
+  /// get list item
+  UnmodifiableListView<MartabakModel> get listItem =>
+      UnmodifiableListView(_list);
 
   /// get customer yang dipilih
   Customer get selectedCustomer => _selectedCustomer;
@@ -46,7 +51,8 @@ class KasirBloc with ChangeNotifier {
   HargaPenjualan get selectedHargaPenjualan => _selectedHargaPenjualan;
 
   /// get listHarga
-  List<HargaPenjualan> get listHarga => _listHarga;
+  UnmodifiableListView<HargaPenjualan> get listHarga =>
+      UnmodifiableListView(_listHarga);
 
   /// get catatanController
   TextEditingController get catatanController => _catatanController;
@@ -181,7 +187,8 @@ class KasirBloc with ChangeNotifier {
     try {
       var responseJson = jsonDecode(_encodedRequest);
 
-      _list = List<MartabakModel>();
+      clearListItem();
+
       for (var data in responseJson['item']) {
         var diskonX;
         var priceX;
@@ -282,7 +289,7 @@ class KasirBloc with ChangeNotifier {
 
     if (_selectedKategori != null) {
       if (_selectedKategori.id == 'all') {
-        _listD = _list;
+        _listD = List.from(_list);
         // print('if 1');
       } else {
         // print('else 1');
@@ -295,7 +302,7 @@ class KasirBloc with ChangeNotifier {
         }
       }
     } else {
-      _listD = _list;
+      _listD = List.from(_list);
       // print('else 2');
     }
 
@@ -305,7 +312,7 @@ class KasirBloc with ChangeNotifier {
       }
     }
 
-    return _listF;
+    return (_listF);
   }
 
   /// set kategori item yang dipilih
@@ -589,7 +596,7 @@ class KasirBloc with ChangeNotifier {
   }
 
   void editCart(MartabakModel model, int i) {
-    bool isTidakAda = true;
+    // bool isTidakAda = true;
     if (model.listVarian.length != 0 && model.listTopping.length != 0) {
       if (_cart[i].id == model.id &&
           _cart[i]
@@ -599,7 +606,7 @@ class KasirBloc with ChangeNotifier {
               .listVarian
               .any((element) => model.listVarian.contains(element))) {
         _cart[i].qty = model.qty;
-        isTidakAda = false;
+        // isTidakAda = false;
         this.totalHarga;
         this.totalHargaPenjualan;
         this.ppn;
@@ -612,7 +619,7 @@ class KasirBloc with ChangeNotifier {
               .listVarian
               .any((element) => model.listVarian.contains(element))) {
         _cart[i].qty = model.qty;
-        isTidakAda = false;
+        // isTidakAda = false;
         this.totalHarga;
         this.totalHargaPenjualan;
         this.ppn;
@@ -625,7 +632,7 @@ class KasirBloc with ChangeNotifier {
               .listTopping
               .any((modelX) => model.listTopping.contains(modelX))) {
         _cart[i].qty = model.qty;
-        isTidakAda = false;
+        // isTidakAda = false;
         this.totalHarga;
         this.totalHargaPenjualan;
         this.ppn;
@@ -635,7 +642,7 @@ class KasirBloc with ChangeNotifier {
     } else {
       if (_cart[i].id == model.id) {
         _cart[i].qty = model.qty;
-        isTidakAda = false;
+        // isTidakAda = false;
         this.totalHarga;
         this.totalHargaPenjualan;
         this.ppn;
