@@ -45,10 +45,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<KasirBloc>(builder: (context) => KasirBloc()),
-        ChangeNotifierProvider<CompBloc>(builder: (context) => CompBloc()),
+        ChangeNotifierProvider<KasirBloc>(create: (context) => KasirBloc()),
+        ChangeNotifierProvider<CompBloc>(create: (context) => CompBloc()),
         ChangeNotifierProvider<DaftarPenjualanBloc>(
-            builder: (context) => DaftarPenjualanBloc()),
+            create: (context) => DaftarPenjualanBloc()),
       ],
       child: MaterialApp(
         title: "Martabak Djoeragan",

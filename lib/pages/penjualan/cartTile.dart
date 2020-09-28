@@ -86,6 +86,27 @@ class _CartTileState extends State<CartTile> {
         break;
       }
     }
+    double harga = 0;
+    double listHargaVarian = 0;
+    double listHargaTopping = 0;
+
+    if (widget.cart.listVarian.length == 0) {
+      harga = double.parse(widget.cart.price);
+    }
+
+    for (var data in widget.cart.listVarian) {
+      if (data.isSelected) {
+        listHargaVarian += data.hargaVarian;
+      }
+    }
+
+    for (var dataT in widget.cart.listTopping) {
+      for (var dataTD in dataT.listTopping) {
+        if (dataTD.isSelected) {
+          listHargaTopping += dataTD.hargaTopping;
+        }
+      }
+    }
 
     return Padding(
       padding: EdgeInsets.only(bottom: 15.0),
@@ -165,7 +186,9 @@ class _CartTileState extends State<CartTile> {
                                   children: <Widget>[
                                     Text(
                                       numberFormat.format(
-                                        double.parse(widget.cart.price),
+                                        harga +
+                                            listHargaTopping +
+                                            listHargaVarian,
                                       ),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -178,7 +201,9 @@ class _CartTileState extends State<CartTile> {
                                     ),
                                     Text(
                                       numberFormat.format(
-                                        double.parse(widget.cart.price) -
+                                        harga +
+                                            listHargaTopping +
+                                            listHargaVarian -
                                             double.parse(widget.cart.diskon),
                                       ),
                                       style: TextStyle(
@@ -192,7 +217,7 @@ class _CartTileState extends State<CartTile> {
                                 )
                               : Text(
                                   numberFormat.format(
-                                    double.parse(widget.cart.price),
+                                    harga + listHargaTopping + listHargaVarian,
                                   ),
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,

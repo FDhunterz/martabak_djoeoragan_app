@@ -24,7 +24,7 @@ import 'package:martabakdjoeragan_app/utils/print_icon/print_icon_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
-import 'package:http/http.dart' as http;
+
 import 'dart:convert';
 import 'pointofsale_tile.dart';
 // import 'dart:async';
@@ -54,7 +54,7 @@ class _PointofsalesState extends State<Pointofsales> {
 
   @override
   void initState() {
-    _isLoading = false;
+    _isLoading = true;
     _isCari = false;
     _isError = false;
     resource();
@@ -357,221 +357,6 @@ class _PointofsalesState extends State<Pointofsales> {
     }
   }
 
-  void resourceX() async {
-    setState(() {
-      _isLoading = true;
-      _isError = false;
-    });
-    DataStore dataStore = DataStore();
-    String accessToken = await dataStore.getDataString('access_token');
-
-    requestHeaders['Accept'] = 'application/json';
-    requestHeaders['Authorization'] = 'Bearer $accessToken';
-
-    try {
-      // get item
-
-      final response = await http.get(
-        '${url}penjualan/kasir/get/item',
-        headers: requestHeaders,
-      );
-
-      if (response.statusCode == 200) {
-        var responseJson = jsonDecode(response.body);
-
-        // dataResponseItem = response.body;
-
-        KasirBloc blocX = Provider.of<KasirBloc>(context);
-
-        blocX.setEncodedRequest(response.body);
-
-        blocX.clearCart();
-
-        print(responseJson);
-
-        blocX.clearListItem();
-
-        for (var data in responseJson['item']) {
-          List<HargaPenjualanPerItem> _listX = List();
-          for (var dataS in data['harga_jual']) {
-            _listX.add(
-              HargaPenjualanPerItem(
-                idItem: dataS['ghdt_item'].toString(),
-                harga: dataS['ghdt_harga'].toString(),
-                idGroup: dataS['ghdt_group'].toString(),
-              ),
-            );
-          }
-          blocX.addItem(
-            MartabakModel(
-              id: int.parse(data['i_id'].toString()),
-              name: data['i_nama'],
-              img: data['i_gambar1'],
-              price: data['i_harga_jual'].toString(),
-              sysprice: data['i_harga_jual'].toString(),
-              desc: data['i_kode'],
-              qty: 1,
-              idKategoriItem: data['i_kategori'].toString(),
-              details: data['i_kode'],
-              diskon: data['diskon'] != null
-                  ? data['diskon']['diskon'].toString()
-                  : null,
-              listHargaPenjualan: _listX,
-            ),
-          );
-        }
-
-        setState(() {
-          _isLoading = false;
-          _isError = false;
-        });
-      } else if (response.statusCode == 401) {
-        Fluttertoast.showToast(
-            msg: 'Token kedaluwarsa, silahkan login kembali');
-        setState(() {
-          _isLoading = false;
-          _isError = true;
-          _errorMessage = 'Token kedaluwarsa, silahkan login kembali';
-        });
-      } else {
-        Fluttertoast.showToast(msg: 'Error Code : ${response.statusCode}');
-        setState(() {
-          _isLoading = false;
-          _isError = true;
-          _errorMessage = response.body;
-        });
-      }
-
-      // get resouce
-      if (!_isError) {
-        setState(() {
-          _isLoading = true;
-          _isError = false;
-        });
-
-        String link = '${url}penjualan/kasir/resource?cabangs=$_perusahaan';
-
-        final responseX = await http.get(
-          link,
-          headers: requestHeaders,
-        );
-
-        if (responseX.statusCode == 200) {
-          dynamic responseJson = jsonDecode(responseX.body);
-          print(responseJson);
-
-          KasirBloc blocX = Provider.of<KasirBloc>(context);
-
-          blocX.clearListKategori();
-
-          blocX.clearKupon();
-          KategoriItem kategori = KategoriItem(
-            id: 'all',
-            text: 'Semua Item',
-          );
-          blocX.addKategori(
-            kategori,
-          );
-          blocX.setSelectedKategori(
-            kategori,
-          );
-          for (var data in responseJson['kategori']) {
-            blocX.addKategori(
-              KategoriItem(
-                id: data['id'].toString(),
-                text: data['text'],
-              ),
-            );
-          }
-
-          for (var i in responseJson['diskon']) {
-            blocX.addKupon(
-              kupon: KuponBelanja(
-                id: i['d_id'].toString(),
-                nama: i['d_nama'],
-                catatan: i['d_catatan'],
-                dMaxDiskon: i['d_max_diskon'].toString(),
-                dPersen: i['d_persen'].toString(),
-                kategoriHarga: i['d_kategori_harga'].toString(),
-                selected: i['selected'].toString(),
-                disabled: i['disabled'].toString(),
-                dIsDouble: i['d_isdouble'].toString(),
-                nominal: i['d_nominal'].toString(),
-              ),
-            );
-          }
-
-          blocX.clearHargaPenjualan();
-          blocX.unsetSelectedHargaPenjualan();
-
-          blocX.addHargaPenjualan(
-            HargaPenjualan(
-              id: '99999',
-              nama: 'Harga Normal',
-              selected: '0',
-            ),
-          );
-
-          print('${responseJson['harga'].length} responseJson[harga] length');
-
-          for (var j in responseJson['harga']) {
-            print('harga added');
-            blocX.addHargaPenjualan(
-              HargaPenjualan(
-                id: j['gh_id'].toString(),
-                nama: j['gh_nama'],
-                selected: j['selected'].toString(),
-              ),
-            );
-          }
-
-          blocX.settingPPN(
-            double.parse(
-              responseJson['setting_ppn']['hs_pajak_kasir'].toString(),
-            ),
-          );
-
-          setState(() {
-            _isLoading = false;
-            _isError = false;
-          });
-
-          navigatorKePengaturanHarga();
-        } else if (responseX.statusCode == 401) {
-          Fluttertoast.showToast(
-            msg: 'Token kedaluwarsa, silahkan login kembali',
-          );
-          setState(() {
-            _errorMessage = 'Token kedaluwarsa, silahkan login kembali';
-            _isLoading = false;
-            _isError = true;
-          });
-        } else {
-          Fluttertoast.showToast(msg: 'Error Code = ${responseX.statusCode}');
-          Map responseJson = jsonDecode(responseX.body);
-
-          if (responseJson.containsKey('message')) {
-            Fluttertoast.showToast(msg: responseJson['message']);
-          }
-          print(jsonDecode(responseX.body));
-          setState(() {
-            _isLoading = false;
-            _isError = true;
-            _errorMessage = responseX.body;
-          });
-        }
-      }
-    } catch (e) {
-      print(e);
-      Fluttertoast.showToast(msg: e.toString());
-      setState(() {
-        _isError = true;
-        _isLoading = false;
-        _errorMessage = e.toString();
-      });
-    }
-  }
-
   void navigatorKePengaturanHarga() async {
     await Navigator.push(
       context,
@@ -610,7 +395,7 @@ class _PointofsalesState extends State<Pointofsales> {
     // bloc.cart.clear();
 
     List<MartabakModel> _listItem =
-        List.from(bloc.cariItem(cariController.text));
+        List.from(bloc.cariItem(_searchControl.text));
     // List<MartabakModel> _listItem = List.from(bloc.listItem);
 
     return WillPopScope(
@@ -987,124 +772,69 @@ class _PointofsalesState extends State<Pointofsales> {
                           height: 20.0,
                           thickness: 1,
                         ),
-                        Expanded(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: _listItem.length,
-                            itemBuilder: (BuildContext context, int i) =>
-                                POSTileVertical(
-                              id: _listItem[i].id.toString(),
-                              desc: _listItem[i].desc,
-                              gambar: _listItem[i].img,
-                              nama: _listItem[i].name,
-                              diskon: _listItem[i].diskon,
-                              harga: _listItem[i].price,
-                              listVarian: _listItem[i].listVarian,
-                              onTap: () async {
-                                // List<MartabakVarianModel> _listA =
-                                //     new List<MartabakVarianModel>();
-                                // List<ToppingMartabakModel> _listB =
-                                //     new List<ToppingMartabakModel>();
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: _listItem.length,
+                          itemBuilder: (BuildContext context, int i) =>
+                              POSTileVertical(
+                            id: _listItem[i].id.toString(),
+                            desc: _listItem[i].desc,
+                            gambar: _listItem[i].img,
+                            nama: _listItem[i].name,
+                            diskon: _listItem[i].diskon,
+                            harga: _listItem[i].price,
+                            listVarian: _listItem[i].listVarian,
+                            onTap: () async {
+                              // List<MartabakVarianModel> _listA =
+                              //     new List<MartabakVarianModel>();
+                              // List<ToppingMartabakModel> _listB =
+                              //     new List<ToppingMartabakModel>();
+                              MartabakModel b;
+                              if (_listItem[i].listTopping.length != 0 ||
+                                  _listItem[i].listVarian.length != 0) {
+                                b = new MartabakModel(
+                                  id: _listItem[i].id,
+                                  name: _listItem[i].name,
+                                  img: _listItem[i].img,
+                                  price: _listItem[i].price,
+                                  sysprice: _listItem[i].sysprice,
+                                  desc: _listItem[i].desc,
+                                  idKategoriItem: _listItem[i].idKategoriItem,
+                                  qty: _listItem[i].qty,
+                                  details: _listItem[i].details,
+                                  diskon: _listItem[i].diskon,
+                                  listTopping: _listItem[i].listTopping,
+                                  listVarian: _listItem[i].listVarian,
+                                );
 
-                                if (_listItem[i].listTopping.length != 0 ||
-                                    _listItem[i].listVarian.length != 0) {
-                                  MartabakModel b = new MartabakModel(
-                                    id: _listItem[i].id,
-                                    name: _listItem[i].name,
-                                    img: _listItem[i].img,
-                                    price: _listItem[i].price,
-                                    sysprice: _listItem[i].sysprice,
-                                    desc: _listItem[i].desc,
-                                    idKategoriItem: _listItem[i].idKategoriItem,
-                                    qty: _listItem[i].qty,
-                                    details: _listItem[i].details,
-                                    diskon: _listItem[i].diskon,
-                                    listTopping: _listItem[i].listTopping,
-                                    listVarian: _listItem[i].listVarian,
-                                  );
-                                  print('#item-sebelum-listVarian');
-                                  print(_listItem[i]
-                                      .listVarian
-                                      .map((e) => e.isSelected)
-                                      .toList());
-                                  print('------');
-                                  print('#item-sebelum-listTopping');
-
-                                  print(_listItem[i]
-                                      .listTopping
-                                      .map((e) => e.listTopping
-                                          .map((ed) => ed.isSelected)
-                                          .toList())
-                                      .toList());
-                                  print('------');
-                                  print('------');
-                                  print('------');
-
-                                  Map a = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      fullscreenDialog: false,
-                                      maintainState: true,
-                                      builder: (BuildContext context) =>
-                                          PilihTopping(
-                                        martabak: _listItem[i],
-                                        tipe: TipeTombol.tambah,
-                                      ),
+                                Map a = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    fullscreenDialog: false,
+                                    // maintainState: true,
+                                    builder: (BuildContext context) =>
+                                        PilihTopping(
+                                      martabak: b,
+                                      tipe: TipeTombol.tambah,
                                     ),
-                                  );
-                                  print('#b-sesudah-listVarian');
-                                  print(b.listVarian
-                                      .map((e) => e.isSelected)
-                                      .toList());
-                                  print('======');
+                                  ),
+                                );
 
-                                  print('#b-sesudah-listTopping');
+                                if (a != null) {
+                                  print('changed');
+                                  b.qty = a['qty'];
+                                  b.listTopping = a['listTopping'];
+                                  b.listVarian = a['listVarian'];
 
-                                  print(b.listTopping
-                                      .map((e) => e.listTopping
-                                          .map((ed) => ed.isSelected)
-                                          .toList())
-                                      .toList());
-                                  print('======');
-
-                                  print('#item-sesudah-listVarian');
-
-                                  print(_listItem[i]
-                                      .listVarian
-                                      .map((e) => e.isSelected)
-                                      .toList());
-                                  print('======');
-
-                                  print('#item-sesudah-listTopping');
-
-                                  print(_listItem[i]
-                                      .listTopping
-                                      .map((e) => e.listTopping
-                                          .map((ed) => ed.isSelected)
-                                          .toList())
-                                      .toList());
-                                  print('======');
-
-                                  print('#a');
-                                  print(a);
-                                  print('======');
-
-                                  if (a != null) {
-                                    print('changed');
-                                    b.qty = a['qty'];
-                                    b.listTopping = a['listTopping'];
-                                    b.listVarian = a['listVarian'];
-
-                                    if (a['tipe'] == TipeTombol.tambah) {
-                                      bloc.addToCart(b);
-                                    }
+                                  if (a['tipe'] == TipeTombol.tambah) {
+                                    bloc.addToCart(b);
                                   }
-                                } else {
-                                  bloc.addToCart(_listItem[i]);
                                 }
-                              },
-                            ),
+                              } else {
+                                bloc.addToCart(_listItem[i]);
+                              }
+                            },
                           ),
                         ),
                       ],

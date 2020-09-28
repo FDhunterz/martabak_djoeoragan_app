@@ -283,6 +283,21 @@ class _CartPageState extends State<CartPage> {
                                           CartTile(
                                             cart: cart,
                                             onTap: () async {
+                                              var b = new MartabakModel(
+                                                id: cart.id,
+                                                name: cart.name,
+                                                img: cart.img,
+                                                price: cart.price,
+                                                sysprice: cart.sysprice,
+                                                desc: cart.desc,
+                                                idKategoriItem:
+                                                    cart.idKategoriItem,
+                                                qty: cart.qty,
+                                                details: cart.details,
+                                                diskon: cart.diskon,
+                                                listTopping: cart.listTopping,
+                                                listVarian: cart.listVarian,
+                                              );
                                               Map a = await Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -294,7 +309,7 @@ class _CartPageState extends State<CartPage> {
                                                     // namaItem: cart.name,
                                                     // listVarian: cart.listVarian,
                                                     // qty: cart.qty,
-                                                    martabak: cart,
+                                                    martabak: b,
                                                     tipe: TipeTombol.edit,
                                                     index: i,
                                                   ),

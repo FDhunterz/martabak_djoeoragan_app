@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 
 class KasirBloc with ChangeNotifier {
-  List<MartabakModel> _cart = <MartabakModel>[];
+  List<MartabakModel> _cart = List<MartabakModel>();
   List<KuponBelanja> _kupon = List<KuponBelanja>();
   List<HargaPenjualan> _listHarga = List<HargaPenjualan>();
   List<MartabakModel> _list = List<MartabakModel>();
@@ -73,10 +73,40 @@ class KasirBloc with ChangeNotifier {
     double totalX = 0;
 
     for (int i = 0; i < _cart.length; i++) {
-      double harga = _cart[i].diskon != null
-          ? double.parse(_cart[i].sysprice) - double.parse(_cart[i].diskon)
-          : double.parse(_cart[i].sysprice);
-      totalX += (harga) * _cart[i].qty;
+      double harga = 0;
+      double listHargaVarian = 0;
+      double listHargaTopping = 0;
+      if (_cart[i].listVarian.length != 0 && _cart[i].listTopping.length != 0) {
+        for (var data in _cart[i].listVarian) {
+          if (data.isSelected) {
+            listHargaVarian += data.hargaVarian;
+          }
+        }
+
+        for (var dataT in _cart[i].listTopping) {
+          for (var dataTD in dataT.listTopping) {
+            if (dataTD.isSelected) {
+              listHargaTopping += dataTD.hargaTopping;
+            }
+          }
+        }
+      } else if (_cart[i].listTopping.length != 0) {
+        for (var dataT in _cart[i].listTopping) {
+          for (var dataTD in dataT.listTopping) {
+            if (dataTD.isSelected) {
+              listHargaTopping += dataTD.hargaTopping;
+            }
+          }
+        }
+        harga = _cart[i].diskon != null
+            ? double.parse(_cart[i].sysprice) - double.parse(_cart[i].diskon)
+            : double.parse(_cart[i].sysprice);
+      } else {
+        harga = _cart[i].diskon != null
+            ? double.parse(_cart[i].sysprice) - double.parse(_cart[i].diskon)
+            : double.parse(_cart[i].sysprice);
+      }
+      totalX += (harga + listHargaTopping + listHargaVarian) * _cart[i].qty;
     }
     _total = totalX;
 
