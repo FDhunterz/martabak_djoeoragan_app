@@ -90,13 +90,13 @@ class _PointofsalesState extends State<Pointofsales> {
     /// digunakan untuk front end saja atau ketika belum memilih "Golongan Harga".
     ///
     /// untuk function kelola item yang asli dan
-    /// sudah memilih golongan harga ada di kasir_bloc.dart function resetItemSetelahGantiGroupHarga()
+    /// sudah memilih golongan harga ada di [kasir_bloc.dart] function [resetItemSetelahGantiGroupHarga()]
     void _kelolaResponseGetItem(String jsonEncode) {
       var responseJson = jsonDecode(jsonEncode);
 
       // dataResponseItem = jsonEncode;
 
-      KasirBloc blocX = Provider.of<KasirBloc>(context);
+      KasirBloc blocX = Provider.of<KasirBloc>(context, listen: false);
 
       blocX.setEncodedRequest(jsonEncode);
 
@@ -108,8 +108,8 @@ class _PointofsalesState extends State<Pointofsales> {
 
       for (var data in responseJson['item']) {
         List<HargaPenjualanPerItem> _listX = List<HargaPenjualanPerItem>();
-        List<ToppingMartabakModel> _listY = List<ToppingMartabakModel>();
-        List<MartabakVarianModel> _listZ = List<MartabakVarianModel>();
+        // List<ToppingMartabakModel> _listY = List<ToppingMartabakModel>();
+        // List<MartabakVarianModel> _listZ = List<MartabakVarianModel>();
         for (var dataS in data['harga_jual']) {
           _listX.add(
             HargaPenjualanPerItem(
@@ -119,39 +119,39 @@ class _PointofsalesState extends State<Pointofsales> {
             ),
           );
         }
-        for (var dataY in data['modifier']) {
-          List<DetailToppingMartabakModel> _listAA = List();
-          for (var dataYD in dataY['modifier']['detail']) {
-            _listAA.add(
-              DetailToppingMartabakModel(
-                idTopping: dataYD['mddt_modifier'].toString(),
-                hargaTopping: double.parse(dataYD['mddt_harga'].toString()),
-                idDetailTopping: dataYD['mddt_id'].toString(),
-                isSelected: false,
-                namaTopping: dataYD['mddt_nama'],
-                nomorTopping: dataYD['mddt_nomor'].toString(),
-              ),
-            );
-          }
-          _listY.add(
-            ToppingMartabakModel(
-              idTopping: dataY['modifier']['m_id'].toString(),
-              namaTopping: dataY['modifier']['m_nama'],
-              listTopping: _listAA,
-            ),
-          );
-        }
+        // for (var dataY in data['modifier']) {
+        //   List<DetailToppingMartabakModel> _listAA = List();
+        //   for (var dataYD in dataY['modifier']['detail']) {
+        //     _listAA.add(
+        //       DetailToppingMartabakModel(
+        //         idTopping: dataYD['mddt_modifier'].toString(),
+        //         hargaTopping: double.parse(dataYD['mddt_harga'].toString()),
+        //         idDetailTopping: dataYD['mddt_id'].toString(),
+        //         isSelected: false,
+        //         namaTopping: dataYD['mddt_nama'],
+        //         nomorTopping: dataYD['mddt_nomor'].toString(),
+        //       ),
+        //     );
+        //   }
+        //   _listY.add(
+        //     ToppingMartabakModel(
+        //       idTopping: dataY['modifier']['m_id'].toString(),
+        //       namaTopping: dataY['modifier']['m_nama'],
+        //       listTopping: _listAA,
+        //     ),
+        //   );
+        // }
 
-        for (var dataZ in data['varian']) {
-          _listZ.add(
-            MartabakVarianModel(
-              idVarian: dataZ['iv_id'].toString(),
-              hargaVarian: double.parse(dataZ['iv_harga'].toString()),
-              isSelected: false,
-              namaVarian: dataZ['iv_nama'],
-            ),
-          );
-        }
+        // for (var dataZ in data['varian']) {
+        //   _listZ.add(
+        //     MartabakVarianModel(
+        //       idVarian: dataZ['iv_id'].toString(),
+        //       hargaVarian: double.parse(dataZ['iv_harga'].toString()),
+        //       isSelected: false,
+        //       namaVarian: dataZ['iv_nama'],
+        //     ),
+        //   );
+        // }
         blocX.addItem(
           MartabakModel(
             id: int.parse(data['i_id'].toString()),
@@ -167,8 +167,8 @@ class _PointofsalesState extends State<Pointofsales> {
                 ? data['diskon']['diskon'].toString()
                 : null,
             listHargaPenjualan: _listX,
-            listTopping: _listY,
-            listVarian: _listZ,
+            listTopping: json.encode(data['modifier']),
+            listVarian: json.encode(data['varian']),
           ),
         );
       }
@@ -228,7 +228,7 @@ class _PointofsalesState extends State<Pointofsales> {
         dynamic responseJson = jsonDecode(json);
         print(responseJson);
 
-        KasirBloc blocX = Provider.of<KasirBloc>(context);
+        KasirBloc blocX = context.read<KasirBloc>();
 
         blocX.clearListKategori();
 
@@ -364,7 +364,7 @@ class _PointofsalesState extends State<Pointofsales> {
         builder: (BuildContext context) => CariHargaPenjualan(),
       ),
     );
-    KasirBloc blocX = Provider.of<KasirBloc>(context);
+    KasirBloc blocX = Provider.of<KasirBloc>(context, listen: false);
 
     blocX.resetItemSetelahGantiGroupHarga(
       onStart: () {
@@ -786,13 +786,14 @@ class _PointofsalesState extends State<Pointofsales> {
                             harga: _listItem[i].price,
                             listVarian: _listItem[i].listVarian,
                             onTap: () async {
-                              // List<MartabakVarianModel> _listA =
-                              //     new List<MartabakVarianModel>();
-                              // List<ToppingMartabakModel> _listB =
-                              //     new List<ToppingMartabakModel>();
-                              MartabakModel b;
-                              if (_listItem[i].listTopping.length != 0 ||
-                                  _listItem[i].listVarian.length != 0) {
+                              List<ToppingMartabakModel> listTopping = bloc
+                                  .decodeListTopping(_listItem[i].listTopping);
+                              List<MartabakVarianModel> listVarian = bloc
+                                  .decodeListVarian(_listItem[i].listVarian);
+
+                              if (listTopping.length != 0 ||
+                                  listVarian.length != 0) {
+                                MartabakModel b;
                                 b = new MartabakModel(
                                   id: _listItem[i].id,
                                   name: _listItem[i].name,
@@ -811,8 +812,7 @@ class _PointofsalesState extends State<Pointofsales> {
                                 Map a = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    fullscreenDialog: false,
-                                    // maintainState: true,
+                                    maintainState: false,
                                     builder: (BuildContext context) =>
                                         PilihTopping(
                                       martabak: b,

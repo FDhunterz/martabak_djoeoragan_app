@@ -82,7 +82,7 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
 
       print(responseJson);
 
-      CompBloc bloc = Provider.of<CompBloc>(context);
+      CompBloc bloc = context.read<CompBloc>();
 
       bloc.clearListCabang();
       bloc.clearListOutlet();

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:martabakdjoeragan_app/pages/ImageToFile/ImageToFile.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 import 'package:intl/intl.dart';
 import 'package:network_to_file_image/network_to_file_image.dart';
+import 'package:provider/provider.dart';
 
 class CartTile extends StatefulWidget {
   final MartabakModel cart;
@@ -40,13 +42,19 @@ class _CartTileState extends State<CartTile> {
   }
 
   Widget selectedTopping() {
+    KasirBloc blocX = context.watch<KasirBloc>();
+
+    List<ToppingMartabakModel> listTopping = List<ToppingMartabakModel>();
+
+    listTopping = blocX.decodeListTopping(widget.cart.listTopping);
+
     if (widget.cart.listTopping.length != 0) {
       String selectedTopping = '';
-      for (var data in widget.cart.listTopping) {
+      for (var data in listTopping) {
         for (int i = 0; i < data.listTopping.length; i++) {
           var dataD = data.listTopping[i];
           if (dataD.isSelected) {
-            if (i == 0) {
+            if (selectedTopping.length == 0) {
               selectedTopping += dataD.namaTopping;
             } else {
               selectedTopping += ', ${dataD.namaTopping}';
@@ -80,7 +88,13 @@ class _CartTileState extends State<CartTile> {
   @override
   Widget build(BuildContext context) {
     String namaVarianSelected = '';
-    for (var data in widget.cart.listVarian) {
+    List<MartabakVarianModel> listVarian = List<MartabakVarianModel>();
+    List<ToppingMartabakModel> listTopping = List<ToppingMartabakModel>();
+    KasirBloc bloc = Provider.of<KasirBloc>(context);
+    listVarian = bloc.decodeListVarian(widget.cart.listVarian);
+    listTopping = bloc.decodeListTopping(widget.cart.listTopping);
+
+    for (var data in listVarian) {
       if (data.isSelected) {
         namaVarianSelected = ' (${data.namaVarian})';
         break;
@@ -94,13 +108,13 @@ class _CartTileState extends State<CartTile> {
       harga = double.parse(widget.cart.price);
     }
 
-    for (var data in widget.cart.listVarian) {
+    for (var data in listVarian) {
       if (data.isSelected) {
         listHargaVarian += data.hargaVarian;
       }
     }
 
-    for (var dataT in widget.cart.listTopping) {
+    for (var dataT in listTopping) {
       for (var dataTD in dataT.listTopping) {
         if (dataTD.isSelected) {
           listHargaTopping += dataTD.hargaTopping;

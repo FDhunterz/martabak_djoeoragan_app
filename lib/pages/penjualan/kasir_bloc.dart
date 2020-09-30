@@ -76,22 +76,27 @@ class KasirBloc with ChangeNotifier {
       double harga = 0;
       double listHargaVarian = 0;
       double listHargaTopping = 0;
+      List<MartabakVarianModel> listVarian = List<MartabakVarianModel>();
+      List<ToppingMartabakModel> listTopping = List<ToppingMartabakModel>();
+      listVarian = decodeListVarian(_cart[i].listVarian);
+      listTopping = decodeListTopping(_cart[i].listTopping);
+
       if (_cart[i].listVarian.length != 0 && _cart[i].listTopping.length != 0) {
-        for (var data in _cart[i].listVarian) {
+        for (var data in listVarian) {
           if (data.isSelected) {
             listHargaVarian += data.hargaVarian;
           }
         }
 
-        for (var dataT in _cart[i].listTopping) {
+        for (var dataT in listTopping) {
           for (var dataTD in dataT.listTopping) {
             if (dataTD.isSelected) {
               listHargaTopping += dataTD.hargaTopping;
             }
           }
         }
-      } else if (_cart[i].listTopping.length != 0) {
-        for (var dataT in _cart[i].listTopping) {
+      } else if (listTopping.length != 0) {
+        for (var dataT in listTopping) {
           for (var dataTD in dataT.listTopping) {
             if (dataTD.isSelected) {
               listHargaTopping += dataTD.hargaTopping;
@@ -248,41 +253,41 @@ class KasirBloc with ChangeNotifier {
           priceX = data['i_harga_jual'].toString();
         }
 
-        List<ToppingMartabakModel> _listY = List<ToppingMartabakModel>();
-        List<MartabakVarianModel> _listZ = List<MartabakVarianModel>();
-        for (var dataY in data['modifier']) {
-          List<DetailToppingMartabakModel> _listAA = List();
-          for (var dataYD in dataY['modifier']['detail']) {
-            _listAA.add(
-              DetailToppingMartabakModel(
-                idTopping: dataYD['mddt_modifier'].toString(),
-                hargaTopping: double.parse(dataYD['mddt_harga'].toString()),
-                idDetailTopping: dataYD['mddt_id'].toString(),
-                isSelected: false,
-                namaTopping: dataYD['mddt_nama'],
-                nomorTopping: dataYD['mddt_nomor'].toString(),
-              ),
-            );
-          }
-          _listY.add(
-            ToppingMartabakModel(
-              idTopping: dataY['modifier']['m_id'].toString(),
-              namaTopping: dataY['modifier']['m_nama'],
-              listTopping: _listAA,
-            ),
-          );
-        }
+        // List<ToppingMartabakModel> _listY = List<ToppingMartabakModel>();
+        // List<MartabakVarianModel> _listZ = List<MartabakVarianModel>();
+        // for (var dataY in data['modifier']) {
+        //   List<DetailToppingMartabakModel> _listAA = List();
+        //   for (var dataYD in dataY['modifier']['detail']) {
+        //     _listAA.add(
+        //       DetailToppingMartabakModel(
+        //         idTopping: dataYD['mddt_modifier'].toString(),
+        //         hargaTopping: double.parse(dataYD['mddt_harga'].toString()),
+        //         idDetailTopping: dataYD['mddt_id'].toString(),
+        //         isSelected: false,
+        //         namaTopping: dataYD['mddt_nama'],
+        //         nomorTopping: dataYD['mddt_nomor'].toString(),
+        //       ),
+        //     );
+        //   }
+        //   _listY.add(
+        //     ToppingMartabakModel(
+        //       idTopping: dataY['modifier']['m_id'].toString(),
+        //       namaTopping: dataY['modifier']['m_nama'],
+        //       listTopping: _listAA,
+        //     ),
+        //   );
+        // }
 
-        for (var dataZ in data['varian']) {
-          _listZ.add(
-            MartabakVarianModel(
-              idVarian: dataZ['iv_id'].toString(),
-              hargaVarian: double.parse(dataZ['iv_harga'].toString()),
-              isSelected: false,
-              namaVarian: dataZ['iv_nama'],
-            ),
-          );
-        }
+        // for (var dataZ in data['varian']) {
+        //   _listZ.add(
+        //     MartabakVarianModel(
+        //       idVarian: dataZ['iv_id'].toString(),
+        //       hargaVarian: double.parse(dataZ['iv_harga'].toString()),
+        //       isSelected: false,
+        //       namaVarian: dataZ['iv_nama'],
+        //     ),
+        //   );
+        // }
 
         _list.add(
           MartabakModel(
@@ -296,8 +301,8 @@ class KasirBloc with ChangeNotifier {
             qty: 1,
             details: data['i_kode'],
             diskon: diskonX,
-            listTopping: _listY,
-            listVarian: _listZ,
+            listTopping: json.encode(data['modifier']),
+            listVarian: json.encode(data['varian']),
           ),
         );
       }
@@ -530,9 +535,15 @@ class KasirBloc with ChangeNotifier {
     List<bool> _listA = List<bool>();
     List<bool> _listB = List<bool>();
 
-    for (int j = 0; j < _cart[i].listTopping.length; j++) {
-      var dataK = _cart[i].listTopping[j];
-      var dataKX = model.listTopping[j];
+    List<ToppingMartabakModel> _cartListTopping = List<ToppingMartabakModel>();
+    List<ToppingMartabakModel> _modelListTopping = List<ToppingMartabakModel>();
+
+    _cartListTopping = decodeListTopping(_cart[i].listTopping);
+    _modelListTopping = decodeListTopping(model.listTopping);
+
+    for (int j = 0; j < _cartListTopping.length; j++) {
+      var dataK = _cartListTopping[j];
+      var dataKX = _modelListTopping[j];
       for (int k = 0; k < dataK.listTopping.length; k++) {
         var dataKD = dataK.listTopping[k];
         var dataKDX = dataKX.listTopping[k];
@@ -551,16 +562,28 @@ class KasirBloc with ChangeNotifier {
     return false;
   }
 
+  bool _bandingVarianKeranjangDenganVarianItemDipilih(
+      MartabakModel model, int i) {
+    List<MartabakVarianModel> _cartListVarian = List<MartabakVarianModel>();
+    List<MartabakVarianModel> _modelListVarian = List<MartabakVarianModel>();
+
+    _cartListVarian = decodeListVarian(_cart[i].listVarian);
+    _modelListVarian = decodeListVarian(model.listVarian);
+
+    return IterableEquality().equals(
+        _cartListVarian.map((e) => e.isSelected).toList(),
+        _modelListVarian.map((e) => e.isSelected).toList());
+  }
+
   void addToCart(MartabakModel model) {
     bool isTidakAda = true;
+
     for (int i = 0; i < _cart.length; i++) {
-      if (model.listVarian.length != 0 &&
-          model.listTopping.length != 0 &&
+      if (model.listVarian.isNotEmpty &&
+          model.listTopping.isNotEmpty &&
           _cart[i].id == model.id &&
-          IterableEquality().equals(
-              _cart[i].listVarian.map((e) => e.isSelected).toList(),
-              model.listVarian.map((e) => e.isSelected).toList()) &&
-          _bandingToppingKeranjangDenganToppingItemDipilih(model, i)) {
+          _bandingToppingKeranjangDenganToppingItemDipilih(model, i) &&
+          _bandingVarianKeranjangDenganVarianItemDipilih(model, i)) {
         _cart[i].qty += model.qty;
         isTidakAda = false;
         this.totalHarga;
@@ -571,11 +594,10 @@ class KasirBloc with ChangeNotifier {
 
         print('true 1');
         break;
-      } else if (model.listVarian.length != 0 &&
+      } else if (model.listVarian.isNotEmpty &&
+          model.listTopping.isEmpty &&
           _cart[i].id == model.id &&
-          IterableEquality().equals(
-              _cart[i].listVarian.map((e) => e.isSelected).toList(),
-              model.listVarian.map((e) => e.isSelected).toList())) {
+          _bandingVarianKeranjangDenganVarianItemDipilih(model, i)) {
         _cart[i].qty += model.qty;
         isTidakAda = false;
         this.totalHarga;
@@ -585,7 +607,8 @@ class KasirBloc with ChangeNotifier {
         notifyListeners();
         print('true 2');
         break;
-      } else if (model.listTopping.length != 0 &&
+      } else if (model.listTopping.isNotEmpty &&
+          model.listVarian.isEmpty &&
           _cart[i].id == model.id &&
           _bandingToppingKeranjangDenganToppingItemDipilih(model, i)) {
         _cart[i].qty += model.qty;
@@ -597,7 +620,9 @@ class KasirBloc with ChangeNotifier {
         notifyListeners();
         print('true 3');
         break;
-      } else if (_cart[i].id == model.id) {
+      } else if (_cart[i].id == model.id &&
+          model.listVarian.isEmpty &&
+          model.listTopping.isEmpty) {
         print('else 4');
         _cart[i].qty += 1;
         isTidakAda = false;
@@ -629,12 +654,8 @@ class KasirBloc with ChangeNotifier {
     // bool isTidakAda = true;
     if (model.listVarian.length != 0 && model.listTopping.length != 0) {
       if (_cart[i].id == model.id &&
-          _cart[i]
-              .listTopping
-              .any((modelX) => model.listTopping.contains(modelX)) &&
-          _cart[i]
-              .listVarian
-              .any((element) => model.listVarian.contains(element))) {
+          _bandingToppingKeranjangDenganToppingItemDipilih(model, i) &&
+          _bandingVarianKeranjangDenganVarianItemDipilih(model, i)) {
         _cart[i].qty = model.qty;
         // isTidakAda = false;
         this.totalHarga;
@@ -645,9 +666,7 @@ class KasirBloc with ChangeNotifier {
       }
     } else if (model.listVarian.length != 0) {
       if (_cart[i].id == model.id &&
-          _cart[i]
-              .listVarian
-              .any((element) => model.listVarian.contains(element))) {
+          _bandingVarianKeranjangDenganVarianItemDipilih(model, i)) {
         _cart[i].qty = model.qty;
         // isTidakAda = false;
         this.totalHarga;
@@ -658,9 +677,7 @@ class KasirBloc with ChangeNotifier {
       }
     } else if (model.listTopping.length != 0) {
       if (_cart[i].id == model.id &&
-          _cart[i]
-              .listTopping
-              .any((modelX) => model.listTopping.contains(modelX))) {
+          _bandingToppingKeranjangDenganToppingItemDipilih(model, i)) {
         _cart[i].qty = model.qty;
         // isTidakAda = false;
         this.totalHarga;
@@ -748,5 +765,111 @@ class KasirBloc with ChangeNotifier {
     this.isKuponPass();
     _cart.clear();
     notifyListeners();
+  }
+
+  /// decode listVarian masukkan ke model [MartabakVarianModel]
+  ///
+  /// contoh encoded [listVarian]:
+  /// ```
+  /// "varian": [
+  ///     {
+  ///         "iv_id": 1,
+  ///         "iv_item": 95,
+  ///         "iv_nama": "Martabak Red Velvet Green Tea",
+  ///         "iv_harga": 50000,
+  ///         "harga": []
+  ///     }
+  /// ]
+  /// ```
+  List<MartabakVarianModel> decodeListVarian(String encodedListVarian) {
+    List<MartabakVarianModel> _listZ = List<MartabakVarianModel>();
+
+    var data = jsonDecode(encodedListVarian);
+
+    for (Map dataZ in data) {
+      _listZ.add(
+        MartabakVarianModel(
+          idVarian: dataZ['iv_id'].toString(),
+          hargaVarian: double.parse(dataZ['iv_harga'].toString()),
+          isSelected:
+              dataZ.containsKey('iv_selected') ? dataZ['iv_selected'] : false,
+          namaVarian: dataZ['iv_nama'],
+        ),
+      );
+    }
+
+    return _listZ;
+  }
+
+  /// decode listTopping dan masukkan ke model [ToppingMartabakModel]
+  ///
+  /// contoh format encoded [listTopping]:
+  /// ```
+  /// "modifier": [
+  ///     {
+  ///         "im_id": 1,
+  ///         "im_item": 95,
+  ///         "im_modifier": 1,
+  ///         "modifier": {
+  ///             "m_id": 1,
+  ///             "m_nama": "Topping Red Velvet",
+  ///             "detail": [
+  ///                 {
+  ///                     "mddt_id": 21,
+  ///                     "mddt_modifier": 1,
+  ///                     "mddt_nomor": 1,
+  ///                     "mddt_nama": "Green Tea",
+  ///                     "mddt_harga": 5000,
+  ///                     "mddt_selected": 0
+  ///                 },
+  ///                 {
+  ///                     "mddt_id": 22,
+  ///                     "mddt_modifier": 1,
+  ///                     "mddt_nomor": 2,
+  ///                     "mddt_nama": "Vanilla",
+  ///                     "mddt_harga": 5000,
+  ///                     "mddt_selected": 0
+  ///                 },
+  ///                 {
+  ///                     "mddt_id": 23,
+  ///                     "mddt_modifier": 1,
+  ///                     "mddt_nomor": 3,
+  ///                     "mddt_nama": "Keju",
+  ///                     "mddt_harga": 5000,
+  ///                     "mddt_selected": 0
+  ///                 }
+  ///             ]
+  ///         }
+  ///     }
+  /// ],
+  /// ```
+  List<ToppingMartabakModel> decodeListTopping(String encodedListTopping) {
+    List<ToppingMartabakModel> _listY = List<ToppingMartabakModel>();
+    var data = jsonDecode(encodedListTopping);
+
+    for (var dataY in data) {
+      List<DetailToppingMartabakModel> _listAA = List();
+      for (var dataYD in dataY['modifier']['detail']) {
+        _listAA.add(
+          DetailToppingMartabakModel(
+            idTopping: dataYD['mddt_modifier'].toString(),
+            hargaTopping: double.parse(dataYD['mddt_harga'].toString()),
+            idDetailTopping: dataYD['mddt_id'].toString(),
+            isSelected: dataYD['mddt_selected'] == 1 ? true : false,
+            namaTopping: dataYD['mddt_nama'],
+            nomorTopping: dataYD['mddt_nomor'].toString(),
+          ),
+        );
+      }
+      _listY.add(
+        ToppingMartabakModel(
+          idTopping: dataY['modifier']['m_id'].toString(),
+          namaTopping: dataY['modifier']['m_nama'],
+          listTopping: _listAA,
+        ),
+      );
+    }
+
+    return _listY;
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,7 +15,7 @@ enum TipeTombol {
 }
 
 class PilihTopping extends StatefulWidget {
-  // final String namaItem;
+  // final String name;
   // final List<MartabakVarianModel> listVarian;
   // final List<ToppingMartabakModel> listTopping;
   // final int qty;
@@ -27,7 +29,7 @@ class PilihTopping extends StatefulWidget {
     // this.qty,
     // this.listTopping,
     // this.listVarian,
-    // this.namaItem,
+    // this.name,
     this.index,
     @required this.tipe,
     Key key,
@@ -51,18 +53,13 @@ class _PilihToppingState extends State<PilihTopping> {
           widget.tipe == TipeTombol.edit ? widget.martabak.qty.toString() : '1',
     );
     qtyFocus = FocusNode();
-    _listTopping = List<ToppingMartabakModel>.from(widget.martabak.listTopping);
-    _listVarian = List<MartabakVarianModel>.from(widget.martabak.listVarian);
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
     _listTopping = List<ToppingMartabakModel>();
-
     _listVarian = List<MartabakVarianModel>();
-    super.dispose();
+
+    KasirBloc blocX = context.read<KasirBloc>();
+    _listTopping = blocX.decodeListTopping(widget.martabak.listTopping);
+    _listVarian = blocX.decodeListVarian(widget.martabak.listVarian);
+    super.initState();
   }
 
   @override
@@ -74,13 +71,6 @@ class _PilihToppingState extends State<PilihTopping> {
 
   @override
   Widget build(BuildContext context) {
-    // print(_listTopping
-    //     .map((e) => e.listTopping.map((ed) => ed.isSelected).toList())
-    //     .toList());
-    // print(widget.martabak.listTopping
-    //     .map((e) => e.listTopping.map((ed) => ed.isSelected).toList())
-    //     .toList());
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -109,9 +99,8 @@ class _PilihToppingState extends State<PilihTopping> {
                               color: Colors.red,
                               textColor: Colors.white,
                               onPressed: () {
-                                KasirBloc bloc =
-                                    Provider.of<KasirBloc>(context);
-
+                                KasirBloc bloc = Provider.of<KasirBloc>(context,
+                                    listen: false);
                                 bloc.deleteCart(widget.index);
                                 Navigator.popUntil(
                                   context,
@@ -158,8 +147,8 @@ class _PilihToppingState extends State<PilihTopping> {
               print('true');
               Map mapX = {
                 'tipe': widget.tipe,
-                'listTopping': _listTopping,
-                'listVarian': _listVarian,
+                'listTopping': json.encode(_listTopping),
+                'listVarian': json.encode(_listVarian),
                 'qty': int.parse(qtyController.text)
               };
 

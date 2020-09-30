@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:intl/intl.dart';
 import 'package:martabakdjoeragan_app/pages/ImageToFile/ImageToFile.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 import 'package:network_to_file_image/network_to_file_image.dart';
+import 'package:provider/provider.dart';
 
 class POSTileHorizontal extends StatefulWidget {
   final String id, nama, gambar, desc;
@@ -119,7 +121,8 @@ class _POSTileHorizontalState extends State<POSTileHorizontal> {
 class POSTileVertical extends StatefulWidget {
   final String id, nama, gambar, desc, diskon, harga;
   final Function onTap;
-  final List<MartabakVarianModel> listVarian;
+  // final List<MartabakVarianModel> listVarian;
+  final String listVarian;
 
   POSTileVertical({
     this.desc,
@@ -160,6 +163,13 @@ class _POSTileVerticalState extends State<POSTileVertical> {
 
   @override
   Widget build(BuildContext context) {
+    KasirBloc bloc = Provider.of<KasirBloc>(context);
+    List<MartabakVarianModel> listVarian = List<MartabakVarianModel>();
+
+    listVarian = List<MartabakVarianModel>();
+
+    listVarian = bloc.decodeListVarian(widget.listVarian);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
       child: InkWell(
@@ -287,8 +297,7 @@ class _POSTileVerticalState extends State<POSTileVertical> {
                                     ),
                                   ),
                           ),
-                          widget.listVarian.length != 0
-                              // ignore: dead_code
+                          listVarian.isNotEmpty
                               ? Container(
                                   padding: EdgeInsets.symmetric(
                                     vertical: 3,
@@ -299,13 +308,12 @@ class _POSTileVerticalState extends State<POSTileVertical> {
                                     borderRadius: BorderRadius.circular(50),
                                   ),
                                   child: Text(
-                                    '${widget.listVarian.length} varian',
+                                    '${listVarian.length} varian',
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),
                                   ),
                                 )
-                              // ignore: dead_code
                               : Container(
                                   padding: EdgeInsets.symmetric(
                                     vertical: 3,

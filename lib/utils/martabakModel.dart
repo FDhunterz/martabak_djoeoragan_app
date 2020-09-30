@@ -10,8 +10,66 @@ class MartabakModel {
       idKategoriItem;
   int qty, id;
   List<HargaPenjualanPerItem> listHargaPenjualan;
-  List<ToppingMartabakModel> listTopping;
-  List<MartabakVarianModel> listVarian;
+
+  /// decode listTopping dan masukkan ke model [ToppingMartabakModel]
+  ///
+  /// contoh format encoded [listTopping]:
+  /// ```
+  /// "modifier": [
+  ///     {
+  ///         "im_id": 1,
+  ///         "im_item": 95,
+  ///         "im_modifier": 1,
+  ///         "modifier": {
+  ///             "m_id": 1,
+  ///             "m_nama": "Topping Red Velvet",
+  ///             "detail": [
+  ///                 {
+  ///                     "mddt_id": 21,
+  ///                     "mddt_modifier": 1,
+  ///                     "mddt_nomor": 1,
+  ///                     "mddt_nama": "Green Tea",
+  ///                     "mddt_harga": 5000,
+  ///                     "mddt_selected": 0
+  ///                 },
+  ///                 {
+  ///                     "mddt_id": 22,
+  ///                     "mddt_modifier": 1,
+  ///                     "mddt_nomor": 2,
+  ///                     "mddt_nama": "Vanilla",
+  ///                     "mddt_harga": 5000,
+  ///                     "mddt_selected": 0
+  ///                 },
+  ///                 {
+  ///                     "mddt_id": 23,
+  ///                     "mddt_modifier": 1,
+  ///                     "mddt_nomor": 3,
+  ///                     "mddt_nama": "Keju",
+  ///                     "mddt_harga": 5000,
+  ///                     "mddt_selected": 0
+  ///                 }
+  ///             ]
+  ///         }
+  ///     }
+  /// ],
+  /// ```
+  String listTopping;
+
+  /// decode listVarian dan masukkan ke model [MartabakVarianModel]
+  ///
+  /// contoh encoded [listVarian]:
+  /// ```
+  /// "varian": [
+  ///     {
+  ///         "iv_id": 1,
+  ///         "iv_item": 95,
+  ///         "iv_nama": "Martabak Red Velvet Green Tea",
+  ///         "iv_harga": 50000,
+  ///         "harga": []
+  ///     }
+  /// ]
+  /// ```
+  String listVarian;
 
   MartabakModel({
     this.name,
@@ -126,6 +184,14 @@ class MartabakVarianModel {
   double hargaVarian;
   bool isSelected;
 
+  /// untuk [json.encode()] || [jsonEncode()]
+  Map toJson() => {
+        "iv_id": idVarian,
+        "iv_nama": namaVarian,
+        "iv_harga": hargaVarian,
+        "iv_selected": isSelected,
+      };
+
   MartabakVarianModel({
     this.hargaVarian,
     this.idVarian,
@@ -138,6 +204,18 @@ class ToppingMartabakModel {
   String idTopping, namaTopping;
   List<DetailToppingMartabakModel> listTopping;
 
+  /// untuk [json.encode()] || [jsonEncode()]
+
+  Map toJson() {
+    return {
+      "modifier": {
+        "m_id": idTopping,
+        "m_nama": namaTopping,
+        "detail": listTopping,
+      },
+    };
+  }
+
   ToppingMartabakModel({
     this.idTopping,
     this.namaTopping,
@@ -149,6 +227,16 @@ class DetailToppingMartabakModel {
   String idTopping, namaTopping, idDetailTopping, nomorTopping;
   bool isSelected;
   double hargaTopping;
+
+  /// untuk [json.encode()] || [jsonEncode()]
+  Map toJson() => {
+        "mddt_id": idDetailTopping,
+        "mddt_modifier": idTopping,
+        "mddt_nomor": nomorTopping,
+        "mddt_nama": namaTopping,
+        "mddt_harga": hargaTopping,
+        "mddt_selected": isSelected ? 1 : 0,
+      };
 
   DetailToppingMartabakModel({
     this.hargaTopping,
