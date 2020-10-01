@@ -13,20 +13,82 @@ class CustomSendRequest {
 
   static CustomSendRequest get initialize => _initialize;
 
-  /// send request tipe POST
+  /// # Send Request Tipe POST
+  ///
+  /// [url] = nama url.
+  ///
+  /// [body] = params send request.
+  ///
+  /// [headers] = headers send request.
+  ///
+  /// [isOnline] = bool.
+  ///
+  /// [namaFile] = nama file untuk offline mode. ex: folder/namaFile.txt | namaFile.txt
+  ///
+  /// [onBeforeSend] = sebelum melakukan send request.
+  ///
+  /// [onComplete] = ketika selesai melakukan send request.
+  ///
+  /// [onUnknownStatusCode] = ketika selesai send request status tidak diketahui.
+  ///
+  /// [onErrorCatch] = ketika terjadi error di `try {} catch {}.`
+  ///
+  /// [onUseLocalFile] = ketika [isOnline] false. maka menjalankan function ini.
+  ///
+  /// [onSuccess] = ketika selesai send request status 200.
   void post(
     String url, {
     Map body,
     Map headers,
     bool isOnline,
+    String namaFile,
     Function onBeforeSend,
     Function onComplete,
-    Function onError,
+    Function(int) onUnknownStatusCode,
+    Function(String) onErrorCatch,
     Function(String) onUseLocalFile,
     Function(String) onSuccess,
   }) async {
-    try {} catch (e) {
+    PenyimpananKu storage = PenyimpananKu();
+    // storage.hapusBerkas(namaFile);
+    String resourceJson = await storage.bacaBerkas(namaFile);
+    try {
+      CekKoneksi _cekKoneksi = CekKoneksi.instance;
+
+      Connectivity _connectivity = _cekKoneksi.connectivity;
+
+      Map _hasil = await _cekKoneksi
+          .checkStatus(await _connectivity.checkConnectivity());
+
+      if (_hasil['isOnline']) {
+        final response = await http.post(
+          '$url',
+          headers: headers,
+          body: body,
+        );
+
+        if (response.statusCode == 200) {
+          onSuccess(response.body);
+        } else if (response.statusCode == 401) {
+          Fluttertoast.showToast(
+              msg: 'Token kedaluwarsa, silahkan login kembali');
+          onUseLocalFile(resourceJson);
+        } else {
+          onUnknownStatusCode(response.statusCode);
+          onUseLocalFile(resourceJson);
+        }
+        onComplete();
+      } else {
+        onUseLocalFile(resourceJson);
+      }
+    } on SocketException {
+      Fluttertoast.showToast(
+          msg: 'Tidak dapat mengakses ke server, silahkan coba lagi');
+      onUseLocalFile(resourceJson);
+    } catch (e) {
       print(e);
+      onUseLocalFile(resourceJson);
+      onErrorCatch(e.toString());
     }
   }
 
@@ -48,7 +110,7 @@ class CustomSendRequest {
   ///
   /// [onUnknownStatusCode] = ketika selesai send request status tidak diketahui.
   ///
-  /// [onErrorCatch] = ketika terjadi error di try {} catch {}.
+  /// [onErrorCatch] = ketika terjadi error di `try {} catch {}.`
   ///
   /// [onUseLocalFile] = ketika [isOnline] false. maka menjalankan function ini.
   ///

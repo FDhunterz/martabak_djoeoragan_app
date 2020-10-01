@@ -55,7 +55,7 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
       if (response.statusCode == 200) {
         print(response.body);
         var responseJson = jsonDecode(response.body);
-        var bloc = Provider.of<DaftarPenjualanBloc>(context);
+        DaftarPenjualanBloc bloc = context.read<DaftarPenjualanBloc>();
         bloc.clearNota();
         for (var data in responseJson['data']) {
           List<Item> listDetail = List<Item>();

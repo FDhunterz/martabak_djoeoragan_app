@@ -224,7 +224,13 @@ class ToppingMartabakModel {
 }
 
 class DetailToppingMartabakModel {
-  String idTopping, namaTopping, idDetailTopping, nomorTopping;
+  /// [mddt_modifier]
+  String idTopping;
+  String namaTopping;
+
+  /// [mddt_id]
+  String idDetailTopping;
+  String nomorTopping;
   bool isSelected;
   double hargaTopping;
 

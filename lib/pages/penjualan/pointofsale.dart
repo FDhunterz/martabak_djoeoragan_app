@@ -68,18 +68,18 @@ class _PointofsalesState extends State<Pointofsales> {
     }
   }
 
-  void getUserCabang() async {
-    DataStore store = DataStore();
-    int perusahaan = await store.getDataInteger('us_perusahaan');
-
-    _perusahaan = perusahaan.toString();
-  }
+  void getUserCabang() async {}
 
   void resource() async {
     CustomSendRequest customhttp = CustomSendRequest.initialize;
 
     DataStore dataStore = DataStore();
+
+    int perusahaan = await dataStore.getDataInteger('us_perusahaan');
+
     String accessToken = await dataStore.getDataString('access_token');
+
+    _perusahaan = perusahaan.toString();
 
     requestHeaders['Accept'] = 'application/json';
     requestHeaders['Authorization'] = 'Bearer $accessToken';
@@ -248,6 +248,19 @@ class _PointofsalesState extends State<Pointofsales> {
             KategoriItem(
               id: data['id'].toString(),
               text: data['text'],
+            ),
+          );
+        }
+
+        blocX.listCustomer = List<Customer>();
+
+        for (var i in responseJson['customer']) {
+          blocX.listCustomer.add(
+            Customer(
+              idCustomer: i['id'].toString(),
+              namaCustomer: i['nama'],
+              noTelp: i['text'],
+              alamat: i['alamat'],
             ),
           );
         }

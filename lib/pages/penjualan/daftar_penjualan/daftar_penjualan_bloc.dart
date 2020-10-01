@@ -4,22 +4,22 @@ import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/daftar_pe
 class DaftarPenjualanBloc with ChangeNotifier {
   List<NotaPenjualan> _listNota = List<NotaPenjualan>();
 
-  // get daftar nota
+  /// get daftar nota
   List<NotaPenjualan> get getListNota => _listNota;
 
-  // tambah nota ke daftar
+  /// tambah nota ke daftar
   void addNota(NotaPenjualan notaX) {
     _listNota.add(notaX);
     notifyListeners();
   }
 
-  // reset daftar nota
+  /// reset daftar nota
   void clearNota() {
     _listNota = List<NotaPenjualan>();
     notifyListeners();
   }
 
-  // untuk cari nota berdasarkan nota/customer/kasir
+  /// untuk cari nota berdasarkan nota/customer/kasir
   List<NotaPenjualan> listFilteredNota(String text) {
     List<NotaPenjualan> listX = List<NotaPenjualan>();
     List<NotaPenjualan> listY = this.getListNota;

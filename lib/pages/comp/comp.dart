@@ -34,7 +34,7 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
   GlobalKey<ScaffoldState> _scaffoldKeyComp = GlobalKey<ScaffoldState>();
   CekKoneksi cekKoneksi = CekKoneksi.instance;
 
-  Map<String, dynamic> statusKoneksi = {
+  Map statusKoneksi = {
     'type': ConnectivityResult.none,
     'isOnline': false,
   };

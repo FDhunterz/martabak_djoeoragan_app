@@ -12,7 +12,7 @@ Future<Null> printKasir(String nota, BuildContext context) async {
     name: '',
   );
 
-  KasirBloc blocX = Provider.of<KasirBloc>(context);
+  KasirBloc blocX = context.read<KasirBloc>();
 
   double totalK = 0;
   // ignore: unused_local_variable

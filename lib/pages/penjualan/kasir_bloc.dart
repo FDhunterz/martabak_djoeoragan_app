@@ -20,6 +20,22 @@ class KasirBloc with ChangeNotifier {
   double _settingPpn = 0;
   String _encodedRequest;
 
+  /// daftar customer
+  List<Customer> listCustomer = List<Customer>();
+
+  List<Customer> cariCustomer(String text) {
+    List<Customer> cs = List<Customer>();
+
+    for (var data in listCustomer) {
+      if (data.namaCustomer.toLowerCase().contains(text.toLowerCase()) ||
+          data.alamat.toLowerCase().contains(text.toLowerCase()) ||
+          data.noTelp.toLowerCase().contains(text.toLowerCase())) {
+        cs.add(data);
+      }
+    }
+    return cs;
+  }
+
   TextEditingController _jumlahBayarController = TextEditingController(
     text: 0.toString(),
   );
@@ -81,10 +97,14 @@ class KasirBloc with ChangeNotifier {
       listVarian = decodeListVarian(_cart[i].listVarian);
       listTopping = decodeListTopping(_cart[i].listTopping);
 
-      if (_cart[i].listVarian.length != 0 && _cart[i].listTopping.length != 0) {
+      if (listVarian.isNotEmpty && listTopping.isNotEmpty) {
+        // print('true 1');
         for (var data in listVarian) {
           if (data.isSelected) {
-            listHargaVarian += data.hargaVarian;
+            // listHargaVarian += data.hargaVarian;
+            listHargaVarian += _cart[i].diskon != null
+                ? (data.hargaVarian - double.parse(_cart[i].diskon))
+                : data.hargaVarian;
           }
         }
 
@@ -95,7 +115,8 @@ class KasirBloc with ChangeNotifier {
             }
           }
         }
-      } else if (listTopping.length != 0) {
+      } else if (listTopping.isNotEmpty) {
+        // print('true 2');
         for (var dataT in listTopping) {
           for (var dataTD in dataT.listTopping) {
             if (dataTD.isSelected) {
@@ -107,6 +128,7 @@ class KasirBloc with ChangeNotifier {
             ? double.parse(_cart[i].sysprice) - double.parse(_cart[i].diskon)
             : double.parse(_cart[i].sysprice);
       } else {
+        // print('else');
         harga = _cart[i].diskon != null
             ? double.parse(_cart[i].sysprice) - double.parse(_cart[i].diskon)
             : double.parse(_cart[i].sysprice);
@@ -147,10 +169,14 @@ class KasirBloc with ChangeNotifier {
       }
     }
     double diskonItem = 0;
-    for (var data in _cart) {
-      diskonItem +=
-          double.parse(data.diskon != null ? data.diskon : '0') * data.qty;
-    }
+
+    // # diskon item sementara dinonaktifkan
+
+    // for (var data in _cart) {
+    //   diskonItem +=
+    //       double.parse(data.diskon != null ? data.diskon : '0') * data.qty;
+    // }
+
     return totalDiskon + diskonItem;
   }
 
@@ -252,42 +278,6 @@ class KasirBloc with ChangeNotifier {
 
           priceX = data['i_harga_jual'].toString();
         }
-
-        // List<ToppingMartabakModel> _listY = List<ToppingMartabakModel>();
-        // List<MartabakVarianModel> _listZ = List<MartabakVarianModel>();
-        // for (var dataY in data['modifier']) {
-        //   List<DetailToppingMartabakModel> _listAA = List();
-        //   for (var dataYD in dataY['modifier']['detail']) {
-        //     _listAA.add(
-        //       DetailToppingMartabakModel(
-        //         idTopping: dataYD['mddt_modifier'].toString(),
-        //         hargaTopping: double.parse(dataYD['mddt_harga'].toString()),
-        //         idDetailTopping: dataYD['mddt_id'].toString(),
-        //         isSelected: false,
-        //         namaTopping: dataYD['mddt_nama'],
-        //         nomorTopping: dataYD['mddt_nomor'].toString(),
-        //       ),
-        //     );
-        //   }
-        //   _listY.add(
-        //     ToppingMartabakModel(
-        //       idTopping: dataY['modifier']['m_id'].toString(),
-        //       namaTopping: dataY['modifier']['m_nama'],
-        //       listTopping: _listAA,
-        //     ),
-        //   );
-        // }
-
-        // for (var dataZ in data['varian']) {
-        //   _listZ.add(
-        //     MartabakVarianModel(
-        //       idVarian: dataZ['iv_id'].toString(),
-        //       hargaVarian: double.parse(dataZ['iv_harga'].toString()),
-        //       isSelected: false,
-        //       namaVarian: dataZ['iv_nama'],
-        //     ),
-        //   );
-        // }
 
         _list.add(
           MartabakModel(
@@ -871,5 +861,34 @@ class KasirBloc with ChangeNotifier {
     }
 
     return _listY;
+  }
+
+  /// harga: `item` | `item + topping` | `varian + topping`
+  double hargaItem(MartabakModel model) {
+    double harga = 0;
+
+    List<MartabakVarianModel> listVarian = decodeListVarian(model.listVarian);
+    List<ToppingMartabakModel> listTopping =
+        decodeListTopping(model.listTopping);
+
+    for (var varian in listVarian) {
+      if (varian.isSelected) {
+        harga += varian.hargaVarian;
+      }
+    }
+
+    if (listVarian.isNotEmpty) {
+      for (var topping in listTopping) {
+        for (var toppingDt in topping.listTopping) {
+          if (toppingDt.isSelected) {
+            harga += toppingDt.hargaTopping;
+          }
+        }
+      }
+    } else {
+      harga += double.parse(model.sysprice);
+    }
+
+    return harga;
   }
 }

@@ -48,8 +48,8 @@ class _CartTileState extends State<CartTile> {
 
     listTopping = blocX.decodeListTopping(widget.cart.listTopping);
 
-    if (widget.cart.listTopping.length != 0) {
-      String selectedTopping = '';
+    String selectedTopping = '';
+    if (listTopping.length != 0) {
       for (var data in listTopping) {
         for (int i = 0; i < data.listTopping.length; i++) {
           var dataD = data.listTopping[i];
@@ -62,18 +62,21 @@ class _CartTileState extends State<CartTile> {
           }
         }
       }
-
-      return Column(
-        children: <Widget>[
-          Text(
-            selectedTopping,
-            style: TextStyle(
-              color: Colors.orange,
-              fontSize: 14,
+      if (selectedTopping != '') {
+        return Column(
+          children: <Widget>[
+            Text(
+              selectedTopping,
+              style: TextStyle(
+                color: Colors.orange,
+                fontSize: 14,
+              ),
             ),
-          ),
-        ],
-      );
+          ],
+        );
+      }
+
+      return Container();
     }
 
     return Container();
@@ -89,36 +92,13 @@ class _CartTileState extends State<CartTile> {
   Widget build(BuildContext context) {
     String namaVarianSelected = '';
     List<MartabakVarianModel> listVarian = List<MartabakVarianModel>();
-    List<ToppingMartabakModel> listTopping = List<ToppingMartabakModel>();
     KasirBloc bloc = Provider.of<KasirBloc>(context);
     listVarian = bloc.decodeListVarian(widget.cart.listVarian);
-    listTopping = bloc.decodeListTopping(widget.cart.listTopping);
 
     for (var data in listVarian) {
       if (data.isSelected) {
         namaVarianSelected = ' (${data.namaVarian})';
         break;
-      }
-    }
-    double harga = 0;
-    double listHargaVarian = 0;
-    double listHargaTopping = 0;
-
-    if (widget.cart.listVarian.length == 0) {
-      harga = double.parse(widget.cart.price);
-    }
-
-    for (var data in listVarian) {
-      if (data.isSelected) {
-        listHargaVarian += data.hargaVarian;
-      }
-    }
-
-    for (var dataT in listTopping) {
-      for (var dataTD in dataT.listTopping) {
-        if (dataTD.isSelected) {
-          listHargaTopping += dataTD.hargaTopping;
-        }
       }
     }
 
@@ -200,9 +180,7 @@ class _CartTileState extends State<CartTile> {
                                   children: <Widget>[
                                     Text(
                                       numberFormat.format(
-                                        harga +
-                                            listHargaTopping +
-                                            listHargaVarian,
+                                        bloc.hargaItem(widget.cart),
                                       ),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -215,9 +193,7 @@ class _CartTileState extends State<CartTile> {
                                     ),
                                     Text(
                                       numberFormat.format(
-                                        harga +
-                                            listHargaTopping +
-                                            listHargaVarian -
+                                        bloc.hargaItem(widget.cart) -
                                             double.parse(widget.cart.diskon),
                                       ),
                                       style: TextStyle(
@@ -231,7 +207,7 @@ class _CartTileState extends State<CartTile> {
                                 )
                               : Text(
                                   numberFormat.format(
-                                    harga + listHargaTopping + listHargaVarian,
+                                    bloc.hargaItem(widget.cart),
                                   ),
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,

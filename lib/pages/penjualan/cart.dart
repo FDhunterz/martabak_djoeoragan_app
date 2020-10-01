@@ -8,6 +8,7 @@ import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cartTile.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/customer.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/escpos_function.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/formSerialize.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kupon.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/pointofsale_topping.dart';
@@ -53,49 +54,96 @@ class _CartPageState extends State<CartPage> {
     requestHeaders['Accept'] = 'application/json';
     requestHeaders['Authorization'] = 'Bearer $accessToken';
 
-    Map formSerialize = Map();
-
-    KasirBloc blocX = context.read<KasirBloc>();
-
-    formSerialize['cabangs'] = perusahaan.toString();
-    if (blocX.selectedCustomer != null) {
-      formSerialize['c_nama'] = blocX.selectedCustomer.namaCustomer;
-      formSerialize['c_telepon'] = blocX.selectedCustomer.noTelp;
-      formSerialize['c_alamat'] = blocX.selectedCustomer.alamat;
-    }
-
-    formSerialize['pk_bayar'] = blocX.jumlahBayarController.text;
-    formSerialize['p_harga'] = blocX.selectedHargaPenjualan.id;
-
-    formSerialize['pkdt_item'] = List();
-    formSerialize['pkdt_qty'] = List();
-    formSerialize['pkdt_harga_item'] = List();
-    formSerialize['pkdt_diskon'] = List();
-
-    for (MartabakModel data in blocX.cart) {
-      formSerialize['pkdt_item'].add(data.id);
-      formSerialize['pkdt_qty'].add(data.qty);
-      formSerialize['pkdt_harga_item'].add(data.sysprice);
-      formSerialize['pkdt_diskon'].add(data.diskon ?? 0.toString());
-    }
-
-    formSerialize['pk_diskon_plus'] = blocX.totalDiskon;
-    formSerialize['platform'] = 'android';
-    formSerialize['outlet'] = comp;
-    formSerialize['pk_catatan'] = blocX.catatanController.text;
-
     try {
+      KasirBloc blocX = context.read<KasirBloc>();
+
+      List<int> listIdItem = List();
+      List<int> listQtyItem = List();
+      List<double> listHargaItem = List();
+      List<String> listDiskonItem = List();
+
+      List<String> listIdToppingItem = List();
+      List<String> listNamaToppingItem = List();
+      List<double> listHargaToppingItem = List();
+
+      Map<String, List<dynamic>> idVarianItem = Map<String, List<dynamic>>();
+      Map<String, List<dynamic>> namaVarianItem = Map<String, List<dynamic>>();
+      Map<String, List<dynamic>> hargaVarianItem = Map<String, List<dynamic>>();
+
+      for (MartabakModel data in blocX.cart) {
+        listIdItem.add(data.id);
+        listQtyItem.add(data.qty);
+        listHargaItem.add(blocX.hargaItem(data));
+        listDiskonItem.add(data.diskon ?? 0.toString());
+
+        idVarianItem[data.id.toString()] = List();
+        namaVarianItem[data.id.toString()] = List();
+        hargaVarianItem[data.id.toString()] = List();
+
+        List<ToppingMartabakModel> listTopping = List<ToppingMartabakModel>();
+        List<MartabakVarianModel> listVarian = List<MartabakVarianModel>();
+
+        listTopping = blocX.decodeListTopping(data.listTopping);
+        listVarian = blocX.decodeListVarian(data.listVarian);
+
+        for (var topping in listTopping) {
+          for (var toppingDt in topping.listTopping) {
+            if (toppingDt.isSelected) {
+              idVarianItem[data.id.toString()].add(toppingDt.idDetailTopping);
+              namaVarianItem[data.id.toString()].add(toppingDt.namaTopping);
+              hargaVarianItem[data.id.toString()].add(toppingDt.hargaTopping);
+            }
+          }
+        }
+
+        for (var varian in listVarian) {
+          if (varian.isSelected) {
+            listIdToppingItem.add(varian.idVarian);
+            listNamaToppingItem.add(varian.namaVarian);
+            listHargaToppingItem.add(varian.hargaVarian);
+          }
+        }
+      }
+
+      FormSerializeSimpanPenjualan form = FormSerializeSimpanPenjualan(
+        cabangs: perusahaan.toString(),
+        isCustomerSelected: blocX.selectedCustomer != null ? true : false,
+        namaCustomer: blocX.selectedCustomer != null
+            ? blocX.selectedCustomer.namaCustomer
+            : '',
+        alamat:
+            blocX.selectedCustomer != null ? blocX.selectedCustomer.noTelp : '',
+        noTelp:
+            blocX.selectedCustomer != null ? blocX.selectedCustomer.alamat : '',
+        jumlahBayar: blocX.jumlahBayarController.text,
+        idHargaPenjualan: blocX.selectedHargaPenjualan.id,
+        listIdItem: listIdItem,
+        listQtyItem: listQtyItem,
+        listHargaItem: listHargaItem,
+        listDiskonItem: listDiskonItem,
+        listIdToppingItem: listIdToppingItem,
+        listNamaToppingItem: listNamaToppingItem,
+        listHargaToppingItem: listHargaToppingItem,
+        idVarianItem: idVarianItem,
+        namaVarianItem: namaVarianItem,
+        hargaVarianItem: hargaVarianItem,
+        catatanPenjualan: blocX.catatanController.text,
+        outlet: comp,
+        totalDiskon: blocX.totalDiskon,
+      );
+
       final response = await http.post(
         '${url}penjualan/kasir/save',
         headers: requestHeaders,
         body: {
-          'data': jsonEncode(formSerialize),
+          'data': jsonEncode(form),
           'platform': 'android',
         },
       );
 
       if (response.statusCode == 200) {
         var responseJson = jsonDecode(response.body);
+        print(responseJson);
 
         if (responseJson['status'] == 'success') {
           await printKasir(responseJson['data']['nota'], context);
