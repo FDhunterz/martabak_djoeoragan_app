@@ -95,6 +95,10 @@ class Auth {
             'us_perusahaan',
             int.parse(getresponse['data']['us_perusahaan'].toString()),
           );
+          session.saveString(
+            'p_nama',
+            getresponse['data']['p_nama'],
+          );
           session.saveString('token_type', 'Bearer');
           Fluttertoast.showToast(msg: 'Token saved');
           return {

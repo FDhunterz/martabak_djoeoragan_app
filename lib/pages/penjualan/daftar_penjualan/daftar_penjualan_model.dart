@@ -2,16 +2,20 @@ class NotaPenjualan {
   String id,
       nota,
       tanggal,
-      subTotal,
       diskonPlus,
       pajak,
       bayar,
       harga,
-      grandTotal,
       customer,
       telpon,
       alamat,
       kasir;
+
+  /// total penjualan `"belum"` dipotong diskon
+  String subTotal;
+
+  /// total penjualan `"sudah"` dipotong diskon
+  String grandTotal;
 
   List<Item> detailNotaPenjualan;
 

@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:martabakdjoeragan_app/core/custom_sendrequest.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
+import 'package:martabakdjoeragan_app/core/storage.dart';
+import 'package:martabakdjoeragan_app/pages/CekKoneksi/cek_koneksi.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cartTile.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/customer.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/escpos_function.dart';
@@ -19,7 +23,7 @@ import 'package:provider/provider.dart';
 import 'package:martabakdjoeragan_app/pages/cameo/empty_cart.dart';
 // import 'package:martabakdjoeragan_app/utils/foods.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 // ignore: unused_import
 import 'package:escposprinter/escposprinter.dart';
 
@@ -40,19 +44,29 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   NumberFormat _numberFormat =
       NumberFormat.simpleCurrency(decimalDigits: 0, name: 'Rp. ');
+  CekKoneksi cekKoneksi = CekKoneksi.instance;
+  PenyimpananKu storage = PenyimpananKu();
+  DataStore dataStore = DataStore();
+  bool isSendNotaOffline = false;
+
+  Map statusKoneksi = {
+    'type': ConnectivityResult.none,
+    'isOnline': false,
+  };
 
   void simpanKasir() async {
     setState(() {
       _isSendRequest = true;
       _errorMessage = '';
     });
-    DataStore dataStore = DataStore();
     String accessToken = await dataStore.getDataString('access_token');
     int perusahaan = await dataStore.getDataInteger('us_perusahaan');
     String comp = await dataStore.getDataString('comp');
 
     requestHeaders['Accept'] = 'application/json';
     requestHeaders['Authorization'] = 'Bearer $accessToken';
+
+    CustomSendRequest httpCustom = CustomSendRequest.initialize;
 
     try {
       KasirBloc blocX = context.read<KasirBloc>();
@@ -62,23 +76,43 @@ class _CartPageState extends State<CartPage> {
       List<double> listHargaItem = List();
       List<String> listDiskonItem = List();
 
-      List<String> listIdToppingItem = List();
-      List<String> listNamaToppingItem = List();
-      List<double> listHargaToppingItem = List();
+      List<String> listIdVarianItem = List();
+      List<String> listNamaVarianItem = List();
+      List<double> listHargaVarianItem = List();
 
-      Map<String, List<dynamic>> idVarianItem = Map<String, List<dynamic>>();
-      Map<String, List<dynamic>> namaVarianItem = Map<String, List<dynamic>>();
-      Map<String, List<dynamic>> hargaVarianItem = Map<String, List<dynamic>>();
+      Map<String, List<dynamic>> idToppingItem = Map<String, List<dynamic>>();
+      Map<String, List<dynamic>> namaTopping = Map<String, List<dynamic>>();
+      Map<String, List<dynamic>> hargaToppingItem =
+          Map<String, List<dynamic>>();
 
+      // untuk nota offline
+      List<String> listGambarItem = List<String>();
+      List<String> listNamaItem = List<String>();
+      // end nota offline
+
+      DateTime now = DateTime.now();
+
+      String formatedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+
+      String namaUser = await dataStore.getDataString('p_nama');
+
+      String formatedNotaDate = DateFormat('dd/MMyyyy/HHmmss').format(now);
+
+      String nota = 'Offline-$formatedNotaDate';
       for (MartabakModel data in blocX.cart) {
         listIdItem.add(data.id);
         listQtyItem.add(data.qty);
         listHargaItem.add(blocX.hargaItem(data));
         listDiskonItem.add(data.diskon ?? 0.toString());
 
-        idVarianItem[data.id.toString()] = List();
-        namaVarianItem[data.id.toString()] = List();
-        hargaVarianItem[data.id.toString()] = List();
+        // untuk nota offline
+        listGambarItem.add(data.img);
+        listNamaItem.add(data.name);
+        // end nota offline
+
+        idToppingItem[data.id.toString()] = List();
+        namaTopping[data.id.toString()] = List();
+        hargaToppingItem[data.id.toString()] = List();
 
         List<ToppingMartabakModel> listTopping = List<ToppingMartabakModel>();
         List<MartabakVarianModel> listVarian = List<MartabakVarianModel>();
@@ -89,19 +123,25 @@ class _CartPageState extends State<CartPage> {
         for (var topping in listTopping) {
           for (var toppingDt in topping.listTopping) {
             if (toppingDt.isSelected) {
-              idVarianItem[data.id.toString()].add(toppingDt.idDetailTopping);
-              namaVarianItem[data.id.toString()].add(toppingDt.namaTopping);
-              hargaVarianItem[data.id.toString()].add(toppingDt.hargaTopping);
+              idToppingItem[data.id.toString()].add(toppingDt.idDetailTopping);
+              namaTopping[data.id.toString()].add(toppingDt.namaTopping);
+              hargaToppingItem[data.id.toString()].add(toppingDt.hargaTopping);
             }
           }
         }
 
-        for (var varian in listVarian) {
-          if (varian.isSelected) {
-            listIdToppingItem.add(varian.idVarian);
-            listNamaToppingItem.add(varian.namaVarian);
-            listHargaToppingItem.add(varian.hargaVarian);
+        if (listVarian.isNotEmpty) {
+          for (var varian in listVarian) {
+            if (varian.isSelected) {
+              listIdVarianItem.add(varian.idVarian);
+              listNamaVarianItem.add(varian.namaVarian);
+              listHargaVarianItem.add(varian.hargaVarian);
+            }
           }
+        } else {
+          listIdVarianItem.add('null');
+          listNamaVarianItem.add('null');
+          listHargaVarianItem.add(0);
         }
       }
 
@@ -112,79 +152,190 @@ class _CartPageState extends State<CartPage> {
             ? blocX.selectedCustomer.namaCustomer
             : '',
         alamat:
-            blocX.selectedCustomer != null ? blocX.selectedCustomer.noTelp : '',
-        noTelp:
             blocX.selectedCustomer != null ? blocX.selectedCustomer.alamat : '',
+        noTelp:
+            blocX.selectedCustomer != null ? blocX.selectedCustomer.noTelp : '',
         jumlahBayar: blocX.jumlahBayarController.text,
         idHargaPenjualan: blocX.selectedHargaPenjualan.id,
         listIdItem: listIdItem,
         listQtyItem: listQtyItem,
         listHargaItem: listHargaItem,
         listDiskonItem: listDiskonItem,
-        listIdToppingItem: listIdToppingItem,
-        listNamaToppingItem: listNamaToppingItem,
-        listHargaToppingItem: listHargaToppingItem,
-        idVarianItem: idVarianItem,
-        namaVarianItem: namaVarianItem,
-        hargaVarianItem: hargaVarianItem,
+        listIdVarianItem: listIdVarianItem,
+        listNamaVarianItem: listNamaVarianItem,
+        listHargaVarianItem: listHargaVarianItem,
+        idToppingItem: idToppingItem,
+        namaToppingItem: namaTopping,
+        hargaToppingItem: hargaToppingItem,
         catatanPenjualan: blocX.catatanController.text,
         outlet: comp,
         totalDiskon: blocX.totalDiskon,
+        listGambarItem: listGambarItem,
+        listNamaItem: listNamaItem,
+        namaHargaPenjualan: blocX.selectedHargaPenjualan.nama,
+        namaUserMelayani: namaUser,
+        nota: nota,
+        tanggalPenjualan: formatedDate,
+        totalPpn: blocX.ppn,
       );
 
-      final response = await http.post(
+      String namaFile = 'simpan-kasir.json';
+
+      httpCustom.post(
         '${url}penjualan/kasir/save',
         headers: requestHeaders,
         body: {
           'data': jsonEncode(form),
           'platform': 'android',
         },
-      );
-
-      if (response.statusCode == 200) {
-        var responseJson = jsonDecode(response.body);
-        print(responseJson);
-
-        if (responseJson['status'] == 'success') {
-          await printKasir(responseJson['data']['nota'], context);
-          Fluttertoast.showToast(msg: responseJson['text']);
-          blocX.clearCart();
-          blocX.unsetCustomer();
-          blocX.catatanController.clear();
-          blocX.jumlahBayarController.text = '0';
-          Navigator.pop(context, true);
-        } else if (responseJson['status'] == 'error') {
-          Fluttertoast.showToast(msg: responseJson['text']);
-        } else {
-          Fluttertoast.showToast(msg: 'Send Response done');
+        isOnline: statusKoneksi['isOnline'],
+        namaFile: namaFile,
+        onBeforeSend: () {
+          setState(() {
+            _isSendRequest = true;
+            _errorMessage = '';
+          });
+        },
+        onComplete: () {
+          setState(() {
+            _isSendRequest = false;
+          });
+        },
+        onErrorCatch: (ini) {
+          Fluttertoast.showToast(msg: ini);
+          setState(() {
+            _isSendRequest = false;
+            _errorMessage = ini;
+          });
+          showError(
+            context: context,
+            errorMessage: _errorMessage,
+            onTryAgain: () {
+              simpanKasir();
+            },
+          );
+        },
+        onSuccess: (ini) async {
+          var responseJson = jsonDecode(ini);
           print(responseJson);
-        }
-        setState(() {
-          _isSendRequest = false;
-        });
-      } else if (response.statusCode == 401) {
-        Fluttertoast.showToast(
-            msg: 'Token kedaluwarsa, silahkan login kembali');
-        setState(() {
-          _isSendRequest = false;
-          _errorMessage = 'Token kedaluwarsa, silahkan login kembali';
-        });
-      } else {
-        Fluttertoast.showToast(msg: 'Error Code: ${response.statusCode}');
-        Fluttertoast.showToast(msg: response.body);
-        print(response.body);
-        setState(() {
-          _errorMessage = response.body;
-          _isSendRequest = false;
-        });
-      }
+
+          if (responseJson['status'] == 'success') {
+            await printKasir(responseJson['data']['nota'], context);
+            Fluttertoast.showToast(msg: responseJson['text']);
+            blocX.clearCart();
+            blocX.unsetCustomer();
+            blocX.catatanController.clear();
+            blocX.jumlahBayarController.text = '0';
+            Navigator.pop(context, true);
+          } else if (responseJson['status'] == 'error') {
+            Fluttertoast.showToast(msg: responseJson['text']);
+          } else {
+            Fluttertoast.showToast(msg: 'Send Response done');
+            print(responseJson);
+          }
+        },
+        onUnknownStatusCode: (statusCode, hasilResponse) {
+          Fluttertoast.showToast(msg: 'Error Code: $statusCode');
+          Fluttertoast.showToast(msg: hasilResponse);
+          print(hasilResponse);
+          setState(() {
+            _errorMessage = hasilResponse;
+            _isSendRequest = false;
+          });
+          showError(
+            context: context,
+            errorMessage: _errorMessage,
+            onTryAgain: () {
+              simpanKasir();
+            },
+          );
+        },
+        onUseLocalFile: (ini) async {
+          print(ini);
+
+          List<String> list = List();
+          // storage.hapusBerkas(namaFile);
+
+          if (ini == '') {
+            print('true is empty');
+            list.add(jsonEncode(form));
+            print(list);
+            storage.tulisBerkas(jsonEncode(list), namaFile);
+
+            Fluttertoast.showToast(msg: 'Penjualan berhasil disimpan dilokal');
+
+            await printKasir(form.nota, context);
+
+            blocX.clearCart();
+            blocX.unsetCustomer();
+            blocX.catatanController.clear();
+            blocX.jumlahBayarController.text = '0';
+            Navigator.pop(context, true);
+          } else {
+            print('offline else isnotempty');
+            print(ini);
+            List<dynamic> decodeJson = jsonDecode(ini);
+
+            list = List.from(decodeJson);
+
+            list.add(jsonEncode(form));
+
+            print(list.length);
+            print(list);
+
+            storage.tulisBerkas(jsonEncode(list), namaFile);
+
+            await printKasir(form.nota, context);
+
+            blocX.clearCart();
+            blocX.unsetCustomer();
+            blocX.catatanController.clear();
+            blocX.jumlahBayarController.text = '0';
+            Navigator.pop(context, true);
+          }
+        },
+      );
     } catch (e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e);
       setState(() {
         _isSendRequest = false;
-        _errorMessage = e.toString();
+        _errorMessage = e;
       });
+      showError(
+        context: context,
+        errorMessage: _errorMessage,
+        onTryAgain: () {
+          simpanKasir();
+        },
+      );
     }
+  }
+
+  void cekKoneksiFunction() {
+    cekKoneksi.myStream.listen((event) async {
+      print(event);
+
+      if (event['isOnline'] && !isSendNotaOffline) {
+        isSendNotaOffline = true;
+        await Future.delayed(Duration.zero, () {
+          simpanNotaOfflineKeServer(
+            context,
+            onOnlyOnce: (ini) {
+              isSendNotaOffline = false;
+            },
+          );
+        });
+      }
+
+      /// event @return
+      /// {
+      ///   'type': ConnectivityResult.none | ConnectivityResult.mobile | ConnectivityResult.wifi,
+      ///   'isOnline' : bool,
+      /// };
+      setState(() {
+        statusKoneksi = event;
+      });
+    });
   }
 
   @override
@@ -193,6 +344,10 @@ class _CartPageState extends State<CartPage> {
     _scrollController = ScrollController(
       keepScrollOffset: true,
     );
+
+    cekKoneksi.initialise();
+    cekKoneksiFunction();
+    // storage.hapusBerkas('simpan-kasir.json');
     offset = 0;
     bool lessOnce = false;
     bool moreOnce = false;
@@ -221,9 +376,20 @@ class _CartPageState extends State<CartPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // KasirBloc bloc = Provider.of<KasirBloc>(context);
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Consumer<KasirBloc>(
       builder: (BuildContext context, KasirBloc bloc, Widget child) {
         var cart = bloc.cart;
@@ -918,18 +1084,18 @@ class _CartPageState extends State<CartPage> {
                                     ),
                                   ),
                                 ),
-                                _errorMessage != ''
-                                    ? Container(
-                                        padding: EdgeInsets.all(10),
-                                        color: Colors.white,
-                                        child: Text(
-                                          _errorMessage,
-                                          style: TextStyle(
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                      )
-                                    : Container(),
+                                // _errorMessage != ''
+                                //     ? Container(
+                                //         padding: EdgeInsets.all(10),
+                                //         color: Colors.white,
+                                //         child: Text(
+                                //           _errorMessage,
+                                //           style: TextStyle(
+                                //             color: Colors.red,
+                                //           ),
+                                //         ),
+                                //       )
+                                //     : Container(),
                               ],
                             ),
                           )

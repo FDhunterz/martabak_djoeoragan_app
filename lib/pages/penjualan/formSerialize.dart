@@ -11,13 +11,24 @@ class FormSerializeSimpanPenjualan {
   List<int> listQtyItem;
   List<double> listHargaItem;
   List<String> listDiskonItem;
-  List<String> listIdToppingItem;
-  List<String> listNamaToppingItem;
-  List<double> listHargaToppingItem;
 
-  Map<String, List<dynamic>> idVarianItem;
-  Map<String, List<dynamic>> namaVarianItem;
-  Map<String, List<dynamic>> hargaVarianItem;
+  // untuk nota offline
+  String nota;
+  double totalPpn;
+  String namaUserMelayani;
+  String tanggalPenjualan;
+  String namaHargaPenjualan;
+  List<String> listNamaItem;
+  List<String> listGambarItem;
+  // end nota offline
+
+  List<String> listIdVarianItem;
+  List<String> listNamaVarianItem;
+  List<double> listHargaVarianItem;
+
+  Map<String, List<dynamic>> idToppingItem;
+  Map<String, List<dynamic>> namaToppingItem;
+  Map<String, List<dynamic>> hargaToppingItem;
 
   double totalDiskon;
 
@@ -41,18 +52,28 @@ class FormSerializeSimpanPenjualan {
     formSerialize['pkdt_harga_item'] = listHargaItem;
     formSerialize['pkdt_diskon'] = listDiskonItem;
 
-    formSerialize['pkdt_varian'] = listIdToppingItem;
-    formSerialize['pkdt_nama_varian'] = listNamaToppingItem;
-    formSerialize['pkdt_modifier'] = listHargaToppingItem;
+    formSerialize['pkdt_varian'] = listIdVarianItem;
+    formSerialize['pkdt_nama_varian'] = listNamaVarianItem;
+    formSerialize['pkdt_modifier'] = listHargaVarianItem;
 
-    formSerialize['id_modifier'] = idVarianItem;
-    formSerialize['nama_modifier'] = namaVarianItem;
-    formSerialize['harga_modifier'] = hargaVarianItem;
+    formSerialize['id_modifier'] = idToppingItem;
+    formSerialize['nama_modifier'] = namaToppingItem;
+    formSerialize['harga_modifier'] = hargaToppingItem;
 
     formSerialize['pk_diskon_plus'] = totalDiskon;
     formSerialize['platform'] = 'android';
     formSerialize['outlet'] = outlet;
-    formSerialize['pk_catatan'] = catatanPenjualan;
+    formSerialize['c_catatan'] = catatanPenjualan;
+
+    // untuk nota offline
+    formSerialize['pkdt_gambar'] = listGambarItem;
+    formSerialize['pkdt_nama_item'] = listNamaItem;
+    formSerialize['tanggal_penjualan'] = tanggalPenjualan;
+    formSerialize['totalPpn'] = totalPpn;
+    formSerialize['namaHargaPenjualan'] = namaHargaPenjualan;
+    formSerialize['namaUserMelayani'] = namaUserMelayani;
+    formSerialize['nota'] = nota;
+    // end nota offline
 
     return formSerialize;
   }
@@ -61,22 +82,29 @@ class FormSerializeSimpanPenjualan {
     this.alamat,
     this.cabangs,
     this.catatanPenjualan,
-    this.hargaVarianItem,
+    this.hargaToppingItem,
     this.idHargaPenjualan,
-    this.idVarianItem,
+    this.idToppingItem,
     this.isCustomerSelected,
     this.jumlahBayar,
     this.listDiskonItem,
     this.listHargaItem,
-    this.listHargaToppingItem,
+    this.listHargaVarianItem,
     this.listIdItem,
-    this.listIdToppingItem,
-    this.listNamaToppingItem,
+    this.listIdVarianItem,
+    this.listNamaVarianItem,
     this.listQtyItem,
     this.namaCustomer,
-    this.namaVarianItem,
+    this.namaToppingItem,
     this.noTelp,
     this.outlet,
     this.totalDiskon,
+    this.listGambarItem,
+    this.listNamaItem,
+    this.namaHargaPenjualan,
+    this.namaUserMelayani,
+    this.nota,
+    this.tanggalPenjualan,
+    this.totalPpn,
   });
 }

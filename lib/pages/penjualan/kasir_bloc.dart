@@ -761,7 +761,7 @@ class KasirBloc with ChangeNotifier {
   ///
   /// contoh encoded [listVarian]:
   /// ```
-  /// "varian": [
+  /// [
   ///     {
   ///         "iv_id": 1,
   ///         "iv_item": 95,
@@ -795,7 +795,7 @@ class KasirBloc with ChangeNotifier {
   ///
   /// contoh format encoded [listTopping]:
   /// ```
-  /// "modifier": [
+  /// [
   ///     {
   ///         "im_id": 1,
   ///         "im_item": 95,
@@ -890,5 +890,18 @@ class KasirBloc with ChangeNotifier {
     }
 
     return harga;
+  }
+
+  String namaItem(MartabakModel model) {
+    List<MartabakVarianModel> listVarian = decodeListVarian(model.listVarian);
+
+    if (listVarian.isNotEmpty) {
+      for (var data in listVarian) {
+        if (data.isSelected) {
+          return data.namaVarian;
+        }
+      }
+    }
+    return model.name;
   }
 }

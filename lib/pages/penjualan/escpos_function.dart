@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
+import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -49,21 +50,41 @@ Future<Null> printKasir(String nota, BuildContext context) async {
       double diskons =
           double.parse(data.diskon != null ? data.diskon : '0') * data.qty;
 
-      await Escposprinter.printText("${data.name.padRight(46, ' ')}\n");
+      List<ToppingMartabakModel> listTopping =
+          blocX.decodeListTopping(data.listTopping);
 
-      double total = (double.parse(data.price) * data.qty);
+      String namaTopping = '';
+
+      for (var topping in listTopping) {
+        for (var toppingDt in topping.listTopping) {
+          if (toppingDt.isSelected) {
+            if (namaTopping == '') {
+              namaTopping += toppingDt.namaTopping;
+            } else {
+              namaTopping += ', ${toppingDt.namaTopping}';
+            }
+          }
+        }
+      }
+
+      await Escposprinter.printText(
+          "${blocX.namaItem(data).padRight(46, ' ')}\n");
+      await Escposprinter.printText(
+          "${wrapText(namaTopping, 46).padRight(46, ' ')}\n");
+
+      double total = (blocX.hargaItem(data) * data.qty);
 
       await Escposprinter.printText(data.qty.toString().padRight(5, ' '));
       await Escposprinter.printText(' X @ ');
       await Escposprinter.printText(
-          _numberFormat.format(double.parse(data.price)).padLeft(11, ' '));
+          _numberFormat.format(blocX.hargaItem(data)).padLeft(11, ' '));
       await Escposprinter.printText(
           " ${_numberFormat.format(diskons.ceilToDouble()).padLeft(12, ' ')}");
       await Escposprinter.printText(_numberFormat.format(total).padLeft(13));
       await Escposprinter.printText("\n\n");
 
       subDiskon += diskons;
-      totalK += double.parse(data.price) * data.qty - diskons;
+      totalK += blocX.hargaItem(data) * data.qty - diskons;
       totalQty += data.qty;
     }
 
@@ -124,4 +145,25 @@ Future<Null> printKasir(String nota, BuildContext context) async {
     Fluttertoast.showToast(msg: 'Failed to get platform version.');
     //response = 'Failed to get platform version.';
   }
+}
+
+String wrapText(String inputText, int wrapLength) {
+  List<String> separatedWords = inputText.split(' ');
+  StringBuffer intermidiateText = StringBuffer();
+  StringBuffer outputText = StringBuffer();
+
+  for (String word in separatedWords) {
+    if ((intermidiateText.length + word.length) >= wrapLength) {
+      intermidiateText.write('\n');
+      outputText.write(intermidiateText);
+      intermidiateText.clear();
+      intermidiateText.write('$word ');
+    } else {
+      intermidiateText.write('$word ');
+    }
+  }
+
+  outputText.write(intermidiateText); //Write any remaining word at the end
+  intermidiateText.clear();
+  return outputText.toString().trim();
 }

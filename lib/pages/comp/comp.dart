@@ -33,21 +33,30 @@ class PilihCabangOutlet extends StatefulWidget {
 class PilihCabangOutletState extends State<PilihCabangOutlet> {
   GlobalKey<ScaffoldState> _scaffoldKeyComp = GlobalKey<ScaffoldState>();
   CekKoneksi cekKoneksi = CekKoneksi.instance;
+  DataStore dataStore = DataStore();
+  CustomSendRequest customhttp = CustomSendRequest.initialize;
+  PenyimpananKu storage = PenyimpananKu();
+  bool isSendNotaOffline = false;
 
   Map statusKoneksi = {
     'type': ConnectivityResult.none,
     'isOnline': false,
   };
-
-  @override
-  void initState() {
-    _isLoading = true;
-    _isError = false;
-    comp = null;
-    _errorMessage = '';
-    cekKoneksi.initialise();
-    cekKoneksi.myStream.listen((event) {
+  void cekKoneksiFunction() {
+    cekKoneksi.myStream.listen((event) async {
       print(event);
+
+      if (event['isOnline'] && !isSendNotaOffline) {
+        isSendNotaOffline = true;
+        await Future.delayed(Duration.zero, () {
+          simpanNotaOfflineKeServer(
+            context,
+            onOnlyOnce: (ini) {
+              isSendNotaOffline = false;
+            },
+          );
+        });
+      }
 
       /// event @return
       /// {
@@ -58,6 +67,17 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
         statusKoneksi = event;
       });
     });
+  }
+
+  @override
+  void initState() {
+    _isLoading = true;
+    _isError = false;
+    comp = null;
+    _errorMessage = '';
+    cekKoneksi.initialise();
+    cekKoneksiFunction();
+
     Timer(
       Duration(seconds: 1),
       () {
@@ -68,13 +88,10 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
   }
 
   getResource() async {
-    DataStore dataStore = DataStore();
-
     String accessToken = await dataStore.getDataString('access_token');
 
     requestHeaders['Accept'] = 'application/json';
     requestHeaders['Authorization'] = 'Bearer $accessToken';
-    CustomSendRequest customhttp = CustomSendRequest.initialize;
     String namaFile = 'session-resource.json';
 
     void _kelolaResponseSessionResource(String json) async {
@@ -156,13 +173,11 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
         showError();
       },
       onSuccess: (ini) async {
-        PenyimpananKu storage = PenyimpananKu();
-
         storage.tulisBerkas(ini, namaFile);
 
         _kelolaResponseSessionResource(ini);
       },
-      onUnknownStatusCode: (statusCode) {
+      onUnknownStatusCode: (statusCode, e) {
         setState(() {
           _errorMessage = 'Error Code : $statusCode';
         });
@@ -180,34 +195,6 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
           _kelolaResponseSessionResource(ini);
         }
       },
-    );
-  }
-
-  void showError() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text('Error'),
-        content: Text(_errorMessage),
-        actions: <Widget>[
-          RaisedButton(
-            child: Text('Coba Lagi'),
-            color: Colors.orange,
-            onPressed: () {
-              Navigator.pop(context);
-              getResource();
-            },
-            textColor: Colors.white,
-          ),
-          RaisedButton(
-            child: Text('Tutup'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            textColor: Colors.black,
-          ),
-        ],
-      ),
     );
   }
 

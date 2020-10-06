@@ -1,24 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:warungislamibogorandroid/penjualan/kasir/tambah_penjualan.dart';
 
-import 'package:http/http.dart' as http;
-import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
-import 'package:martabakdjoeragan_app/store/DataStore.dart';
-import 'package:martabakdjoeragan_app/utils/errorWidget.dart';
 import 'dart:async';
 
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 import 'package:provider/provider.dart';
 
 Customer customerState;
-bool _isCari, _isLoading, _isError;
+bool _isCari;
 
-String tokenType, accessToken, _errorMessage, _perusahaan;
+String tokenType, accessToken;
 Map<String, String> requestHeaders = Map();
 GlobalKey<ScaffoldState> _scaffoldKeyCustomer;
 
@@ -40,11 +32,9 @@ class _CariCustomerState extends State<CariCustomer> {
 
   @override
   void initState() {
-    _errorMessage = '';
     delayRequest = 0;
     _scaffoldKeyCustomer = GlobalKey<ScaffoldState>();
     _isCari = false;
-    _isLoading = true;
 
     customerState = widget.customer == null
         ? Customer(idCustomer: '', namaCustomer: '')

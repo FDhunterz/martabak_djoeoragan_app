@@ -8,6 +8,7 @@ import 'package:martabakdjoeragan_app/core/api.dart';
 import 'package:martabakdjoeragan_app/core/custom_sendrequest.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:martabakdjoeragan_app/core/storage.dart';
+import 'package:martabakdjoeragan_app/pages/CekKoneksi/cek_koneksi.dart';
 // import 'package:martabakdjoeragan_app/pages/CekKoneksi/cek_koneksi.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cariPrint.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/daftar_penjualan.dart';
@@ -46,17 +47,50 @@ class Pointofsales extends StatefulWidget {
 
 class _PointofsalesState extends State<Pointofsales> {
   final TextEditingController _searchControl = new TextEditingController();
-  // CekKoneksi _cekKoneksi = CekKoneksi.instance;
-  Map<String, dynamic> statusKoneksi = {
+  CekKoneksi cekKoneksi = CekKoneksi.instance;
+  CustomSendRequest customhttp = CustomSendRequest.initialize;
+  DataStore dataStore = DataStore();
+  PenyimpananKu storage = PenyimpananKu();
+  bool isSendNotaOffline = false;
+
+  Map statusKoneksi = {
     'type': ConnectivityResult.none,
     'isOnline': false,
   };
+  void cekKoneksiFunction() {
+    cekKoneksi.myStream.listen((event) async {
+      print(event);
+
+      if (event['isOnline'] && !isSendNotaOffline) {
+        isSendNotaOffline = true;
+        await Future.delayed(Duration.zero, () {
+          simpanNotaOfflineKeServer(
+            context,
+            onOnlyOnce: (ini) {
+              isSendNotaOffline = false;
+            },
+          );
+        });
+      }
+
+      /// event @return
+      /// {
+      ///   'type': ConnectivityResult.none | ConnectivityResult.mobile | ConnectivityResult.wifi,
+      ///   'isOnline' : bool,
+      /// };
+      setState(() {
+        statusKoneksi = event;
+      });
+    });
+  }
 
   @override
   void initState() {
     _isLoading = true;
     _isCari = false;
     _isError = false;
+    cekKoneksi.initialise();
+    cekKoneksiFunction();
     resource();
     super.initState();
   }
@@ -71,11 +105,8 @@ class _PointofsalesState extends State<Pointofsales> {
   void getUserCabang() async {}
 
   void resource() async {
-    CustomSendRequest customhttp = CustomSendRequest.initialize;
-
-    DataStore dataStore = DataStore();
-
     int perusahaan = await dataStore.getDataInteger('us_perusahaan');
+    String outlet = await dataStore.getDataString('comp');
 
     String accessToken = await dataStore.getDataString('access_token');
 
@@ -119,39 +150,7 @@ class _PointofsalesState extends State<Pointofsales> {
             ),
           );
         }
-        // for (var dataY in data['modifier']) {
-        //   List<DetailToppingMartabakModel> _listAA = List();
-        //   for (var dataYD in dataY['modifier']['detail']) {
-        //     _listAA.add(
-        //       DetailToppingMartabakModel(
-        //         idTopping: dataYD['mddt_modifier'].toString(),
-        //         hargaTopping: double.parse(dataYD['mddt_harga'].toString()),
-        //         idDetailTopping: dataYD['mddt_id'].toString(),
-        //         isSelected: false,
-        //         namaTopping: dataYD['mddt_nama'],
-        //         nomorTopping: dataYD['mddt_nomor'].toString(),
-        //       ),
-        //     );
-        //   }
-        //   _listY.add(
-        //     ToppingMartabakModel(
-        //       idTopping: dataY['modifier']['m_id'].toString(),
-        //       namaTopping: dataY['modifier']['m_nama'],
-        //       listTopping: _listAA,
-        //     ),
-        //   );
-        // }
 
-        // for (var dataZ in data['varian']) {
-        //   _listZ.add(
-        //     MartabakVarianModel(
-        //       idVarian: dataZ['iv_id'].toString(),
-        //       hargaVarian: double.parse(dataZ['iv_harga'].toString()),
-        //       isSelected: false,
-        //       namaVarian: dataZ['iv_nama'],
-        //     ),
-        //   );
-        // }
         blocX.addItem(
           MartabakModel(
             id: int.parse(data['i_id'].toString()),
@@ -197,13 +196,11 @@ class _PointofsalesState extends State<Pointofsales> {
         });
       },
       onSuccess: (ini) {
-        PenyimpananKu storage = PenyimpananKu();
-
         storage.tulisBerkas(ini, namaFile);
 
         _kelolaResponseGetItem(ini);
       },
-      onUnknownStatusCode: (statusCode) {
+      onUnknownStatusCode: (statusCode, e) {
         setState(() {
           _errorMessage = 'Error Code : $statusCode';
         });
@@ -227,6 +224,8 @@ class _PointofsalesState extends State<Pointofsales> {
       void _kelolaResponseKasirResource(String json) {
         dynamic responseJson = jsonDecode(json);
         print(responseJson);
+
+        storage.tulisBerkas(json, 'daftar-nota.json');
 
         KasirBloc blocX = context.read<KasirBloc>();
 
@@ -326,6 +325,7 @@ class _PointofsalesState extends State<Pointofsales> {
         '${url}penjualan/kasir/resource',
         body: {
           'cabangs': _perusahaan,
+          'outlet': outlet,
         },
         headers: requestHeaders,
         namaFile: namaFileX,
@@ -343,13 +343,11 @@ class _PointofsalesState extends State<Pointofsales> {
         },
         onErrorCatch: (e) {},
         onSuccess: (ini) {
-          PenyimpananKu storage = PenyimpananKu();
-
           storage.tulisBerkas(ini, namaFileX);
 
           _kelolaResponseKasirResource(ini);
         },
-        onUnknownStatusCode: (statusCode) {
+        onUnknownStatusCode: (statusCode, e) {
           setState(() {
             _errorMessage = 'Error Code : $statusCode';
           });
