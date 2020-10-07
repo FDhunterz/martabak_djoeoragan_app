@@ -70,10 +70,12 @@ class _SplashScreenState extends State<SplashScreen> {
                     child: Text(
                       "Martabak Djoeragan",
                       style: TextStyle(
-                          color: Color(0xfffbaf18),
-                          fontFamily: 'Quicksand',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30.0),
+                        color: Color(0xfffbaf18),
+                        fontFamily: 'Quicksand',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30.0,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
