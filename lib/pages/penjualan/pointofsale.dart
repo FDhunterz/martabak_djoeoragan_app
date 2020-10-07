@@ -33,7 +33,7 @@ import 'pointofsale_tile.dart';
 // List<MartabakModel> foods, foodsBackup;
 String _errorMessage, _perusahaan;
 Map<String, String> requestHeaders = Map();
-bool _isError, _isLoading, _isCari;
+bool _isError, _isLoading;
 DateTime backbuttonpressedTime;
 
 // String dataResponseItem, dataResponseResource;
@@ -52,6 +52,8 @@ class _PointofsalesState extends State<Pointofsales> {
   DataStore dataStore = DataStore();
   PenyimpananKu storage = PenyimpananKu();
   bool isSendNotaOffline = false;
+  bool _isCari = false;
+  bool _isCariEmpty = true;
 
   Map statusKoneksi = {
     'type': ConnectivityResult.none,
@@ -89,6 +91,7 @@ class _PointofsalesState extends State<Pointofsales> {
     _isLoading = true;
     _isCari = false;
     _isError = false;
+    _isCariEmpty = true;
     cekKoneksi.initialise();
     cekKoneksiFunction();
     resource();
@@ -690,90 +693,118 @@ class _PointofsalesState extends State<Pointofsales> {
                           ),
                           child: Row(
                             children: [
-                              Expanded(
-                                child: TextField(
-                                  style: TextStyle(
-                                    fontSize: 15.0,
-                                    color: Colors.blueGrey[700],
-                                  ),
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10.0),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                      ),
-                                    ),
-                                    suffixIcon: _isCari
-                                        ? InkWell(
-                                            child: Icon(Icons.close),
-                                            onTap: () {
-                                              setState(() {
-                                                _searchControl.text = '';
-                                                _isCari = false;
-                                              });
-                                            },
-                                          )
-                                        : null,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                      ),
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xfffbaf18),
-                                        width: 2,
-                                      ),
-                                    ),
-                                    hintText: "Pencarian",
-                                    prefixIcon: Icon(
-                                      Icons.search,
-                                      color: Colors.blueGrey[500],
-                                    ),
-                                    hintStyle: TextStyle(
-                                      fontSize: 15.0,
-                                      color: Colors.blueGrey[400],
-                                    ),
-                                  ),
-                                  maxLines: 1,
-                                  controller: _searchControl,
-                                  onChanged: (ini) {
-                                    setState(() {
-                                      _searchControl.value = TextEditingValue(
-                                        text: ini,
-                                        selection: _searchControl.selection,
-                                      );
-                                    });
+                              _isCari
+                                  ? Expanded(
+                                      child: TextField(
+                                        autofocus: true,
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          color: Colors.blueGrey[700],
+                                        ),
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.all(10.0),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            borderSide: BorderSide(
+                                              color: Colors.transparent,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.transparent,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xfffbaf18),
+                                              width: 2,
+                                            ),
+                                          ),
+                                          hintText: "Pencarian",
+                                          prefixIcon: Icon(
+                                            Icons.search,
+                                            color: Colors.blueGrey[500],
+                                          ),
+                                          hintStyle: TextStyle(
+                                            fontSize: 15.0,
+                                            color: Colors.blueGrey[400],
+                                          ),
+                                        ),
+                                        maxLines: 1,
+                                        controller: _searchControl,
+                                        onChanged: (ini) {
+                                          setState(() {
+                                            _searchControl.value =
+                                                TextEditingValue(
+                                              text: ini,
+                                              selection:
+                                                  _searchControl.selection,
+                                            );
+                                          });
 
-                                    if (ini.length != 0) {
-                                      setState(() {
-                                        _isCari = true;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        _isCari = false;
-                                      });
-                                    }
-                                  },
-                                ),
-                              ),
-                              DropdownButton(
-                                isDense: true,
-                                underline: Container(),
-                                items: bloc.listKategori
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        child: Text(e.text),
-                                        value: e,
+                                          if (ini.length != 0) {
+                                            setState(() {
+                                              _isCariEmpty = false;
+                                            });
+                                          } else {
+                                            setState(() {
+                                              _isCariEmpty = true;
+                                            });
+                                          }
+                                        },
                                       ),
                                     )
-                                    .toList(),
-                                hint: Text('Pilih Kategori'),
-                                value: bloc.getSelectedKategoriItem,
-                                onChanged: (e) {
-                                  bloc.setSelectedKategori(e);
+                                  : Container(),
+                              !_isCari
+                                  ? Expanded(
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15.0),
+                                        child: DropdownButton(
+                                          // isDense: false,
+                                          isExpanded: true,
+                                          underline: Container(),
+                                          items: bloc.listKategori
+                                              .map(
+                                                (e) => DropdownMenuItem(
+                                                  child: Text(e.text),
+                                                  value: e,
+                                                ),
+                                              )
+                                              .toList(),
+                                          hint: Text('Pilih Kategori'),
+                                          value: bloc.getSelectedKategoriItem,
+                                          onChanged: (e) {
+                                            bloc.setSelectedKategori(e);
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                              FlatButton(
+                                color: Colors.orange[300],
+                                child: _isCari
+                                    ? Icon(Icons.close)
+                                    : Icon(Icons.search),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 0,
+                                  vertical: 12,
+                                ),
+                                onPressed: () {
+                                  if (_isCari) {
+                                    setState(() {
+                                      _isCari = !_isCari;
+                                      _searchControl.text = '';
+                                      _isCariEmpty = !_isCariEmpty;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      _isCari = !_isCari;
+                                    });
+                                  }
                                 },
                               ),
                             ],
@@ -783,71 +814,97 @@ class _PointofsalesState extends State<Pointofsales> {
                           height: 20.0,
                           thickness: 1,
                         ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: _listItem.length,
-                          itemBuilder: (BuildContext context, int i) =>
-                              POSTileVertical(
-                            id: _listItem[i].id.toString(),
-                            desc: _listItem[i].desc,
-                            gambar: _listItem[i].img,
-                            nama: _listItem[i].name,
-                            diskon: _listItem[i].diskon,
-                            harga: _listItem[i].price,
-                            listVarian: _listItem[i].listVarian,
-                            onTap: () async {
-                              List<ToppingMartabakModel> listTopping = bloc
-                                  .decodeListTopping(_listItem[i].listTopping);
-                              List<MartabakVarianModel> listVarian = bloc
-                                  .decodeListVarian(_listItem[i].listVarian);
-
-                              if (listTopping.length != 0 ||
-                                  listVarian.length != 0) {
-                                MartabakModel b;
-                                b = new MartabakModel(
-                                  id: _listItem[i].id,
-                                  name: _listItem[i].name,
-                                  img: _listItem[i].img,
-                                  price: _listItem[i].price,
-                                  sysprice: _listItem[i].sysprice,
-                                  desc: _listItem[i].desc,
-                                  idKategoriItem: _listItem[i].idKategoriItem,
-                                  qty: _listItem[i].qty,
-                                  details: _listItem[i].details,
-                                  diskon: _listItem[i].diskon,
-                                  listTopping: _listItem[i].listTopping,
-                                  listVarian: _listItem[i].listVarian,
-                                );
-
-                                Map a = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    maintainState: false,
-                                    builder: (BuildContext context) =>
-                                        PilihTopping(
-                                      martabak: b,
-                                      tipe: TipeTombol.tambah,
+                        Column(
+                          children: _listItem.isEmpty
+                              ? [
+                                  ListTile(
+                                    title: Text(
+                                      'Tidak ada Data',
+                                      textAlign: TextAlign.center,
                                     ),
                                   ),
-                                );
+                                ]
+                              : _listItem
+                                  .asMap()
+                                  .map(
+                                    (int i, MartabakModel martabak) => MapEntry(
+                                      i,
+                                      POSTileVertical(
+                                        id: martabak.id.toString(),
+                                        desc: martabak.desc,
+                                        gambar: martabak.img,
+                                        nama: martabak.name,
+                                        diskon: martabak.diskon,
+                                        harga: martabak.price,
+                                        listVarian: martabak.listVarian,
+                                        onTap: () async {
+                                          List<ToppingMartabakModel>
+                                              listTopping =
+                                              bloc.decodeListTopping(
+                                                  martabak.listTopping);
+                                          List<MartabakVarianModel> listVarian =
+                                              bloc.decodeListVarian(
+                                                  martabak.listVarian);
 
-                                if (a != null) {
-                                  print('changed');
-                                  b.qty = a['qty'];
-                                  b.listTopping = a['listTopping'];
-                                  b.listVarian = a['listVarian'];
+                                          if (listTopping.length != 0 ||
+                                              listVarian.length != 0) {
+                                            MartabakModel b;
+                                            b = new MartabakModel(
+                                              id: martabak.id,
+                                              name: martabak.name,
+                                              img: martabak.img,
+                                              price: martabak.price,
+                                              sysprice: martabak.sysprice,
+                                              desc: martabak.desc,
+                                              idKategoriItem:
+                                                  martabak.idKategoriItem,
+                                              qty: martabak.qty,
+                                              details: martabak.details,
+                                              diskon: martabak.diskon,
+                                              listTopping: martabak.listTopping,
+                                              listVarian: martabak.listVarian,
+                                            );
 
-                                  if (a['tipe'] == TipeTombol.tambah) {
-                                    bloc.addToCart(b);
-                                  }
-                                }
-                              } else {
-                                bloc.addToCart(_listItem[i]);
-                              }
-                            },
-                          ),
+                                            Map a = await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                maintainState: false,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        PilihTopping(
+                                                  martabak: b,
+                                                  tipe: TipeTombol.tambah,
+                                                ),
+                                              ),
+                                            );
+
+                                            if (a != null) {
+                                              print('changed');
+                                              b.qty = a['qty'];
+                                              b.listTopping = a['listTopping'];
+                                              b.listVarian = a['listVarian'];
+
+                                              if (a['tipe'] ==
+                                                  TipeTombol.tambah) {
+                                                bloc.addToCart(b);
+                                              }
+                                            }
+                                          } else {
+                                            bloc.addToCart(martabak);
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                  .values
+                                  .toList(),
                         ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 0,
+                            vertical: 50,
+                          ),
+                        )
                       ],
                     ),
         ),
