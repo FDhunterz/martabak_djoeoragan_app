@@ -846,25 +846,25 @@ class _PointofsalesState extends State<Pointofsales> {
                                               bloc.decodeListVarian(
                                                   martabak.listVarian);
 
+                                          MartabakModel b;
+                                          b = new MartabakModel(
+                                            id: martabak.id,
+                                            name: martabak.name,
+                                            img: martabak.img,
+                                            price: martabak.price,
+                                            sysprice: martabak.sysprice,
+                                            desc: martabak.desc,
+                                            idKategoriItem:
+                                                martabak.idKategoriItem,
+                                            qty: 1,
+                                            details: martabak.details,
+                                            diskon: martabak.diskon,
+                                            listTopping: martabak.listTopping,
+                                            listVarian: martabak.listVarian,
+                                          );
+
                                           if (listTopping.length != 0 ||
                                               listVarian.length != 0) {
-                                            MartabakModel b;
-                                            b = new MartabakModel(
-                                              id: martabak.id,
-                                              name: martabak.name,
-                                              img: martabak.img,
-                                              price: martabak.price,
-                                              sysprice: martabak.sysprice,
-                                              desc: martabak.desc,
-                                              idKategoriItem:
-                                                  martabak.idKategoriItem,
-                                              qty: martabak.qty,
-                                              details: martabak.details,
-                                              diskon: martabak.diskon,
-                                              listTopping: martabak.listTopping,
-                                              listVarian: martabak.listVarian,
-                                            );
-
                                             Map a = await Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -890,7 +890,7 @@ class _PointofsalesState extends State<Pointofsales> {
                                               }
                                             }
                                           } else {
-                                            bloc.addToCart(martabak);
+                                            bloc.addToCart(b);
                                           }
                                         },
                                       ),
