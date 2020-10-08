@@ -48,12 +48,12 @@ class CompBloc with ChangeNotifier {
   }
 
   void clearListCabang() {
-    _listCabang = List<Cabang>();
+    _listCabang.clear();
     notifyListeners();
   }
 
   void clearListOutlet() {
-    _listOutlet = List<Outlet>();
+    _listOutlet.clear();
     notifyListeners();
   }
 
@@ -71,7 +71,7 @@ class CompBloc with ChangeNotifier {
 
   List<Outlet> cariOutlet(String text, {Cabang filterByCabang}) {
     List<Outlet> a = List<Outlet>();
-    List<Outlet> b = this.listOutlet();
+    List<Outlet> b = listOutlet();
 
     for (Outlet data in b) {
       if (filterByCabang != null) {

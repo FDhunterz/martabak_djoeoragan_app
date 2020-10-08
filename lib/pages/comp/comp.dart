@@ -103,6 +103,7 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
 
       bloc.clearListCabang();
       bloc.clearListOutlet();
+      bloc.setSelectedCabang(null);
 
       for (var c in responseJson['cabang']) {
         bloc.addCabang(

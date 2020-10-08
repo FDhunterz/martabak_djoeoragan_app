@@ -34,31 +34,15 @@ class _CariOutletState extends State<CariOutlet> {
 
   cariOutlet() {}
 
-  getOutlet() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    CompBloc blocX = Provider.of<CompBloc>(context);
-
-    listOutletX = blocX.listOutlet(filterByCabang: blocX.selectedCabang);
-    listOutlet = listOutletX;
-    Timer(Duration(seconds: 1), () {
-      setState(() {
-        _isLoading = false;
-      });
-    });
-  }
-
   @override
   void initState() {
     listOutlet = List<Outlet>();
     listOutletX = List<Outlet>();
-    // getOutlet();
+
     delayRequest = 0;
     _isCari = false;
     _isLoading = false;
-    // getOutlet();
+
     outletState = widget.outlet == null
         ? Outlet(
             id: '',
