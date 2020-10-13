@@ -51,6 +51,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       setState(() {
         _message = loginX['message'];
+        loading = false;
       });
     }
     setState(() {
