@@ -117,21 +117,21 @@ class Auth {
           'message': 'Error Code ${sendlogin.statusCode}',
         };
       }
-    } on SocketException catch (_) {
+    } on SocketException {
       Fluttertoast.showToast(
           msg: 'tidak bisa mengakes ke host, koneksi ditolak');
       return {
         'status': 'error',
         'message': 'tidak bisa mengakses ke host, koneksi ditolak',
       };
-    } on TimeoutException catch (_) {
+    } on TimeoutException {
       Fluttertoast.showToast(msg: 'Request Timeout, try again');
       return {
         'status': 'error',
         'message': 'Request Timeout, try again',
       };
     } catch (e) {
-      Fluttertoast.showToast(msg: '$e');
+      Fluttertoast.showToast(msg: 'Error Try Catch : $e');
       print(e);
       return {
         'status': 'error',
