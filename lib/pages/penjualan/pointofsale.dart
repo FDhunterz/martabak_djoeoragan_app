@@ -54,7 +54,10 @@ class _PointofsalesState extends State<Pointofsales> {
   bool isSendNotaOffline = false;
   bool _isCari = false;
   bool _isCariEmpty = true;
-
+  ScrollController _scrollController = ScrollController(
+    keepScrollOffset: true,
+  );
+  double offset = 0;
   Map statusKoneksi = {
     'type': ConnectivityResult.none,
     'isOnline': false,
@@ -95,6 +98,27 @@ class _PointofsalesState extends State<Pointofsales> {
     cekKoneksi.initialise();
     cekKoneksiFunction();
     resource();
+    bool lessOnce = false;
+    bool moreOnce = false;
+    _scrollController.addListener(() {
+      if (lessOnce && _scrollController.offset < 2000) {
+        setState(() {
+          offset = _scrollController.offset;
+        });
+        lessOnce = false;
+      } else {
+        lessOnce = true;
+      }
+
+      if (moreOnce && _scrollController.offset > 2000) {
+        setState(() {
+          offset = _scrollController.offset;
+        });
+        moreOnce = false;
+      } else {
+        moreOnce = true;
+      }
+    });
     super.initState();
   }
 
@@ -571,6 +595,14 @@ class _PointofsalesState extends State<Pointofsales> {
             elevation: 0.0,
             backgroundColor: Colors.white,
           ),
+          floatingActionButton: offset > 1000
+              ? FloatingActionButton(
+                  child: Icon(FontAwesomeIcons.chevronCircleUp),
+                  onPressed: () {
+                    _scrollController.jumpTo(0);
+                  },
+                )
+              : null,
           body: _isLoading
               ? SingleChildScrollView(
                   child: Column(
@@ -599,313 +631,321 @@ class _PointofsalesState extends State<Pointofsales> {
                         resource();
                       },
                     )
-                  : ListView(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: 20.0,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Color(0xff4c1b37),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  color: Color(0xff76273c),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
+                  : Scrollbar(
+                      child: ListView(
+                        controller: _scrollController,
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                              vertical: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Color(0xff4c1b37),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xff76273c),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 10.0,
+                                    vertical: 10,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Fitur Point Of Sales',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 10.0,
-                                  vertical: 10,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Fitur Point Of Sales',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-                                child: Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.start,
-                                  alignment: WrapAlignment.center,
-                                  children: <Widget>[
-                                    MenuTile(
-                                      tooltip: 'Kelola Data Nota Kasir',
-                                      icon: FontAwesomeIcons.clipboardList,
-                                      namaMenu: 'Data Kasir',
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                DaftarPenjualan(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    MenuTile(
-                                      icon: FontAwesomeIcons.tags,
-                                      namaMenu: 'Golongan Harga',
-                                      tooltip: 'Golongan Harga',
-                                      onTap: () {
-                                        navigatorKePengaturanHarga();
-                                      },
-                                    ),
-                                    MenuTile(
-                                      tooltip: 'Setting Session',
-                                      icon: FontAwesomeIcons.store,
-                                      namaMenu: 'Pilih Outlet',
-                                      onTap: () {
-                                        Navigator.pushNamed(context, '/comp');
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Colors.blueGrey[50],
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5.0),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              _isCari
-                                  ? Expanded(
-                                      child: TextField(
-                                        autofocus: true,
-                                        style: TextStyle(
-                                          fontSize: 15.0,
-                                          color: Colors.blueGrey[700],
-                                        ),
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(10.0),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            borderSide: BorderSide(
-                                              color: Colors.transparent,
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                                  child: Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.start,
+                                    alignment: WrapAlignment.center,
+                                    children: <Widget>[
+                                      MenuTile(
+                                        tooltip: 'Kelola Data Nota Kasir',
+                                        icon: FontAwesomeIcons.clipboardList,
+                                        namaMenu: 'Data Kasir',
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  DaftarPenjualan(),
                                             ),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Colors.transparent,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0xfffbaf18),
-                                              width: 2,
-                                            ),
-                                          ),
-                                          hintText: "Pencarian",
-                                          prefixIcon: Icon(
-                                            Icons.search,
-                                            color: Colors.blueGrey[500],
-                                          ),
-                                          hintStyle: TextStyle(
-                                            fontSize: 15.0,
-                                            color: Colors.blueGrey[400],
-                                          ),
-                                        ),
-                                        maxLines: 1,
-                                        controller: _searchControl,
-                                        onChanged: (ini) {
-                                          setState(() {
-                                            _searchControl.value =
-                                                TextEditingValue(
-                                              text: ini,
-                                              selection:
-                                                  _searchControl.selection,
-                                            );
-                                          });
-
-                                          if (ini.length != 0) {
-                                            setState(() {
-                                              _isCariEmpty = false;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _isCariEmpty = true;
-                                            });
-                                          }
+                                          );
                                         },
                                       ),
-                                    )
-                                  : Container(),
-                              !_isCari
-                                  ? Expanded(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15.0),
-                                        child: DropdownButton(
-                                          // isDense: false,
-                                          isExpanded: true,
-                                          underline: Container(),
-                                          items: bloc.listKategori
-                                              .map(
-                                                (e) => DropdownMenuItem(
-                                                  child: Text(e.text),
-                                                  value: e,
+                                      MenuTile(
+                                        icon: FontAwesomeIcons.tags,
+                                        namaMenu: 'Golongan Harga',
+                                        tooltip: 'Golongan Harga',
+                                        onTap: () {
+                                          navigatorKePengaturanHarga();
+                                        },
+                                      ),
+                                      MenuTile(
+                                        tooltip: 'Setting Session',
+                                        icon: FontAwesomeIcons.store,
+                                        namaMenu: 'Pilih Outlet',
+                                        onTap: () {
+                                          Navigator.pushNamed(context, '/comp');
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: Colors.blueGrey[50],
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.0),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                _isCari
+                                    ? Expanded(
+                                        child: TextField(
+                                          autofocus: true,
+                                          style: TextStyle(
+                                            fontSize: 15.0,
+                                            color: Colors.blueGrey[700],
+                                          ),
+                                          decoration: InputDecoration(
+                                            contentPadding:
+                                                EdgeInsets.all(10.0),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              borderSide: BorderSide(
+                                                color: Colors.transparent,
+                                              ),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.transparent,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0xfffbaf18),
+                                                width: 2,
+                                              ),
+                                            ),
+                                            hintText: "Pencarian",
+                                            prefixIcon: Icon(
+                                              Icons.search,
+                                              color: Colors.blueGrey[500],
+                                            ),
+                                            hintStyle: TextStyle(
+                                              fontSize: 15.0,
+                                              color: Colors.blueGrey[400],
+                                            ),
+                                          ),
+                                          maxLines: 1,
+                                          controller: _searchControl,
+                                          onChanged: (ini) {
+                                            setState(() {
+                                              _searchControl.value =
+                                                  TextEditingValue(
+                                                text: ini,
+                                                selection:
+                                                    _searchControl.selection,
+                                              );
+                                            });
+
+                                            if (ini.length != 0) {
+                                              setState(() {
+                                                _isCariEmpty = false;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                _isCariEmpty = true;
+                                              });
+                                            }
+                                          },
+                                        ),
+                                      )
+                                    : Container(),
+                                !_isCari
+                                    ? Expanded(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15.0),
+                                          child: DropdownButton(
+                                            // isDense: false,
+                                            isExpanded: true,
+                                            underline: Container(),
+                                            items: bloc.listKategori
+                                                .map(
+                                                  (e) => DropdownMenuItem(
+                                                    child: Text(e.text),
+                                                    value: e,
+                                                  ),
+                                                )
+                                                .toList(),
+                                            hint: Text('Pilih Kategori'),
+                                            value: bloc.getSelectedKategoriItem,
+                                            onChanged: (e) {
+                                              bloc.setSelectedKategori(e);
+                                            },
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+                                FlatButton(
+                                  color: Colors.orange[300],
+                                  child: _isCari
+                                      ? Icon(Icons.close)
+                                      : Icon(Icons.search),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 0,
+                                    vertical: 12,
+                                  ),
+                                  onPressed: () {
+                                    if (_isCari) {
+                                      setState(() {
+                                        _isCari = !_isCari;
+                                        _searchControl.text = '';
+                                        _isCariEmpty = !_isCariEmpty;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        _isCari = !_isCari;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(
+                            height: 20.0,
+                            thickness: 1,
+                          ),
+                          Column(
+                            children: _listItem.isEmpty
+                                ? [
+                                    ListTile(
+                                      title: Text(
+                                        'Tidak ada Data',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ]
+                                : _listItem
+                                    .asMap()
+                                    .map(
+                                      (int i, MartabakModel martabak) =>
+                                          MapEntry(
+                                        i,
+                                        POSTileVertical(
+                                          id: martabak.id.toString(),
+                                          desc: martabak.desc,
+                                          gambar: martabak.img,
+                                          nama: martabak.name,
+                                          diskon: martabak.diskon,
+                                          harga: martabak.price,
+                                          listVarian: martabak.listVarian,
+                                          onTap: () async {
+                                            List<ToppingMartabakModel>
+                                                listTopping =
+                                                bloc.decodeListTopping(
+                                                    martabak.listTopping);
+                                            List<MartabakVarianModel>
+                                                listVarian =
+                                                bloc.decodeListVarian(
+                                                    martabak.listVarian);
+
+                                            MartabakModel b;
+                                            b = new MartabakModel(
+                                              id: martabak.id,
+                                              name: martabak.name,
+                                              img: martabak.img,
+                                              price: martabak.price,
+                                              sysprice: martabak.sysprice,
+                                              desc: martabak.desc,
+                                              idKategoriItem:
+                                                  martabak.idKategoriItem,
+                                              qty: 1,
+                                              details: martabak.details,
+                                              diskon: martabak.diskon,
+                                              listTopping: martabak.listTopping,
+                                              listVarian: martabak.listVarian,
+                                            );
+
+                                            if (listTopping.length != 0 ||
+                                                listVarian.length != 0) {
+                                              Map a = await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  maintainState: false,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          PilihTopping(
+                                                    martabak: b,
+                                                    tipe: TipeTombol.tambah,
+                                                  ),
                                                 ),
-                                              )
-                                              .toList(),
-                                          hint: Text('Pilih Kategori'),
-                                          value: bloc.getSelectedKategoriItem,
-                                          onChanged: (e) {
-                                            bloc.setSelectedKategori(e);
+                                              );
+
+                                              if (a != null) {
+                                                print('changed');
+                                                b.qty = a['qty'];
+                                                b.listTopping =
+                                                    a['listTopping'];
+                                                b.listVarian = a['listVarian'];
+
+                                                if (a['tipe'] ==
+                                                    TipeTombol.tambah) {
+                                                  bloc.addToCart(b);
+                                                }
+                                              }
+                                            } else {
+                                              bloc.addToCart(b);
+                                            }
                                           },
                                         ),
                                       ),
                                     )
-                                  : Container(),
-                              FlatButton(
-                                color: Colors.orange[300],
-                                child: _isCari
-                                    ? Icon(Icons.close)
-                                    : Icon(Icons.search),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 0,
-                                  vertical: 12,
-                                ),
-                                onPressed: () {
-                                  if (_isCari) {
-                                    setState(() {
-                                      _isCari = !_isCari;
-                                      _searchControl.text = '';
-                                      _isCariEmpty = !_isCariEmpty;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      _isCari = !_isCari;
-                                    });
-                                  }
-                                },
-                              ),
-                            ],
+                                    .values
+                                    .toList(),
                           ),
-                        ),
-                        Divider(
-                          height: 20.0,
-                          thickness: 1,
-                        ),
-                        Column(
-                          children: _listItem.isEmpty
-                              ? [
-                                  ListTile(
-                                    title: Text(
-                                      'Tidak ada Data',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ]
-                              : _listItem
-                                  .asMap()
-                                  .map(
-                                    (int i, MartabakModel martabak) => MapEntry(
-                                      i,
-                                      POSTileVertical(
-                                        id: martabak.id.toString(),
-                                        desc: martabak.desc,
-                                        gambar: martabak.img,
-                                        nama: martabak.name,
-                                        diskon: martabak.diskon,
-                                        harga: martabak.price,
-                                        listVarian: martabak.listVarian,
-                                        onTap: () async {
-                                          List<ToppingMartabakModel>
-                                              listTopping =
-                                              bloc.decodeListTopping(
-                                                  martabak.listTopping);
-                                          List<MartabakVarianModel> listVarian =
-                                              bloc.decodeListVarian(
-                                                  martabak.listVarian);
-
-                                          MartabakModel b;
-                                          b = new MartabakModel(
-                                            id: martabak.id,
-                                            name: martabak.name,
-                                            img: martabak.img,
-                                            price: martabak.price,
-                                            sysprice: martabak.sysprice,
-                                            desc: martabak.desc,
-                                            idKategoriItem:
-                                                martabak.idKategoriItem,
-                                            qty: 1,
-                                            details: martabak.details,
-                                            diskon: martabak.diskon,
-                                            listTopping: martabak.listTopping,
-                                            listVarian: martabak.listVarian,
-                                          );
-
-                                          if (listTopping.length != 0 ||
-                                              listVarian.length != 0) {
-                                            Map a = await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                maintainState: false,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        PilihTopping(
-                                                  martabak: b,
-                                                  tipe: TipeTombol.tambah,
-                                                ),
-                                              ),
-                                            );
-
-                                            if (a != null) {
-                                              print('changed');
-                                              b.qty = a['qty'];
-                                              b.listTopping = a['listTopping'];
-                                              b.listVarian = a['listVarian'];
-
-                                              if (a['tipe'] ==
-                                                  TipeTombol.tambah) {
-                                                bloc.addToCart(b);
-                                              }
-                                            }
-                                          } else {
-                                            bloc.addToCart(b);
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  )
-                                  .values
-                                  .toList(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 0,
-                            vertical: 50,
-                          ),
-                        )
-                      ],
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 50,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
         ),
       ),
