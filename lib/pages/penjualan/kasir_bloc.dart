@@ -115,6 +115,7 @@ class KasirBloc with ChangeNotifier {
             }
           }
         }
+        // print('listvarian dan listoping not empty');
       } else if (listTopping.isNotEmpty) {
         // print('true 2');
         for (var dataT in listTopping) {
@@ -125,13 +126,24 @@ class KasirBloc with ChangeNotifier {
           }
         }
         harga = _cart[i].diskon != null
-            ? double.parse(_cart[i].sysprice) - double.parse(_cart[i].diskon)
-            : double.parse(_cart[i].sysprice);
+            ? hargaItem(_cart[i]) - double.parse(_cart[i].diskon)
+            : hargaItem(_cart[i]);
+        // print('listoping not empty');
+      } else if (listVarian.isNotEmpty) {
+        for (var data in listVarian) {
+          if (data.isSelected) {
+            // listHargaVarian += data.hargaVarian;
+            listHargaVarian += _cart[i].diskon != null
+                ? (data.hargaVarian - double.parse(_cart[i].diskon))
+                : data.hargaVarian;
+          }
+        }
+        // print('listvarian not empty');
       } else {
         // print('else');
         harga = _cart[i].diskon != null
-            ? double.parse(_cart[i].sysprice) - double.parse(_cart[i].diskon)
-            : double.parse(_cart[i].sysprice);
+            ? hargaItem(_cart[i]) - double.parse(_cart[i].diskon)
+            : hargaItem(_cart[i]);
       }
       totalX += (harga + listHargaTopping + listHargaVarian) * _cart[i].qty;
     }
