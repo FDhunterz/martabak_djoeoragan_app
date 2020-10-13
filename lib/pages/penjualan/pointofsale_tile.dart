@@ -251,43 +251,18 @@ class _POSTileVerticalState extends State<POSTileVertical> {
                         children: <Widget>[
                           Container(
                             alignment: Alignment.centerLeft,
-                            child: widget.diskon != null
-                                ? Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Text(
-                                        _numberFormat.format(
-                                          double.parse(widget.harga),
-                                        ),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                          color: Colors.grey,
-                                        ),
-                                        maxLines: 1,
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      Text(
-                                        _numberFormat.format(
-                                          double.parse(widget.harga) -
-                                              double.parse(widget.diskon),
-                                        ),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
-                                        maxLines: 1,
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ],
-                                  )
-                                : Container(
+                            child: listVarian.isNotEmpty
+                                ? Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 3,
+                                      horizontal: 15,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.cyan[100],
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
                                     child: Text(
-                                      _numberFormat.format(
-                                        double.parse(widget.harga),
-                                      ),
+                                      'Harga Sesuai Varian',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
@@ -295,7 +270,52 @@ class _POSTileVerticalState extends State<POSTileVertical> {
                                       maxLines: 1,
                                       textAlign: TextAlign.left,
                                     ),
-                                  ),
+                                  )
+                                : widget.diskon != null
+                                    ? Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Text(
+                                            _numberFormat.format(
+                                              double.parse(widget.harga),
+                                            ),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              color: Colors.grey,
+                                            ),
+                                            maxLines: 1,
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          Text(
+                                            _numberFormat.format(
+                                              double.parse(widget.harga) -
+                                                  double.parse(widget.diskon),
+                                            ),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            ),
+                                            maxLines: 1,
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ],
+                                      )
+                                    : Container(
+                                        child: Text(
+                                          _numberFormat.format(
+                                            double.parse(widget.harga),
+                                          ),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                          maxLines: 1,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
                           ),
                           listVarian.isNotEmpty
                               ? Container(
