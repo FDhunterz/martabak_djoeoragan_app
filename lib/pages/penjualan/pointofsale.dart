@@ -129,6 +129,12 @@ class _PointofsalesState extends State<Pointofsales> {
     }
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void getUserCabang() async {}
 
   void resource() async {

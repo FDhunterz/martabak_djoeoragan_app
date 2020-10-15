@@ -21,24 +21,22 @@ bool _isCari, _isLoading;
 
 String tokenType, accessToken;
 Map<String, String> requestHeaders = Map();
-GlobalKey<ScaffoldState> _scaffoldKeyKuponBelanja;
 
-FocusNode cariFocus;
-TextEditingController cariController;
 // KasirBloc bloc;
 
 class CariKupon extends StatefulWidget {
   final KuponBelanja kupon;
 
-  CariKupon({this.kupon});
+  CariKupon({this.kupon, Key key}) : super(key: key);
 
   @override
   _CariKuponState createState() => _CariKuponState();
 }
 
 class _CariKuponState extends State<CariKupon> {
-  Timer timer;
-  int delayRequest;
+  FocusNode cariFocus;
+  TextEditingController cariController;
+  GlobalKey<ScaffoldState> _scaffoldKeyKuponBelanja;
 
   cariKuponBelanja() {}
 
@@ -55,7 +53,6 @@ class _CariKuponState extends State<CariKupon> {
 
   @override
   void initState() {
-    delayRequest = 0;
     _scaffoldKeyKuponBelanja = GlobalKey<ScaffoldState>();
     _isCari = false;
     _isLoading = false;
@@ -77,6 +74,13 @@ class _CariKuponState extends State<CariKupon> {
     if (mounted) {
       super.setState(fn);
     }
+  }
+
+  @override
+  void dispose() {
+    cariFocus.dispose();
+    cariController.dispose();
+    super.dispose();
   }
 
   @override

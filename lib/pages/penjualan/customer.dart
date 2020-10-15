@@ -7,20 +7,10 @@ import 'dart:async';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 import 'package:provider/provider.dart';
 
-Customer customerState;
-bool _isCari;
-
-String tokenType, accessToken;
-Map<String, String> requestHeaders = Map();
-GlobalKey<ScaffoldState> _scaffoldKeyCustomer;
-
-FocusNode cariFocus;
-TextEditingController cariController;
-
 class CariCustomer extends StatefulWidget {
   final Customer customer;
 
-  CariCustomer({this.customer});
+  CariCustomer({Key key, this.customer}) : super(key: key);
 
   @override
   _CariCustomerState createState() => _CariCustomerState();
@@ -30,18 +20,25 @@ class _CariCustomerState extends State<CariCustomer> {
   Timer timer;
   int delayRequest;
 
+  Customer customerState;
+  bool _isCari;
+
+  String tokenType, accessToken;
+  Map<String, String> requestHeaders = Map();
+  GlobalKey<ScaffoldState> _scaffoldKeyCustomer = GlobalKey<ScaffoldState>();
+
+  FocusNode cariFocus = FocusNode();
+  TextEditingController cariController = TextEditingController();
+
   @override
   void initState() {
     delayRequest = 0;
-    _scaffoldKeyCustomer = GlobalKey<ScaffoldState>();
     _isCari = false;
 
     customerState = widget.customer == null
         ? Customer(idCustomer: '', namaCustomer: '')
         : widget.customer;
 
-    cariFocus = FocusNode();
-    cariController = TextEditingController();
     super.initState();
   }
 
@@ -50,6 +47,13 @@ class _CariCustomerState extends State<CariCustomer> {
     if (mounted) {
       super.setState(fn);
     }
+  }
+
+  @override
+  void dispose() {
+    cariController.dispose();
+    cariFocus.dispose();
+    super.dispose();
   }
 
   @override

@@ -5,19 +5,19 @@ import 'package:martabakdjoeragan_app/store/DataStore.dart';
 // import 'package:martabakdjoeragan_app/utils/Navigator.dart';
 import '../core/api.dart';
 
-TextEditingController username = TextEditingController();
-TextEditingController password = TextEditingController();
-FocusNode usernameFocus = FocusNode();
-FocusNode passwordFocus = FocusNode();
-bool loading = false;
-String _message = '';
-
 class LoginPage extends StatefulWidget {
+  LoginPage({Key key}) : super(key: key);
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
+  FocusNode usernameFocus = FocusNode();
+  FocusNode passwordFocus = FocusNode();
+  bool loading = false;
+  String _message = '';
   login() async {
     FocusScope.of(context).unfocus();
     setState(() {
@@ -57,6 +57,15 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       loading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    username.dispose();
+    password.dispose();
+    usernameFocus.dispose();
+    passwordFocus.dispose();
+    super.dispose();
   }
 
   @override

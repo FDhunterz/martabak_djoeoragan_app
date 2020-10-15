@@ -13,8 +13,6 @@ List<Cabang> listCabang, listCabangX;
 String tokenType, accessToken;
 Map<String, String> requestHeaders = Map();
 
-FocusNode cariFocus;
-TextEditingController cariController;
 CompBloc bloc;
 
 class CariCabang extends StatefulWidget {
@@ -29,8 +27,8 @@ class CariCabang extends StatefulWidget {
 class _CariCabangState extends State<CariCabang> {
   GlobalKey<ScaffoldState> _scaffoldKeyCabang = GlobalKey<ScaffoldState>();
 
-  Timer timer;
-  int delayRequest;
+  FocusNode cariFocus = FocusNode();
+  TextEditingController cariController = TextEditingController();
 
   cariCabang() {}
 
@@ -55,7 +53,7 @@ class _CariCabangState extends State<CariCabang> {
     listCabang = List<Cabang>();
     listCabangX = List<Cabang>();
     // getCabang();
-    delayRequest = 0;
+
     _isCari = false;
     _isLoading = false;
     // getCabang();
@@ -66,8 +64,6 @@ class _CariCabangState extends State<CariCabang> {
           )
         : widget.cabang;
 
-    cariFocus = FocusNode();
-    cariController = TextEditingController();
     super.initState();
   }
 
@@ -76,6 +72,14 @@ class _CariCabangState extends State<CariCabang> {
     if (mounted) {
       super.setState(fn);
     }
+  }
+
+  @override
+  void dispose() {
+    cariController.dispose();
+    cariFocus.dispose();
+
+    super.dispose();
   }
 
   @override

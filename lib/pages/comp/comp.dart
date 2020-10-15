@@ -26,6 +26,7 @@ String comp = 'Tidak ditemukan';
 Map<String, String> requestHeaders = Map();
 
 class PilihCabangOutlet extends StatefulWidget {
+  PilihCabangOutlet({Key key}) : super(key: key);
   @override
   PilihCabangOutletState createState() => PilihCabangOutletState();
 }

@@ -558,9 +558,10 @@ class _TambahOpname extends State<TambahOpname> {
                                         Text(
                                           'Simpan Data',
                                           style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ],
                                     ),
