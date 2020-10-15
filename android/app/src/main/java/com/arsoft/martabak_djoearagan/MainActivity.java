@@ -1,4 +1,4 @@
-package com.example.martabakdjoeragan_app;
+package com.arsoft.martabak_djoearagan;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
