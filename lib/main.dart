@@ -10,23 +10,23 @@ import 'package:martabakdjoeragan_app/pages/penjualan/cart.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/daftar_penjualan_bloc.dart';
 import 'package:martabakdjoeragan_app/pages/splash_screen.dart';
 import 'package:martabakdjoeragan_app/pages/master.dart';
-import 'package:martabakdjoeragan_app/pages/Pembelian/pembelian.dart';
+// import 'package:martabakdjoeragan_app/pages/Pembelian/pembelian.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/pointofsale.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'pages/inventory/inventory.dart';
-import 'pages/inventory/tambah_opname.dart';
+// import 'pages/inventory/inventory.dart';
+// import 'pages/inventory/tambah_opname.dart';
 
 var routes = <String, WidgetBuilder>{
   "/dashboard": (BuildContext context) => DashboardPage(),
   "/login": (BuildContext context) => LoginPage(),
   "/master": (BuildContext context) => MasterPage(),
-  "/pembelian": (BuildContext context) => PembelianPage(),
+  // "/pembelian": (BuildContext context) => PembelianPage(),
   "/pos": (BuildContext context) => Pointofsales(),
   "/cart_pos": (BuildContext context) => CartPage(),
-  "/inventory": (BuildContext context) => Inventory(),
-  "/opname": (BuildContext context) => TambahOpname(),
+  // "/inventory": (BuildContext context) => Inventory(),
+  // "/opname": (BuildContext context) => TambahOpname(),
   "/splash": (BuildContext context) => SplashScreen(),
   "/diskon": (BuildContext context) => ViewDiskon(),
   "/tambah_diskon": (BuildContext context) => TambahDiskon(),

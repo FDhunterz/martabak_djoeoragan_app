@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:martabakdjoeragan_app/presentation/custom_icon_icons.dart';
 // import 'package:async/async.dart';
 
-import 'package:martabakdjoeragan_app/pages/Pembelian/pemesanan_pembelian.dart' as tab1;
-import 'package:martabakdjoeragan_app/pages/Pembelian/pembelian_pesanan.dart' as tab2;
-import 'package:martabakdjoeragan_app/pages/Pembelian/return_pembelian.dart' as tab3;
-import 'package:martabakdjoeragan_app/pages/Pembelian/pembayaran_supplier.dart' as tab4;
+// import 'package:martabakdjoeragan_app/pages/Pembelian/pemesanan_pembelian.dart' as tab1;
+// import 'package:martabakdjoeragan_app/pages/Pembelian/pembelian_pesanan.dart' as tab2;
+// import 'package:martabakdjoeragan_app/pages/Pembelian/return_pembelian.dart' as tab3;
+// import 'package:martabakdjoeragan_app/pages/Pembelian/pembayaran_supplier.dart' as tab4;
 
 class PembelianPage extends StatefulWidget {
   @override
   _PembelianPageState createState() => _PembelianPageState();
 }
 
-class _PembelianPageState extends State<PembelianPage> with SingleTickerProviderStateMixin {
+class _PembelianPageState extends State<PembelianPage>
+    with SingleTickerProviderStateMixin {
   TabController controller;
-
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _PembelianPageState extends State<PembelianPage> with SingleTickerProvider
               icon: new Icon(CustomIcon.sticky_note_o),
             ),
             new Tab(
-                icon: new Icon(CustomIcon.cw),
+              icon: new Icon(CustomIcon.cw),
             ),
             new Tab(
               icon: new Icon(CustomIcon.credit_card_alt),
@@ -62,16 +62,14 @@ class _PembelianPageState extends State<PembelianPage> with SingleTickerProvider
         ),
       ),
       body: new TabBarView(
-          controller: controller,
-          children: <Widget>[
-            new tab1.PemesananPembelianPage(),
-            new tab2.PembelianPesananPage(),
-            new tab3.ReturnPembelianPage(),
-            new tab4.PembayaranSupplierPage()
-          ],
+        controller: controller,
+        children: <Widget>[
+          // new tab1.PemesananPembelianPage(),
+          // new tab2.PembelianPesananPage(),
+          // new tab3.ReturnPembelianPage(),
+          // new tab4.PembayaranSupplierPage()
+        ],
       ),
     );
   }
 }
-
-

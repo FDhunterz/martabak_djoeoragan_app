@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:martabakdjoeragan_app/pages/inventory/tab_3.dart';
+// import 'package:martabakdjoeragan_app/pages/inventory/tab_3.dart';
 import 'tab_1.dart';
 import 'tab_2.dart';
 import 'tab_3.dart';
