@@ -161,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                 login();
               },
         child: Text(
-          loading ? 'Sedang Memproses ..' : "Masuk",
+          loading ? 'Sedang Memproses ..' : "Login",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
