@@ -336,7 +336,7 @@ class _PilihToppingState extends State<PilihTopping> {
                             controller: qtyController,
                             focusNode: qtyFocus,
                             inputFormatters: [
-                              WhitelistingTextInputFormatter.digitsOnly,
+                              FilteringTextInputFormatter.digitsOnly,
                             ],
                             keyboardType: TextInputType.number,
                             onChanged: (ini) {

@@ -73,7 +73,7 @@ class _TambahDiskonState extends State<TambahDiskon> {
       thousandSeparator: ',',
       decimalSeparator: '.',
     );
-    
+
     _maxDiskonController = MoneyMaskedTextController(
       initialValue: 0.0,
       thousandSeparator: ',',
@@ -722,7 +722,7 @@ class _TambahDiskonState extends State<TambahDiskon> {
                                                 _kategoriTotalPembelianController,
                                             textAlign: TextAlign.end,
                                             inputFormatters: [
-                                              WhitelistingTextInputFormatter
+                                              FilteringTextInputFormatter
                                                   .digitsOnly,
                                               NumberMask()
                                             ],
@@ -821,7 +821,7 @@ class _TambahDiskonState extends State<TambahDiskon> {
                                                     _diskonNilaiController,
                                                 textAlign: TextAlign.end,
                                                 inputFormatters: [
-                                                  WhitelistingTextInputFormatter
+                                                  FilteringTextInputFormatter
                                                       .digitsOnly,
                                                   NumberMask()
                                                 ],
@@ -974,7 +974,7 @@ class _TambahDiskonState extends State<TambahDiskon> {
                                               controller: _maxDiskonController,
                                               enabled: !_isNilai,
                                               inputFormatters: [
-                                                WhitelistingTextInputFormatter
+                                                FilteringTextInputFormatter
                                                     .digitsOnly,
                                                 NumberMask()
                                               ],
@@ -1014,7 +1014,9 @@ class _TambahDiskonState extends State<TambahDiskon> {
                                       ),
                                     )
                                   : Container(),
-                              _selectedlistDTipe.id == 'SUB' ? Divider(): Container(),
+                              _selectedlistDTipe.id == 'SUB'
+                                  ? Divider()
+                                  : Container(),
                               Container(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 5.0,

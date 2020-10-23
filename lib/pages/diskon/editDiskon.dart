@@ -806,7 +806,7 @@ class _EditDiskonState extends State<EditDiskon> {
                                                 _kategoriTotalPembelianController,
                                             textAlign: TextAlign.end,
                                             inputFormatters: [
-                                              WhitelistingTextInputFormatter
+                                              FilteringTextInputFormatter
                                                   .digitsOnly,
                                               NumberMask()
                                             ],
@@ -905,7 +905,7 @@ class _EditDiskonState extends State<EditDiskon> {
                                                     _diskonNilaiController,
                                                 textAlign: TextAlign.end,
                                                 inputFormatters: [
-                                                  WhitelistingTextInputFormatter
+                                                  FilteringTextInputFormatter
                                                       .digitsOnly,
                                                   NumberMask()
                                                 ],
@@ -1058,7 +1058,7 @@ class _EditDiskonState extends State<EditDiskon> {
                                               controller: _maxDiskonController,
                                               enabled: !_isNilai,
                                               inputFormatters: [
-                                                WhitelistingTextInputFormatter
+                                                FilteringTextInputFormatter
                                                     .digitsOnly,
                                                 NumberMask()
                                               ],

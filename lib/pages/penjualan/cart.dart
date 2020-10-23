@@ -980,7 +980,7 @@ class _CartPageState extends State<CartPage> {
                                         controller: bloc.jumlahBayarController,
                                         textAlign: TextAlign.end,
                                         inputFormatters: [
-                                          WhitelistingTextInputFormatter
+                                          FilteringTextInputFormatter
                                               .digitsOnly,
                                           NumberMask()
                                         ],

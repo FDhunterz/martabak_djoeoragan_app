@@ -214,17 +214,14 @@ class UbahQty extends StatefulWidget{
   final code;
   final qty;
   UbahQty({Key key , this.code , this.qty});
-  _UbahQty createState()=> _UbahQty(code: code , qty: qty);
+  _UbahQty createState()=> _UbahQty();
 }
 
 class _UbahQty extends State<UbahQty>{
-  var code;
-  var qty;
-
-  _UbahQty({Key key, this.code , this.qty});
+  
 
   void initState() {
-    uqty = TextEditingController(text: qty.toString());
+    uqty = TextEditingController(text: widget.qty.toString());
     super.initState();
   }
 
@@ -320,7 +317,7 @@ class _UbahQty extends State<UbahQty>{
                     minWidth: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                     onPressed: () async {
-                      await ubahqty(uqty,code);
+                      await ubahqty(uqty,widget.code);
                       Navigator.pop(context);
                     },
                     child: Text("Simpan",

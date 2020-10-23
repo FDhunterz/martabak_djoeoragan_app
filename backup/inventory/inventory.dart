@@ -22,10 +22,10 @@ class _InventoryState extends State<Inventory> {
   ];
 
   void _onItemTapped(int index) {
-  setState(() {
-    _selectedIndex = index;
-  });
-}
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,56 +35,54 @@ class _InventoryState extends State<Inventory> {
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(41, 56, 70, 1),
           title: Text('Inventory'),
-          leading: Material( 
+          leading: Material(
             color: Color.fromRGBO(41, 56, 70, 1),
             child: InkWell(
-              onTap: (){
-                Navigator.of(context).pushNamedAndRemoveUntil('/dashboard', (Route<dynamic> route) => false);
+              onTap: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/dashboard', (Route<dynamic> route) => false);
               },
               child: Container(
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: Colors.transparent,  
+                  color: Colors.transparent,
                 ),
-                child : Icon(Icons.arrow_back),
+                child: Icon(Icons.arrow_back),
               ),
-            ), 
+            ),
           ),
         ),
         body: _widgetOptions.elementAt(_selectedIndex),
-
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                offset:Offset(0.0 ,0.0),
-                blurRadius: 5,
-                spreadRadius: 3,
-              ),
-            ]
-          ),
+          decoration: BoxDecoration(boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0.0, 0.0),
+              blurRadius: 5,
+              spreadRadius: 3,
+            ),
+          ]),
           child: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.library_books),
-                title: Text('Laporan'),
+                label: ('Laporan'),
               ),
               BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.listAlt),
-                title: Text('Data Stok'),
+                label: ('Data Stok'),
               ),
               BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.clipboard),
-                title: Text('Opname'),
+                label: ('Opname'),
               ),
             ],
             currentIndex: _selectedIndex,
             selectedItemColor: Colors.amber[800],
             onTap: _onItemTapped,
           ),
-        ), 
+        ),
       ),
     );
   }
