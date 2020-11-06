@@ -16,7 +16,7 @@ class NumberMask extends TextInputFormatter {
       return new TextEditingValue(
         text: newString,
         selection: TextSelection.collapsed(
-            int: newString.length - selectionIndexFromTheRight),
+            offset: newString.length - selectionIndexFromTheRight),
       );
     } else {
       return newValue;
