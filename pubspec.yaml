@@ -12,7 +12,7 @@ description: Martabak Djoeragan Application.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-version: 1.0.2+2 # "+" represents the versionCode such as 1, 2, 3, etc.
+version: 1.0.3+3 # "+" represents the versionCode such as 1, 2, 3, etc.
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -27,7 +27,7 @@ dependencies:
   datetime_picker_formfield: 1.0.0
   shared_preferences: ^0.5.1+2
   provider: 4.3.2+2
-  http:
+  http: ^0.12.2
   dio:
   fluttertoast:
   font_awesome_flutter:
@@ -35,8 +35,8 @@ dependencies:
   fl_chart: ^0.6.0
   loading:
   path_provider: ^1.4.4
-  network_to_file_image: ^2.3.3
-  connectivity:
+  network_to_file_image: ^2.3.6
+  connectivity: ^2.0.1
   flutter_masked_text: ^0.8.0
   month_picker_dialog: ^0.3.2
   collection: any
@@ -76,6 +76,7 @@ flutter:
     - images/martabak5.jpg
     - images/empty.png
     - images/support.png
+    - images/splashscreen.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
