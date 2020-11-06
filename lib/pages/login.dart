@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
-// import 'package:martabakdjoeragan_app/utils/Navigator.dart';
 import '../core/api.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,7 +17,14 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode passwordFocus = FocusNode();
   bool loading = false;
   String _message = '';
-  login() async {
+
+  /// nama versi apk. untuk versi bisa dilihat di file pubspec.yaml sintak :
+  /// ```
+  /// version: //some version
+  /// ```
+  String versionName = '1.0.3';
+
+  void login() async {
     FocusScope.of(context).unfocus();
     setState(() {
       _message = '';
@@ -57,6 +63,11 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       loading = false;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -206,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
     final footer = Text(
-      "Powered by Alamraya Software v.1.0 © 2019",
+      "Powered by Alamraya Software v. $versionName © 2019",
       style:
           TextStyle(color: Colors.grey, fontFamily: 'Roboto', fontSize: 10.0),
     );
