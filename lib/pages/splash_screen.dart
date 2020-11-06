@@ -58,7 +58,9 @@ class _SplashScreenState extends State<SplashScreen> {
         fit: StackFit.expand,
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(color: Colors.white),
+            decoration: BoxDecoration(
+              color: Color(0xffffdd00),
+            ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -67,16 +69,20 @@ class _SplashScreenState extends State<SplashScreen> {
                 flex: 2,
                 child: Container(
                   child: Center(
-                    child: Text(
-                      "Martabak Djoeragan",
-                      style: TextStyle(
-                        color: Color(0xfffbaf18),
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30.0,
-                      ),
-                      textAlign: TextAlign.center,
+                    child: Image.asset(
+                      'images/splashscreen.png',
+                      height: MediaQuery.of(context).size.width / 3,
                     ),
+                    // Text(
+                    //   "Martabak Djoeragan",
+                    //   style: TextStyle(
+                    //     color: Color(0xfffbaf18),
+                    //     fontFamily: 'Quicksand',
+                    //     fontWeight: FontWeight.bold,
+                    //     fontSize: 30.0,
+                    //   ),
+                    //   textAlign: TextAlign.center,
+                    // ),
                   ),
                 ),
               ),
