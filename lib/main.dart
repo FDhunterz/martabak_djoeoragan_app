@@ -6,6 +6,7 @@ import 'package:martabakdjoeragan_app/pages/dashboard.dart';
 import 'package:martabakdjoeragan_app/pages/diskon/diskon.dart';
 import 'package:martabakdjoeragan_app/pages/diskon/tambahDiskon.dart';
 import 'package:martabakdjoeragan_app/pages/login.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/cari_bluetooth_bloc.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cart.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/daftar_penjualan_bloc.dart';
 import 'package:martabakdjoeragan_app/pages/splash_screen.dart';
@@ -49,6 +50,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<CompBloc>(create: (context) => CompBloc()),
         ChangeNotifierProvider<DaftarPenjualanBloc>(
             create: (context) => DaftarPenjualanBloc()),
+        ChangeNotifierProvider<CariBluetoothBloc>(
+            create: (context) => CariBluetoothBloc()),
       ],
       child: MaterialApp(
         title: "Martabak Djoeragan",
