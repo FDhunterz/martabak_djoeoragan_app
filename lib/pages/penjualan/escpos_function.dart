@@ -7,6 +7,9 @@ import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+/// menggunakan package:
+///
+/// package:escposprinter/escposprinter.dart
 Future<Null> printKasir(String nota, BuildContext context) async {
   NumberFormat _numberFormat = NumberFormat.simpleCurrency(
     decimalDigits: 0,
