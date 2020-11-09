@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:martabakdjoeragan_app/core/custom_sendrequest.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
@@ -14,7 +15,7 @@ import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/detail_pe
 // import 'package:martabakdjoeragan_app/pages/profile.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import 'package:martabakdjoeragan_app/utils/errorWidget.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
+// import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -336,19 +337,53 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
         key: _scaffoldKeyDaftarPenjualan,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            showMonthPicker(
+            showDialog(
               context: context,
-              initialDate: _selectedTanggal,
-              lastDate: DateTime.now(),
-              firstDate: DateTime(DateTime.now().year - 1),
-            ).then((ini) {
-              if (ini != null) {
-                setState(() {
-                  _selectedTanggal = ini;
-                });
-              }
-              getNota();
-            });
+              builder: (context) => AlertDialog(
+                content: CalendarDatePicker(
+                  initialDate: _selectedTanggal,
+                  firstDate: DateTime(DateTime.now().year - 1),
+                  lastDate: DateTime.now(),
+                  onDateChanged: (ini) {
+                    if (ini != null) {
+                      setState(() {
+                        _selectedTanggal = ini;
+                      });
+                    }
+                    getNota();
+                  },
+                ),
+              ),
+            );
+
+            // DatePicker.showDatePicker(
+            //   context,
+            //   maxDateTime: DateTime.now(),
+            //   minDateTime: DateTime(DateTime.now().year - 1),
+            //   onConfirm: (ini, selectedIndex) {
+            //     if (ini != null) {
+            //       setState(() {
+            //         _selectedTanggal = ini;
+            //       });
+            //     }
+            //     getNota();
+            //   },
+            // );
+
+            // # package month_picker_dialog
+            // showMonthPicker(
+            //   context: context,
+            //   initialDate: _selectedTanggal,
+            //   lastDate: DateTime.now(),
+            //   firstDate: DateTime(DateTime.now().year - 1),
+            // ).then((ini) {
+            //   if (ini != null) {
+            //     setState(() {
+            //       _selectedTanggal = ini;
+            //     });
+            //   }
+            //   getNota();
+            // });
           },
           label: Text('Periode Nota'),
           icon: Icon(Icons.calendar_today),
