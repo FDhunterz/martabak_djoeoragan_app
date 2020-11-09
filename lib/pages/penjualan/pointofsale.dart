@@ -10,7 +10,8 @@ import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:martabakdjoeragan_app/core/storage.dart';
 import 'package:martabakdjoeragan_app/pages/CekKoneksi/cek_koneksi.dart';
 // import 'package:martabakdjoeragan_app/pages/CekKoneksi/cek_koneksi.dart';
-import 'package:martabakdjoeragan_app/pages/penjualan/cariPrint.dart';
+// import 'package:martabakdjoeragan_app/pages/penjualan/cariPrint.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/cariPrintBluetooth.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/daftar_penjualan.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/hargaPenjualan.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/pointofsale_topping.dart';
@@ -533,7 +534,7 @@ class _PointofsalesState extends State<Pointofsales> {
                 tooltip: 'Pengaturan',
                 icon: Icon(FontAwesomeIcons.ellipsisV),
                 itemBuilder: (BuildContext context) =>
-                    ['Daftar Perangkat USB', 'Sinkron Data', 'Logout']
+                    ['Daftar Perangkat Bluetooth', 'Sinkron Data', 'Logout']
                         .map(
                           (e) => PopupMenuItem(
                             child: Text(e),
@@ -578,11 +579,13 @@ class _PointofsalesState extends State<Pointofsales> {
                       );
 
                       break;
-                    case 'Daftar Perangkat USB':
+                    case 'Daftar Perangkat Bluetooth':
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => CariPrint(),
+                          builder: (BuildContext context) => CariPrintBluetooth(
+                            title: 'Cari Perangkat',
+                          ),
                         ),
                       );
                       break;

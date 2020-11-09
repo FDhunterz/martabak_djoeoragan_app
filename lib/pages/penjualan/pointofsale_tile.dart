@@ -245,108 +245,117 @@ class _POSTileVerticalState extends State<POSTileVertical> {
                         ),
                       ),
                       SizedBox(height: 3),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Wrap(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        alignment: WrapAlignment.spaceBetween,
+                        runAlignment: WrapAlignment.spaceBetween,
+                        crossAxisAlignment: WrapCrossAlignment.start,
                         children: <Widget>[
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            child: listVarian.isNotEmpty
-                                ? Container(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 3,
-                                      horizontal: 15,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.cyan[100],
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    child: Text(
-                                      'Harga Sesuai Varian',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
+                          FittedBox(
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: listVarian.isNotEmpty
+                                  ? Container(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 3,
+                                        horizontal: 15,
                                       ),
-                                      maxLines: 1,
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  )
-                                : widget.diskon != null
-                                    ? Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Text(
+                                      decoration: BoxDecoration(
+                                        color: Colors.cyan[100],
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: Text(
+                                        'Harga Sesuai Varian',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                        maxLines: 1,
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    )
+                                  : widget.diskon != null
+                                      ? Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Text(
+                                              _numberFormat.format(
+                                                double.parse(widget.harga),
+                                              ),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                                color: Colors.grey,
+                                              ),
+                                              maxLines: 1,
+                                              textAlign: TextAlign.left,
+                                            ),
+                                            Text(
+                                              _numberFormat.format(
+                                                double.parse(widget.harga) -
+                                                    double.parse(widget.diskon),
+                                              ),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                              ),
+                                              maxLines: 1,
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ],
+                                        )
+                                      : Container(
+                                          child: Text(
                                             _numberFormat.format(
                                               double.parse(widget.harga),
                                             ),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 14,
-                                              decoration:
-                                                  TextDecoration.lineThrough,
-                                              color: Colors.grey,
                                             ),
                                             maxLines: 1,
                                             textAlign: TextAlign.left,
                                           ),
-                                          Text(
-                                            _numberFormat.format(
-                                              double.parse(widget.harga) -
-                                                  double.parse(widget.diskon),
-                                            ),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                            maxLines: 1,
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ],
-                                      )
-                                    : Container(
-                                        child: Text(
-                                          _numberFormat.format(
-                                            double.parse(widget.harga),
-                                          ),
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                          maxLines: 1,
-                                          textAlign: TextAlign.left,
                                         ),
-                                      ),
+                            ),
                           ),
                           listVarian.isNotEmpty
-                              ? Container(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 3,
-                                    horizontal: 15,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Color(0xfffbaf18),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Text(
-                                    '${listVarian.length} varian',
-                                    style: TextStyle(
-                                      color: Colors.white,
+                              ? FittedBox(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 3,
+                                      horizontal: 15,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Color(0xfffbaf18),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Text(
+                                      '${listVarian.length} varian',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 )
-                              : Container(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 3,
-                                    horizontal: 15,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff76273c),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Text(
-                                    'Tambah',
-                                    style: TextStyle(
-                                      color: Colors.white,
+                              : FittedBox(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 3,
+                                      horizontal: 15,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Color(0xff76273c),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Text(
+                                      'Tambah',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
