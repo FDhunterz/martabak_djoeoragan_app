@@ -9,6 +9,7 @@ import 'package:martabakdjoeragan_app/core/custom_sendrequest.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
 import 'package:martabakdjoeragan_app/core/storage.dart';
 import 'package:martabakdjoeragan_app/pages/CekKoneksi/cek_koneksi.dart';
+import 'package:martabakdjoeragan_app/pages/penjualan/cari_bluetooth_bloc.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cartTile.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/customer.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/escpos_function.dart';
@@ -220,7 +221,10 @@ class _CartPageState extends State<CartPage> {
           print(responseJson);
 
           if (responseJson['status'] == 'success') {
-            await printKasir(responseJson['data']['nota'], context);
+            // await printKasir(responseJson['data']['nota'], context);
+            CariBluetoothBloc blocB = context.read<CariBluetoothBloc>();
+
+            blocB.print(context, nota);
             Fluttertoast.showToast(msg: responseJson['text']);
             blocX.clearCart();
             blocX.unsetCustomer();
