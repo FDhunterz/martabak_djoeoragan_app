@@ -910,7 +910,7 @@ class KasirBloc with ChangeNotifier {
     if (listVarian.isNotEmpty) {
       for (var data in listVarian) {
         if (data.isSelected) {
-          return data.namaVarian;
+          return '${model.name} (${data.namaVarian})';
         }
       }
     }
