@@ -38,8 +38,10 @@ dependencies:
   network_to_file_image: ^2.3.6
   connectivity: ^2.0.1
   flutter_masked_text: ^0.8.0
-  month_picker_dialog: ^0.3.2
+  # month_picker_dialog: ^0.3.2
   collection: any
+  esc_pos_bluetooth: ^0.2.8
+  esc_pos_utils: ^0.3.6
   escposprinter:
     git:
         url: https://github.com/marcusfelix/esc-pos-printer-flutter.git
