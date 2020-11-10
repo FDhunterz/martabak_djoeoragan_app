@@ -92,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
       focusNode: usernameFocus,
       autofocus: true,
       obscureText: false,
+      textInputAction: TextInputAction.next,
       style: TextStyle(
         fontFamily: 'Roboto',
         fontSize: 16.0,
@@ -122,6 +123,7 @@ class _LoginPageState extends State<LoginPage> {
       controller: password,
       focusNode: passwordFocus,
       obscureText: true,
+      textInputAction: TextInputAction.done,
       style: TextStyle(
         fontFamily: 'Roboto',
         fontSize: 16.0,
