@@ -1,46 +1,51 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:martabakdjoeragan_app/pages/ImageToFile/ImageToFile.dart';
+// ignore: unused_import
 import 'package:path_provider/path_provider.dart';
 
 class PenyimpananKu {
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
+  // Future<String> get _localPath async {
+  //   final directory = await getApplicationDocumentsDirectory();
 
-    return directory.path;
-  }
+  //   return directory.path;
+  // }
 
-  Future<File> _berkasLokal(String namaFile) async {
-    final path = await _localPath;
+  File _berkasLokal(String namaFile) {
+    /// # var appDocsDir dari main.dart
+    final path = appDocsDir.path;
     print(path);
-    return File('$path/$namaFile');
+    File file = File('$path/$namaFile');
+    return file;
   }
 
   /// untuk membaca file.
   /// contoh: example.txt atau folder/example.txt
   Future<String> bacaBerkas(String namaFile) async {
-    try {
-      final file = await _berkasLokal(namaFile);
+    final File file = _berkasLokal(namaFile);
 
+    bool kondisi = await file.exists();
+
+    if (kondisi) {
       String contents = await file.readAsString();
 
       return contents;
-    } catch (e) {
-      // If encountering an error, return ''
-      return '';
     }
+    // return empty string if not exist
+    return '';
   }
 
   /// untuk menulis file.
   /// @content = tulis isi file.
   /// @namaFile = nama berkas contoh: example.txt atau folder/example.txt
   Future<File> tulisBerkas(String content, String namaFile) async {
-    final file = await _berkasLokal(namaFile);
+    final file = _berkasLokal(namaFile);
 
     return file.writeAsString('$content');
   }
 
   Future<void> hapusBerkas(String namaFile) async {
-    final file = await _berkasLokal(namaFile);
+    final file = _berkasLokal(namaFile);
 
     try {
       if (await file.exists()) {

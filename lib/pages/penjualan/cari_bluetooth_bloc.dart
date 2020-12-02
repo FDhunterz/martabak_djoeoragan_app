@@ -33,6 +33,7 @@ class CariBluetoothBloc extends ChangeNotifier {
   }
 
   void print(BuildContext context, String nota) async {
+    Fluttertoast.showToast(msg: 'Sedang membaca printer');
     printerManager.selectPrinter(selectedPrinterBluetooth);
 
     // TODO Don't forget to choose printer's paper
@@ -65,6 +66,7 @@ Future<Ticket> demoReceipt(
   double totalK = 0;
   // ignore: unused_local_variable
   double subDiskon = 0;
+  // ignore: unused_local_variable
   double totalQty = 0;
 
   ticket.text('Martabak Djoeragan',

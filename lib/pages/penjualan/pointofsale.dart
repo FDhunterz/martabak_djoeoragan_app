@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+// ignore: unused_import
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -59,13 +60,11 @@ class _PointofsalesState extends State<Pointofsales> {
     keepScrollOffset: true,
   );
   double offset = 0;
-  Map statusKoneksi = {
-    'type': ConnectivityResult.none,
-    'isOnline': false,
-  };
+  Map statusKoneksi = Map();
   void cekKoneksiFunction() {
     cekKoneksi.myStream.listen((event) async {
       print(event);
+      Fluttertoast.showToast(msg: event['message']);
 
       if (event['isOnline'] && !isSendNotaOffline) {
         isSendNotaOffline = true;
@@ -133,6 +132,8 @@ class _PointofsalesState extends State<Pointofsales> {
   @override
   void dispose() {
     _scrollController.dispose();
+    cekKoneksi.disposeConnectivity();
+    cekKoneksi.disposeStream();
     super.dispose();
   }
 
@@ -211,7 +212,6 @@ class _PointofsalesState extends State<Pointofsales> {
       '${url}penjualan/kasir/get/item',
       headers: requestHeaders,
       namaFile: namaFile,
-      isOnline: statusKoneksi['isOnline'],
       onBeforeSend: () {
         setState(() {
           _isLoading = true;
@@ -363,7 +363,6 @@ class _PointofsalesState extends State<Pointofsales> {
         },
         headers: requestHeaders,
         namaFile: namaFileX,
-        isOnline: statusKoneksi['isOnline'],
         onBeforeSend: () {
           setState(() {
             _isLoading = true;
@@ -584,7 +583,7 @@ class _PointofsalesState extends State<Pointofsales> {
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) => CariPrintBluetooth(
-                            title: 'Cari Perangkat',
+                            title: 'Pilih Printer',
                           ),
                         ),
                       );

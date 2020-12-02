@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+// ignore: unused_import
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ import 'package:martabakdjoeragan_app/pages/penjualan/daftar_penjualan/detail_pe
 // import 'package:martabakdjoeragan_app/pages/profile.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import 'package:martabakdjoeragan_app/utils/errorWidget.dart';
-// import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -38,10 +39,7 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
   PenyimpananKu storage = PenyimpananKu();
   bool isSendNotaOffline = false;
 
-  Map statusKoneksi = {
-    'type': ConnectivityResult.none,
-    'isOnline': false,
-  };
+  Map statusKoneksi = Map();
 
   void getNota() async {
     int perusahaan = await store.getDataInteger('us_perusahaan');
@@ -56,225 +54,216 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
     String dateParse = DateFormat('MM/yyyy').format(_selectedTanggal);
     // print(dateParse);
 
-    try {
-      String namaFile = 'daftar-nota.json';
+    String namaFile = 'daftar-nota.json';
 
-      _kelolaResourceNota(String encodedString) async {
-        var responseJson = jsonDecode(encodedString);
-        DaftarPenjualanBloc bloc = context.read<DaftarPenjualanBloc>();
+    _kelolaResourceNota(String encodedString) async {
+      var responseJson = jsonDecode(encodedString);
+      DaftarPenjualanBloc bloc = context.read<DaftarPenjualanBloc>();
 
-        bloc.clearNota();
-        for (var data in responseJson['data']) {
-          DateTime tanggal = DateTime.parse(data['pk_tanggal']);
+      bloc.clearNota();
+      for (var data in responseJson['data']) {
+        DateTime tanggal = DateTime.parse(data['pk_tanggal']);
 
-          if (DateTime(tanggal.year, tanggal.month)
-                  .difference(
-                      DateTime(_selectedTanggal.year, _selectedTanggal.month))
-                  .inDays ==
-              0) {
-            List<Item> listDetail = List<Item>();
-            for (var item in data['detail']) {
-              listDetail.add(
-                Item(
-                  diskon: item['pkdt_diskon'].toString(),
-                  harga: item['pkdt_harga'].toString(),
-                  idItem: item['pkdt_item'].toString(),
-                  namaItem: item['pkdt_nama'],
-                  nomor: item['pkdt_nomor'].toString(),
-                  penjualanKasir: item['pkdt_penjualan_kasir'].toString(),
-                  qty: item['pkdt_qty'].toString(),
-                  total: item['pkdt_total'].toString(),
-                  gambar: item['gambar'].toString(),
-                ),
-              );
-            }
-
-            bloc.addNota(
-              NotaPenjualan(
-                alamat: data['c_alamat'],
-                bayar: data['pk_bayar'].toString(),
-                customer: data['c_nama'],
-                diskonPlus: data['pk_diskon_plus'].toString(),
-                grandTotal: data['pk_grand_total'].toString(),
-                harga: data['pk_harga'],
-                id: data['pk_id'].toString(),
-                kasir: data['p_nama'],
-                nota: data['pk_nota'],
-                pajak: data['pk_pajak'].toString(),
-                subTotal: data['pk_sub_total'].toString(),
-                tanggal: data['pk_tanggal'],
-                telpon: data['c_telp'],
-                detailNotaPenjualan: listDetail,
+        if (DateTime(tanggal.year, tanggal.month)
+                .difference(
+                    DateTime(_selectedTanggal.year, _selectedTanggal.month))
+                .inDays ==
+            0) {
+          List<Item> listDetail = List<Item>();
+          for (var item in data['detail']) {
+            listDetail.add(
+              Item(
+                diskon: item['pkdt_diskon'].toString(),
+                harga: item['pkdt_harga'].toString(),
+                idItem: item['pkdt_item'].toString(),
+                namaItem: item['pkdt_nama'],
+                nomor: item['pkdt_nomor'].toString(),
+                penjualanKasir: item['pkdt_penjualan_kasir'].toString(),
+                qty: item['pkdt_qty'].toString(),
+                total: item['pkdt_total'].toString(),
+                gambar: item['gambar'].toString(),
               ),
             );
           }
+
+          bloc.addNota(
+            NotaPenjualan(
+              alamat: data['c_alamat'],
+              bayar: data['pk_bayar'].toString(),
+              customer: data['c_nama'],
+              diskonPlus: data['pk_diskon_plus'].toString(),
+              grandTotal: data['pk_grand_total'].toString(),
+              harga: data['pk_harga'],
+              id: data['pk_id'].toString(),
+              kasir: data['p_nama'],
+              nota: data['pk_nota'],
+              pajak: data['pk_pajak'].toString(),
+              subTotal: data['pk_sub_total'].toString(),
+              tanggal: data['pk_tanggal'],
+              telpon: data['c_telp'],
+              detailNotaPenjualan: listDetail,
+            ),
+          );
         }
       }
+    }
 
-      customHttp.get(
-        '${url}penjualan/kasir/get/nota',
-        body: {
-          'cabangs': perusahaan,
-          'outlet': outlet,
-          'periode': dateParse,
-        },
-        headers: requestHeaders,
-        isOnline: statusKoneksi['isOnline'],
-        namaFile: namaFile,
-        onBeforeSend: () {
-          setState(() {
-            _isLoading = true;
-            _isError = false;
-          });
-        },
-        onComplete: () {
-          setState(() {
-            _isLoading = false;
-            _isError = false;
-          });
-        },
-        onErrorCatch: (ini) {
-          print(ini);
-          setState(() {
-            _isError = true;
-            _isLoading = false;
-            _errorMessage = ini;
-          });
-        },
-        onSuccess: (ini) {
-          print(ini);
+    customHttp.get(
+      '${url}penjualan/kasir/get/nota',
+      body: {
+        'cabangs': perusahaan,
+        'outlet': outlet,
+        'periode': dateParse,
+      },
+      headers: requestHeaders,
+      namaFile: namaFile,
+      onBeforeSend: () {
+        setState(() {
+          _isLoading = true;
+          _isError = false;
+        });
+      },
+      onComplete: () {
+        setState(() {
+          _isLoading = false;
+          _isError = false;
+        });
+      },
+      onErrorCatch: (ini) {
+        print(ini);
+        print('error catch');
+        setState(() {
+          _isError = true;
+          _isLoading = false;
+          _errorMessage = ini;
+        });
+      },
+      onSuccess: (ini) {
+        print(ini);
 
-          storage.tulisBerkas(ini, namaFile);
+        storage.tulisBerkas(ini, namaFile);
 
-          _kelolaResourceNota(ini);
-        },
-        onUnknownStatusCode: (statusCode, e) {
-          Fluttertoast.showToast(msg: 'Error Code : $statusCode');
-          Fluttertoast.showToast(msg: e);
-          print(e);
-          setState(() {
-            _isLoading = false;
-            _isError = true;
-            _errorMessage = e;
-          });
-        },
-        onUseLocalFile: (ini) async {
-          DaftarPenjualanBloc bloc = context.read<DaftarPenjualanBloc>();
+        _kelolaResourceNota(ini);
+      },
+      onUnknownStatusCode: (statusCode, e) {
+        Fluttertoast.showToast(msg: 'Error Code : $statusCode');
+        Fluttertoast.showToast(msg: e);
+        print(e);
+        setState(() {
+          _isLoading = false;
+          _isError = true;
+          _errorMessage = e;
+        });
+      },
+      onUseLocalFile: (ini) async {
+        DaftarPenjualanBloc bloc = context.read<DaftarPenjualanBloc>();
 
-          _kelolaResourceDataKasirTersimpanOffline() async {
-            String anotherFile = 'simpan-kasir.json';
+        _kelolaResourceDataKasirTersimpanOffline() async {
+          String anotherFile = 'simpan-kasir.json';
 
-            String encodedFile = await storage.bacaBerkas(anotherFile);
+          String encodedFile = await storage.bacaBerkas(anotherFile);
 
-            if (encodedFile.isNotEmpty) {
-              List<dynamic> listDecode = List();
+          if (encodedFile.isNotEmpty) {
+            List<dynamic> listDecode = List();
 
-              listDecode = jsonDecode(encodedFile);
+            listDecode = jsonDecode(encodedFile);
 
-              // bloc.clearNota();
+            // bloc.clearNota();
 
-              for (String data in listDecode) {
-                Map decodedData = jsonDecode(data);
+            for (String data in listDecode) {
+              Map decodedData = jsonDecode(data);
 
-                print(decodedData);
+              print(decodedData);
 
-                DateTime tanggal =
-                    DateTime.parse(decodedData['tanggal_penjualan']);
+              DateTime tanggal =
+                  DateTime.parse(decodedData['tanggal_penjualan']);
 
-                // print(tanggal);
-                /// compare data jika bulan yang dipilih[_selectedTanggal] sama dengan bulan nota dibuat[tanggal]
-                if (DateTime(tanggal.year, tanggal.month)
-                        .difference(DateTime(
-                            _selectedTanggal.year, _selectedTanggal.month))
-                        .inDays ==
-                    0) {
-                  print('true');
+              // print(tanggal);
+              /// compare data jika bulan yang dipilih[_selectedTanggal] sama dengan bulan nota dibuat[tanggal]
+              if (DateTime(tanggal.year, tanggal.month)
+                      .difference(DateTime(
+                          _selectedTanggal.year, _selectedTanggal.month))
+                      .inDays ==
+                  0) {
+                print('true');
 
-                  List<Item> listDetail = List<Item>();
+                List<Item> listDetail = List<Item>();
 
-                  double subTotal = 0;
-                  for (int i = 0; i < decodedData['pkdt_item'].length; i++) {
-                    double total = (double.parse(
-                                decodedData['pkdt_harga_item'][i].toString()) -
-                            double.parse(
-                                decodedData['pkdt_diskon'][i].toString())) *
-                        int.parse(decodedData['pkdt_qty'][i].toString());
+                double subTotal = 0;
+                for (int i = 0; i < decodedData['pkdt_item'].length; i++) {
+                  double total = (double.parse(
+                              decodedData['pkdt_harga_item'][i].toString()) -
+                          double.parse(
+                              decodedData['pkdt_diskon'][i].toString())) *
+                      int.parse(decodedData['pkdt_qty'][i].toString());
 
-                    subTotal += total;
+                  subTotal += total;
 
-                    listDetail.add(
-                      Item(
-                        diskon: decodedData['pkdt_diskon'][i].toString(),
-                        harga: decodedData['pkdt_harga_item'][i].toString(),
-                        idItem: decodedData['pkdt_item'][i].toString(),
-                        namaItem: decodedData['pkdt_nama_item'][i],
-                        // nomor: decodedData['pkdt_nomor'][i].toString(),
-                        // penjualanKasir:
-                        //     decodedData['pkdt_penjualan_kasir'][i].toString(),
-                        qty: decodedData['pkdt_qty'][i].toString(),
-                        total: total.toString(),
-                        gambar: decodedData['pkdt_gambar'][i].toString(),
-                      ),
-                    );
-                  }
-
-                  bloc.addNota(
-                    NotaPenjualan(
-                      alamat: decodedData['c_alamat'],
-                      bayar: decodedData['pk_bayar']
-                          .toString()
-                          .replaceAll(',', ''),
-                      customer: decodedData['c_nama'],
-                      diskonPlus: decodedData['pk_diskon_plus'].toString(),
-                      grandTotal: (subTotal -
-                              double.parse(
-                                  decodedData['pk_diskon_plus'].toString()))
-                          .toString(),
-                      harga: decodedData['namaHargaPenjualan'],
-                      id: '0',
-                      kasir: decodedData['namaUserMelayani'],
-                      nota: decodedData['nota'],
-                      pajak: decodedData['totalPpn'].toString(),
-                      subTotal: subTotal.toString(),
-                      tanggal: DateFormat('yyyy-MM-dd').format(tanggal),
-                      telpon: decodedData['c_telepon'],
-                      detailNotaPenjualan: listDetail,
+                  listDetail.add(
+                    Item(
+                      diskon: decodedData['pkdt_diskon'][i].toString(),
+                      harga: decodedData['pkdt_harga_item'][i].toString(),
+                      idItem: decodedData['pkdt_item'][i].toString(),
+                      namaItem: decodedData['pkdt_nama_item'][i],
+                      // nomor: decodedData['pkdt_nomor'][i].toString(),
+                      // penjualanKasir:
+                      //     decodedData['pkdt_penjualan_kasir'][i].toString(),
+                      qty: decodedData['pkdt_qty'][i].toString(),
+                      total: total.toString(),
+                      gambar: decodedData['pkdt_gambar'][i].toString(),
                     ),
                   );
                 }
-              }
-            } else {
-              print('encoded file isempty');
-            }
-          }
 
-          if (ini.isNotEmpty) {
-            _kelolaResourceNota(ini);
-            _kelolaResourceDataKasirTersimpanOffline();
+                bloc.addNota(
+                  NotaPenjualan(
+                    alamat: decodedData['c_alamat'],
+                    bayar:
+                        decodedData['pk_bayar'].toString().replaceAll(',', ''),
+                    customer: decodedData['c_nama'],
+                    diskonPlus: decodedData['pk_diskon_plus'].toString(),
+                    grandTotal: (subTotal -
+                            double.parse(
+                                decodedData['pk_diskon_plus'].toString()))
+                        .toString(),
+                    harga: decodedData['namaHargaPenjualan'],
+                    id: '0',
+                    kasir: decodedData['namaUserMelayani'],
+                    nota: decodedData['nota'],
+                    pajak: decodedData['totalPpn'].toString(),
+                    subTotal: subTotal.toString(),
+                    tanggal: DateFormat('yyyy-MM-dd').format(tanggal),
+                    telpon: decodedData['c_telepon'],
+                    detailNotaPenjualan: listDetail,
+                  ),
+                );
+              }
+            }
           } else {
-            print('lokal isEmpty');
-            bloc.clearNota();
-            _kelolaResourceDataKasirTersimpanOffline();
+            print('encoded file isempty');
           }
-          setState(() {
-            _isLoading = false;
-            _isError = false;
-          });
-        },
-      );
-    } catch (e) {
-      print(e);
-      setState(() {
-        _isError = true;
-        _isLoading = false;
-        _errorMessage = e.toString();
-      });
-    }
+        }
+
+        if (ini.isNotEmpty) {
+          _kelolaResourceNota(ini);
+          _kelolaResourceDataKasirTersimpanOffline();
+        } else {
+          print('lokal isEmpty');
+          bloc.clearNota();
+          _kelolaResourceDataKasirTersimpanOffline();
+        }
+        setState(() {
+          _isLoading = false;
+          _isError = false;
+        });
+      },
+    );
   }
 
   void cekKoneksiFunction() {
     cekKoneksi.myStream.listen((event) async {
       print(event);
+      Fluttertoast.showToast(msg: event['message']);
 
       if (event['isOnline'] && !isSendNotaOffline) {
         isSendNotaOffline = true;
@@ -324,6 +313,13 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
   }
 
   @override
+  void dispose() {
+    cekKoneksi.disposeStream();
+    cekKoneksi.disposeConnectivity();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<DaftarPenjualanBloc>(context);
 
@@ -337,24 +333,24 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
         key: _scaffoldKeyDaftarPenjualan,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                content: CalendarDatePicker(
-                  initialDate: _selectedTanggal,
-                  firstDate: DateTime(DateTime.now().year - 1),
-                  lastDate: DateTime.now(),
-                  onDateChanged: (ini) {
-                    if (ini != null) {
-                      setState(() {
-                        _selectedTanggal = ini;
-                      });
-                    }
-                    getNota();
-                  },
-                ),
-              ),
-            );
+            // showDialog(
+            //   context: context,
+            //   builder: (context) => AlertDialog(
+            //     content: CalendarDatePicker(
+            //       initialDate: _selectedTanggal,
+            //       firstDate: DateTime(DateTime.now().year - 1),
+            //       lastDate: DateTime.now(),
+            //       onDateChanged: (ini) {
+            //         if (ini != null) {
+            //           setState(() {
+            //             _selectedTanggal = ini;
+            //           });
+            //         }
+            //         getNota();
+            //       },
+            //     ),
+            //   ),
+            // );
 
             // DatePicker.showDatePicker(
             //   context,
@@ -371,19 +367,19 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
             // );
 
             // # package month_picker_dialog
-            // showMonthPicker(
-            //   context: context,
-            //   initialDate: _selectedTanggal,
-            //   lastDate: DateTime.now(),
-            //   firstDate: DateTime(DateTime.now().year - 1),
-            // ).then((ini) {
-            //   if (ini != null) {
-            //     setState(() {
-            //       _selectedTanggal = ini;
-            //     });
-            //   }
-            //   getNota();
-            // });
+            showMonthPicker(
+              context: context,
+              initialDate: _selectedTanggal,
+              lastDate: DateTime.now(),
+              firstDate: DateTime(DateTime.now().year - 1),
+            ).then((ini) {
+              if (ini != null) {
+                setState(() {
+                  _selectedTanggal = ini;
+                });
+              }
+              getNota();
+            });
           },
           label: Text('Periode Nota'),
           icon: Icon(Icons.calendar_today),

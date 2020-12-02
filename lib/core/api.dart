@@ -119,10 +119,10 @@ class Auth {
       }
     } on SocketException {
       Fluttertoast.showToast(
-          msg: 'tidak bisa mengakes ke host, koneksi ditolak');
+          msg: 'Tidak dapat mengakses ke server, silahkan coba lagi');
       return {
         'status': 'error',
-        'message': 'tidak bisa mengakses ke host, koneksi ditolak',
+        'message': 'Tidak dapat mengakses ke server, silahkan coba lagi',
       };
     } on TimeoutException {
       Fluttertoast.showToast(msg: 'Request Timeout, try again');

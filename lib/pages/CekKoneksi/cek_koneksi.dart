@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
+// ignore: unused_import
 import 'package:fluttertoast/fluttertoast.dart';
 // ignore: unused_import
 import 'package:martabakdjoeragan_app/core/env.dart';
@@ -17,20 +18,23 @@ class CekKoneksi {
   static CekKoneksi get instance => _instance;
 
   Connectivity connectivity = Connectivity();
-
-  StreamController controller = StreamController.broadcast();
+  StreamSubscription<ConnectivityResult> subscription;
+  StreamController controller;
 
   Stream get myStream => controller.stream;
 
   void initialise() async {
     // ConnectivityResult result = await connectivity.checkConnectivity();
     // checkStatus(result);
-    connectivity.onConnectivityChanged.listen((result) {
+    subscription = connectivity.onConnectivityChanged.listen((result) {
       checkStatus(result);
     });
+    controller = StreamController.broadcast();
   }
 
-  Future<Map> checkStatus(ConnectivityResult result) async {
+  void disposeConnectivity() => subscription.cancel();
+
+  Future<Map> checkStatus(ConnectivityResult resultX) async {
     bool isOnline = false;
     String message = 'Mode Offline';
     try {
@@ -45,14 +49,16 @@ class CekKoneksi {
       isOnline = false;
     }
     Map hasil = {
-      'type': result,
+      'type': resultX,
       'isOnline': isOnline,
+      'message': message,
     };
-    Fluttertoast.showToast(msg: message);
 
-    controller.sink.add(
-      hasil,
-    );
+    if (!controller.isClosed) {
+      controller.sink.add(
+        hasil,
+      );
+    }
 
     return hasil;
   }

@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   /// ```
   /// version: //some version
   /// ```
-  String versionName = '1.0.3';
+  String versionName = '1.0.4';
 
   void login() async {
     FocusScope.of(context).unfocus();

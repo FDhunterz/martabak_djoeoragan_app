@@ -83,85 +83,86 @@ class _KuponListTileState extends State<KuponListTile> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  padding: EdgeInsets.all(5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      widget.persen != 'null'
-                          ? Container(
-                              padding: EdgeInsets.all(5.0),
-                              margin: EdgeInsets.only(right: 10.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100.0),
-                                color: widget.disabled == '0'
-                                    ? Colors.blue
-                                    : Colors.grey[400],
-                              ),
-                              width: 50.0,
-                              height: 50.0,
-                              child: Center(
-                                child: Text(
-                                  '${widget.persen} %',
-                                  style: TextStyle(
-                                    color: Colors.white,
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        widget.persen != 'null'
+                            ? Container(
+                                padding: EdgeInsets.all(5.0),
+                                margin: EdgeInsets.only(right: 10.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100.0),
+                                  color: widget.disabled == '0'
+                                      ? Colors.blue
+                                      : Colors.grey[400],
+                                ),
+                                width: 50.0,
+                                height: 50.0,
+                                child: Center(
+                                  child: Text(
+                                    '${widget.persen} %',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                padding: EdgeInsets.all(5.0),
+                                margin: EdgeInsets.only(right: 10.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100.0),
+                                  color: widget.disabled == '0'
+                                      ? Colors.blue
+                                      : Colors.grey[400],
+                                ),
+                                width: 50.0,
+                                height: 50.0,
+                                child: Center(
+                                  child: Text(
+                                    _numberFormat
+                                        .format(double.parse(widget.nominal)),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10.0,
+                                    ),
                                   ),
                                 ),
                               ),
-                            )
-                          : Container(
-                              padding: EdgeInsets.all(5.0),
-                              margin: EdgeInsets.only(right: 10.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100.0),
-                                color: widget.disabled == '0'
-                                    ? Colors.blue
-                                    : Colors.grey[400],
-                              ),
-                              width: 50.0,
-                              height: 50.0,
-                              child: Center(
+                        Flexible(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Flexible(
                                 child: Text(
-                                  _numberFormat
-                                      .format(double.parse(widget.nominal)),
+                                  widget.nama,
                                   style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10.0,
+                                    color: widget.disabled == '0'
+                                        ? Colors.black
+                                        : Colors.grey[400],
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                            ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            child: Text(
-                              widget.nama,
-                              style: TextStyle(
-                                color: widget.disabled == '0'
-                                    ? Colors.black
-                                    : Colors.grey[400],
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            child:
-                                widget.catatan == '' || widget.catatan == null
-                                    ? Text(
-                                        'Tidak ada Catatan',
-                                        style: TextStyle(
-                                          color: widget.disabled == '0'
-                                              ? Colors.grey
-                                              : Colors.grey[400],
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      )
-                                    : Text(
+                              widget.catatan.isEmpty
+                                  ? Text(
+                                      'Tidak ada Catatan',
+                                      style: TextStyle(
+                                        color: widget.disabled == '0'
+                                            ? Colors.grey
+                                            : Colors.grey[400],
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    )
+                                  : Flexible(
+                                      child: Text(
                                         widget.catatan,
                                         style: TextStyle(
                                           color: widget.disabled == '0'
@@ -171,10 +172,12 @@ class _KuponListTileState extends State<KuponListTile> {
                                           fontWeight: FontWeight.normal,
                                         ),
                                       ),
+                                    ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Divider(),

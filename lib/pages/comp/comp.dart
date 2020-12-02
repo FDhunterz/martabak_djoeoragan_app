@@ -42,10 +42,12 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
   Map statusKoneksi = {
     'type': ConnectivityResult.none,
     'isOnline': false,
+    'message': '',
   };
   void cekKoneksiFunction() {
     cekKoneksi.myStream.listen((event) async {
       print(event);
+      Fluttertoast.showToast(msg: event['message']);
 
       if (event['isOnline'] && !isSendNotaOffline) {
         isSendNotaOffline = true;
@@ -71,6 +73,13 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
   }
 
   @override
+  void dispose() {
+    cekKoneksi.disposeConnectivity();
+    cekKoneksi.disposeStream();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     _isLoading = true;
     _isError = false;
@@ -88,7 +97,7 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
     super.initState();
   }
 
-  getResource() async {
+  void getResource() async {
     String accessToken = await dataStore.getDataString('access_token');
 
     requestHeaders['Accept'] = 'application/json';
@@ -153,7 +162,6 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
     customhttp.get(
       '${url}setting/session/resource',
       headers: requestHeaders,
-      isOnline: statusKoneksi['isOnline'],
       namaFile: namaFile,
       onBeforeSend: () {
         setState(() {

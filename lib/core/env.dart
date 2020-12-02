@@ -7,8 +7,8 @@ String noapiurl = 'http://martabak.alamraya.site/';
 // String noapiurl = 'http://192.168.1.55/git/martabak_djoeragan/';
 
 // # Lepi
-// String url = 'http://192.168.0.118/alamraya/martabak_djoeragan/api/';
-// String noapiurl = 'http://192.168.0.118/alamraya/martabak_djoeragan/';
+// String url = 'http://192.168.0.119/alamraya/martabak_djoeragan/api/';
+// String noapiurl = 'http://192.168.0.119/alamraya/martabak_djoeragan/';
 
 // # wifi rumah
 // String url = 'http://192.168.1.12/git/martabak_djoeragan/api/';

@@ -38,11 +38,11 @@ class FormSerializeSimpanPenjualan {
     Map<String, dynamic> formSerialize = Map<String, dynamic>();
 
     formSerialize['cabangs'] = cabangs;
-    if (isCustomerSelected) {
-      formSerialize['c_nama'] = namaCustomer;
-      formSerialize['c_telepon'] = noTelp;
-      formSerialize['c_alamat'] = alamat;
-    }
+    // if (isCustomerSelected) {
+    formSerialize['c_nama'] = namaCustomer;
+    formSerialize['c_telepon'] = noTelp;
+    formSerialize['c_alamat'] = alamat;
+    // }
 
     formSerialize['pk_bayar'] = jumlahBayar;
     formSerialize['p_harga'] = idHargaPenjualan;

@@ -12,7 +12,7 @@ description: Martabak Djoeragan Application.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-version: 1.0.3+4 # "+" represents the versionCode such as 1, 2, 3, etc.
+version: 1.0.4+5 # "+" represents the versionCode such as 1, 2, 3, etc.
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -38,14 +38,17 @@ dependencies:
   network_to_file_image: ^2.3.6
   connectivity: ^2.0.1
   flutter_masked_text: ^0.8.0
-  # month_picker_dialog: ^0.3.2
+  month_picker_dialog: ^0.2.3
   collection: any
   esc_pos_bluetooth: ^0.2.8
   esc_pos_utils: ^0.3.6
-  escposprinter:
-    git:
-        url: https://github.com/marcusfelix/esc-pos-printer-flutter.git
-        ref: master
+  # escposprinter:
+  #   git:
+  #       url: https://github.com/marcusfelix/esc-pos-printer-flutter.git
+  #       ref: master
+
+# dependency_overrides:
+#   rxdart: ^0.24.0
 
 dev_dependencies:
   flutter_test:

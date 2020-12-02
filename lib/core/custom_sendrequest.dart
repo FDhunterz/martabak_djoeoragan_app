@@ -54,6 +54,7 @@ class CustomSendRequest {
     Function(String) onUseLocalFile,
     Function(String) onSuccess,
   }) async {
+    onBeforeSend();
     PenyimpananKu storage = PenyimpananKu();
     // storage.hapusBerkas(namaFile);
     String resourceJson = await storage.bacaBerkas(namaFile);
@@ -62,10 +63,14 @@ class CustomSendRequest {
 
       Connectivity _connectivity = _cekKoneksi.connectivity;
 
-      Map _hasil = await _cekKoneksi
-          .checkStatus(await _connectivity.checkConnectivity());
+      ConnectivityResult konekResult = await _connectivity.checkConnectivity();
 
-      if (_hasil['isOnline']) {
+      Map _hasil = await _cekKoneksi.checkStatus(konekResult);
+
+      if (!_hasil['isOnline']) {
+        onUseLocalFile(resourceJson);
+        onComplete();
+      } else {
         final response = await http.post(
           '$url',
           headers: headers,
@@ -82,9 +87,6 @@ class CustomSendRequest {
           onUnknownStatusCode(response.statusCode, response.body);
           onUseLocalFile(resourceJson);
         }
-        onComplete();
-      } else {
-        onUseLocalFile(resourceJson);
         onComplete();
       }
     } on SocketException {
@@ -106,8 +108,6 @@ class CustomSendRequest {
   ///
   /// [headers] = headers send request.
   ///
-  /// [isOnline] = bool.
-  ///
   /// [namaFile] = nama file untuk offline mode. ex: folder/namaFile.txt | namaFile.txt
   ///
   /// [onBeforeSend] = sebelum melakukan send request.
@@ -125,7 +125,6 @@ class CustomSendRequest {
     String url, {
     Map body,
     Map headers,
-    bool isOnline,
     String namaFile,
     Function onBeforeSend,
     Function onComplete,
@@ -134,9 +133,15 @@ class CustomSendRequest {
     Function(String) onUseLocalFile,
     Function(String) onSuccess,
   }) async {
+    onBeforeSend();
+
     PenyimpananKu storage = PenyimpananKu();
     // storage.hapusBerkas(namaFile);
     String resourceJson = await storage.bacaBerkas(namaFile);
+
+    CekKoneksi _cekKoneksi = CekKoneksi.instance;
+
+    Connectivity _connectivity = _cekKoneksi.connectivity;
     try {
       /// membuat @params untuk send request tipe GET
       String form = '';
@@ -154,12 +159,9 @@ class CustomSendRequest {
       }
       print(form);
 
-      CekKoneksi _cekKoneksi = CekKoneksi.instance;
+      ConnectivityResult konekResult = await _connectivity.checkConnectivity();
 
-      Connectivity _connectivity = _cekKoneksi.connectivity;
-
-      Map _hasil = await _cekKoneksi
-          .checkStatus(await _connectivity.checkConnectivity());
+      Map _hasil = await _cekKoneksi.checkStatus(konekResult);
 
       if (_hasil['isOnline']) {
         final response = await http.get(
@@ -222,6 +224,7 @@ void simpanNotaOfflineKeServer(
 
     String namaFile = 'simpan-kasir.json';
 
+    // await store.hapusBerkas(namaFile);
     String encodedNotaOffline = await store.bacaBerkas(namaFile);
 
     if (encodedNotaOffline.isNotEmpty) {
@@ -237,8 +240,9 @@ void simpanNotaOfflineKeServer(
 
       if (response.statusCode == 200) {
         Map jsonDecoded = jsonDecode(response.body);
+
         if (jsonDecoded.containsKey('status')) {
-          if (jsonDecoded['status'] == 'sukses') {
+          if (jsonDecoded['status'] == 'success') {
             store.tulisBerkas('', namaFile);
             Fluttertoast.showToast(
                 msg: 'Nota Offline berhasil disimpan ke Server');

@@ -12,6 +12,7 @@ import 'package:martabakdjoeragan_app/pages/CekKoneksi/cek_koneksi.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cari_bluetooth_bloc.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/cartTile.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/customer.dart';
+// ignore: unused_import
 import 'package:martabakdjoeragan_app/pages/penjualan/escpos_function.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/formSerialize.dart';
 import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
@@ -26,7 +27,7 @@ import 'package:martabakdjoeragan_app/pages/cameo/empty_cart.dart';
 import 'package:intl/intl.dart';
 // import 'package:http/http.dart' as http;
 // ignore: unused_import
-import 'package:escposprinter/escposprinter.dart';
+// import 'package:escposprinter/escposprinter.dart';
 
 Map<String, String> requestHeaders = Map();
 GlobalKey<ScaffoldState> _scaffoldKeyCart;
@@ -268,7 +269,9 @@ class _CartPageState extends State<CartPage> {
 
             Fluttertoast.showToast(msg: 'Penjualan berhasil disimpan dilokal');
 
-            await printKasir(form.nota, context);
+            CariBluetoothBloc blocB = context.read<CariBluetoothBloc>();
+
+            blocB.print(context, nota);
 
             blocX.clearCart();
             blocX.unsetCustomer();
@@ -289,7 +292,9 @@ class _CartPageState extends State<CartPage> {
 
             storage.tulisBerkas(jsonEncode(list), namaFile);
 
-            await printKasir(form.nota, context);
+            CariBluetoothBloc blocB = context.read<CariBluetoothBloc>();
+
+            blocB.print(context, nota);
 
             blocX.clearCart();
             blocX.unsetCustomer();
@@ -318,6 +323,7 @@ class _CartPageState extends State<CartPage> {
   void cekKoneksiFunction() {
     cekKoneksi.myStream.listen((event) async {
       print(event);
+      Fluttertoast.showToast(msg: event['message']);
 
       if (event['isOnline'] && !isSendNotaOffline) {
         isSendNotaOffline = true;
@@ -389,6 +395,8 @@ class _CartPageState extends State<CartPage> {
   @override
   void dispose() {
     _scrollController.dispose();
+    cekKoneksi.disposeConnectivity();
+    cekKoneksi.disposeStream();
     super.dispose();
   }
 

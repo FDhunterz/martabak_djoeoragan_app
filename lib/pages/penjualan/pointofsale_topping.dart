@@ -345,6 +345,7 @@ class _PilihToppingState extends State<PilihTopping> {
                                 text: ini,
                               );
                             },
+                            textAlign: TextAlign.center,
                           ),
                         ),
                         FlatButton(
@@ -419,10 +420,12 @@ class ToppingTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(
-                text,
-                style: TextStyle(
-                  color: isSelected ? Colors.white : Colors.black,
+              Flexible(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : Colors.black,
+                  ),
                 ),
               ),
               Text(
@@ -476,11 +479,13 @@ class VarianTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(
-                text,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: isSelected ? Colors.orange : Colors.black,
+              Flexible(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: isSelected ? Colors.orange : Colors.black,
+                  ),
                 ),
               ),
               Text(
