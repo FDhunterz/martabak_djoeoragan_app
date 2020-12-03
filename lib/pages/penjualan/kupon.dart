@@ -157,26 +157,37 @@ class _CariKuponState extends State<CariKupon> {
                 child: CircularProgressIndicator(),
               )
             : Scrollbar(
-                child: ListView.builder(
-                  itemCount: listKuponBelanja.length,
-                  itemBuilder: (BuildContext context, int i) => Container(
-                    child: KuponListTile(
-                      persen: listKuponBelanja[i].dPersen,
-                      nama: listKuponBelanja[i].nama,
-                      catatan: listKuponBelanja[i].catatan,
-                      maxDiskon: listKuponBelanja[i].dMaxDiskon,
-                      isDouble: listKuponBelanja[i].dIsDouble,
-                      selected: listKuponBelanja[i].selected,
-                      disabled: listKuponBelanja[i].disabled,
-                      nominal: listKuponBelanja[i].nominal,
-                      onTap: () {
-                        if (listKuponBelanja[i].disabled != '1') {
-                          bloc.updateKupon(listKuponBelanja[i]);
-                        }
-                      },
-                    ),
-                  ),
-                ),
+                child: listKuponBelanja.isEmpty
+                    ? ListView(
+                        children: [
+                          ListTile(
+                            title: Text(
+                              'Tidak ada Kupon',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      )
+                    : ListView.builder(
+                        itemCount: listKuponBelanja.length,
+                        itemBuilder: (BuildContext context, int i) => Container(
+                          child: KuponListTile(
+                            persen: listKuponBelanja[i].dPersen,
+                            nama: listKuponBelanja[i].nama,
+                            catatan: listKuponBelanja[i].catatan,
+                            maxDiskon: listKuponBelanja[i].dMaxDiskon,
+                            isDouble: listKuponBelanja[i].dIsDouble,
+                            selected: listKuponBelanja[i].selected,
+                            disabled: listKuponBelanja[i].disabled,
+                            nominal: listKuponBelanja[i].nominal,
+                            onTap: () {
+                              if (listKuponBelanja[i].disabled != '1') {
+                                bloc.updateKupon(listKuponBelanja[i]);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
               ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {

@@ -131,6 +131,7 @@ class _PointofsalesState extends State<Pointofsales> {
 
   @override
   void dispose() {
+    _searchControl.dispose();
     _scrollController.dispose();
     cekKoneksi.disposeConnectivity();
     cekKoneksi.disposeStream();

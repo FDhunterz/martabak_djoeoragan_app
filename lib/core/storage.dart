@@ -5,16 +5,17 @@ import 'package:martabakdjoeragan_app/pages/ImageToFile/ImageToFile.dart';
 import 'package:path_provider/path_provider.dart';
 
 class PenyimpananKu {
-  // Future<String> get _localPath async {
-  //   final directory = await getApplicationDocumentsDirectory();
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
 
-  //   return directory.path;
-  // }
+    return directory.path;
+  }
 
-  File _berkasLokal(String namaFile) {
+  Future<File> _berkasLokal(String namaFile) async {
     /// # var appDocsDir dari main.dart
-    final path = appDocsDir.path;
-    print(path);
+    // final path = appDocsDir.path;
+    final path = await _localPath;
+    // print(path);
     File file = File('$path/$namaFile');
     return file;
   }
@@ -22,7 +23,7 @@ class PenyimpananKu {
   /// untuk membaca file.
   /// contoh: example.txt atau folder/example.txt
   Future<String> bacaBerkas(String namaFile) async {
-    final File file = _berkasLokal(namaFile);
+    final File file = await _berkasLokal(namaFile);
 
     bool kondisi = await file.exists();
 
@@ -30,22 +31,28 @@ class PenyimpananKu {
       String contents = await file.readAsString();
 
       return contents;
+    } else {
+      tulisBerkas('', namaFile);
+      final File fileX = await _berkasLokal(namaFile);
+      String contentXs = await fileX.readAsString();
+
+      return contentXs;
     }
     // return empty string if not exist
-    return '';
+    // return '';
   }
 
   /// untuk menulis file.
   /// @content = tulis isi file.
   /// @namaFile = nama berkas contoh: example.txt atau folder/example.txt
   Future<File> tulisBerkas(String content, String namaFile) async {
-    final file = _berkasLokal(namaFile);
+    final file = await _berkasLokal(namaFile);
 
     return file.writeAsString('$content');
   }
 
   Future<void> hapusBerkas(String namaFile) async {
-    final file = _berkasLokal(namaFile);
+    final file = await _berkasLokal(namaFile);
 
     try {
       if (await file.exists()) {

@@ -124,7 +124,11 @@ class Customer {
       idKabupatenKota,
       idKecamatan;
 
+  /// untuk kondisi ketika customer dibuat dari applikasi mobile
+  bool isNew;
+
   Customer({
+    this.isNew = false,
     this.idCustomer,
     this.namaCustomer,
     this.kodeCustomer,

@@ -130,13 +130,20 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
         });
       },
       onErrorCatch: (ini) {
-        print(ini);
         print('error catch');
-        setState(() {
-          _isError = true;
-          _isLoading = false;
-          _errorMessage = ini;
-        });
+        print(ini);
+        if (ini.isNotEmpty) {
+          setState(() {
+            _isError = true;
+            _isLoading = false;
+            _errorMessage = ini;
+          });
+        } else {
+          setState(() {
+            _isLoading = false;
+            _isError = false;
+          });
+        }
       },
       onSuccess: (ini) {
         print(ini);

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
@@ -36,7 +38,11 @@ class _CariCustomerState extends State<CariCustomer> {
     _isCari = false;
 
     customerState = widget.customer == null
-        ? Customer(idCustomer: '', namaCustomer: '')
+        ? Customer(
+            idCustomer: '',
+            namaCustomer: '',
+            alamat: '',
+          )
         : widget.customer;
 
     super.initState();
@@ -111,6 +117,36 @@ class _CariCustomerState extends State<CariCustomer> {
                   )
           ],
         ),
+        floatingActionButton: FloatingActionButton.extended(
+          label: Text(
+            customerState != null
+                ? customerState.isNew
+                    ? 'Edit Customer'
+                    : 'Buat Customer Baru'
+                : 'Buat Customer Baru',
+          ),
+          onPressed: () async {
+            Customer cusX = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CreateCustomer(
+                  customer: customerState.isNew ? customerState : null,
+                ),
+              ),
+            );
+
+            if (cusX != null) {
+              Navigator.pop(context, cusX);
+            }
+          },
+          icon: Icon(
+            customerState != null
+                ? customerState.isNew
+                    ? Icons.edit
+                    : Icons.add
+                : Icons.add,
+          ),
+        ),
         body: Scrollbar(
           child: ListView(
               children: bloc.cariCustomer(cariController.text).isEmpty
@@ -166,6 +202,213 @@ class _CariCustomerState extends State<CariCustomer> {
                       .toList()),
         ),
       ),
+    );
+  }
+}
+
+class CreateCustomer extends StatefulWidget {
+  final Customer customer;
+
+  const CreateCustomer({Key key, this.customer}) : super(key: key);
+  @override
+  _CreateCustomerState createState() => _CreateCustomerState();
+}
+
+class _CreateCustomerState extends State<CreateCustomer> {
+  TextEditingController namaCustomer, nomorTelp, alamat;
+  FocusNode namaFocus, nomorFocus, alamatFocus;
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
+  void initState() {
+    namaCustomer = TextEditingController(
+      text: widget.customer != null ? widget.customer.namaCustomer : '',
+    );
+    nomorTelp = TextEditingController(
+      text: widget.customer != null ? widget.customer.noTelp : '',
+    );
+    alamat = TextEditingController(
+      text: widget.customer != null ? widget.customer.alamat : '',
+    );
+    namaFocus = FocusNode();
+    nomorFocus = FocusNode();
+    alamatFocus = FocusNode();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    namaFocus.dispose();
+    nomorFocus.dispose();
+    alamatFocus.dispose();
+    namaCustomer.dispose();
+    nomorTelp.dispose();
+    alamat.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.orange[300],
+          title: Text('Form Customer'),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            if (namaCustomer.text.isEmpty) {
+              Fluttertoast.showToast(msg: 'Nama Customer tidak boleh kosong');
+            } else if (nomorTelp.text.isEmpty) {
+              Fluttertoast.showToast(msg: 'Nomor telepon tidak boleh kosong');
+            } else {
+              Navigator.pop(
+                context,
+                Customer(
+                  namaCustomer: namaCustomer.text,
+                  alamat: alamat.text,
+                  noTelp: nomorTelp.text,
+                  isNew: true,
+                ),
+              );
+            }
+          },
+          label: Text('Simpan'),
+          icon: Icon(Icons.check),
+        ),
+        body: Scrollbar(
+          child: ListView(
+            padding: EdgeInsets.symmetric(
+              vertical: 15,
+              horizontal: 15,
+            ),
+            children: [
+              CustomerTextField(
+                autoFocus: true,
+                controller: namaCustomer,
+                focusNode: namaFocus,
+                label: 'Nama Customer',
+                isRequired: true,
+                onChanged: (ini) {},
+                onEditingComplete: () {
+                  FocusScope.of(context).requestFocus(nomorFocus);
+                },
+              ),
+              Divider(),
+              CustomerTextField(
+                keyboardType: TextInputType.number,
+                controller: nomorTelp,
+                focusNode: nomorFocus,
+                label: 'Telp Customer',
+                isRequired: true,
+                onChanged: (ini) {},
+                onEditingComplete: () {
+                  FocusScope.of(context).requestFocus(alamatFocus);
+                },
+              ),
+              Divider(),
+              CustomerTextField(
+                controller: alamat,
+                focusNode: alamatFocus,
+                label: 'Alamat Customer',
+                maxLines: 3,
+                isRequired: false,
+                onChanged: (ini) {},
+                onEditingComplete: () {
+                  FocusScope.of(context).unfocus();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomerTextField extends StatelessWidget {
+  final String label, hintText;
+  final TextEditingController controller;
+  final bool isRequired, autoFocus;
+  final Function(String) onChanged;
+  final Function onEditingComplete;
+  final FocusNode focusNode;
+  final int maxLines;
+  final TextInputType keyboardType;
+  final List<TextInputFormatter> inputFormatters;
+
+  const CustomerTextField({
+    Key key,
+    this.label,
+    this.controller,
+    this.isRequired,
+    this.onChanged,
+    this.onEditingComplete,
+    this.hintText,
+    this.focusNode,
+    this.maxLines = 1,
+    this.keyboardType,
+    this.inputFormatters,
+    this.autoFocus = false,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          child: Text.rich(
+            TextSpan(
+              text: '$label ',
+              children: [
+                TextSpan(
+                  text: isRequired ? '*' : '',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        TextField(
+          autofocus: autoFocus,
+          inputFormatters: inputFormatters,
+          keyboardType: keyboardType,
+          controller: controller,
+          onChanged: onChanged,
+          focusNode: focusNode,
+          onEditingComplete: onEditingComplete,
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            isDense: true,
+            contentPadding: EdgeInsets.zero,
+            hintText: hintText,
+            border: InputBorder.none,
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.orange[300],
+              ),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.orange[300],
+                width: 3,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
