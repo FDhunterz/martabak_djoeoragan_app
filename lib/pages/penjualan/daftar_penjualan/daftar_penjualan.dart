@@ -69,7 +69,7 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
                     DateTime(_selectedTanggal.year, _selectedTanggal.month))
                 .inDays ==
             0) {
-          List<Item> listDetail = List<Item>();
+          List<Item> listDetail = [];
           for (var item in data['detail']) {
             listDetail.add(
               Item(
@@ -171,7 +171,7 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
           String encodedFile = await storage.bacaBerkas(anotherFile);
 
           if (encodedFile.isNotEmpty) {
-            List<dynamic> listDecode = List();
+            List<dynamic> listDecode = [];
 
             listDecode = jsonDecode(encodedFile);
 
@@ -194,7 +194,7 @@ class _DaftarPenjualanState extends State<DaftarPenjualan> {
                   0) {
                 print('true');
 
-                List<Item> listDetail = List<Item>();
+                List<Item> listDetail = [];
 
                 double subTotal = 0;
                 for (int i = 0; i < decodedData['pkdt_item'].length; i++) {
