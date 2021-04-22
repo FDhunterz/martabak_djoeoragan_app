@@ -9,7 +9,7 @@ import 'package:martabakdjoeragan_app/pages/penjualan/kasir_bloc.dart';
 
 class CariBluetoothBloc extends ChangeNotifier {
   PrinterBluetooth selectedPrinterBluetooth;
-  List<PrinterBluetooth> listPrinterBluetooth = List();
+  List<PrinterBluetooth> listPrinterBluetooth = [];
   bool firstTime = true;
 
   PrinterBluetoothManager printerManager = PrinterBluetoothManager();
@@ -24,6 +24,7 @@ class CariBluetoothBloc extends ChangeNotifier {
 
   void startScan() {
     listPrinterBluetooth.clear();
+    firstTime = false;
     notifyListeners();
     printerManager.startScan(Duration(seconds: 4));
   }

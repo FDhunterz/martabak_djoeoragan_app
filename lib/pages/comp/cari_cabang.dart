@@ -50,8 +50,8 @@ class _CariCabangState extends State<CariCabang> {
 
   @override
   void initState() {
-    listCabang = List<Cabang>();
-    listCabangX = List<Cabang>();
+    listCabang = [];
+    listCabangX = [];
     // getCabang();
 
     _isCari = false;

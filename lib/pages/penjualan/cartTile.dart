@@ -44,7 +44,7 @@ class _CartTileState extends State<CartTile> {
   Widget selectedTopping() {
     KasirBloc blocX = context.watch<KasirBloc>();
 
-    List<ToppingMartabakModel> listTopping = List<ToppingMartabakModel>();
+    List<ToppingMartabakModel> listTopping = [];
 
     listTopping = blocX.decodeListTopping(widget.cart.listTopping);
 
@@ -91,7 +91,7 @@ class _CartTileState extends State<CartTile> {
   @override
   Widget build(BuildContext context) {
     String namaVarianSelected = '';
-    List<MartabakVarianModel> listVarian = List<MartabakVarianModel>();
+    List<MartabakVarianModel> listVarian = [];
     KasirBloc bloc = Provider.of<KasirBloc>(context);
     listVarian = bloc.decodeListVarian(widget.cart.listVarian);
 

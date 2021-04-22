@@ -73,14 +73,14 @@ class _CartPageState extends State<CartPage> {
     try {
       KasirBloc blocX = context.read<KasirBloc>();
 
-      List<int> listIdItem = List();
-      List<int> listQtyItem = List();
-      List<double> listHargaItem = List();
-      List<String> listDiskonItem = List();
+      List<int> listIdItem = [];
+      List<int> listQtyItem = [];
+      List<double> listHargaItem = [];
+      List<String> listDiskonItem = [];
 
-      List<String> listIdVarianItem = List();
-      List<String> listNamaVarianItem = List();
-      List<double> listHargaVarianItem = List();
+      List<String> listIdVarianItem = [];
+      List<String> listNamaVarianItem = [];
+      List<double> listHargaVarianItem = [];
 
       Map<String, List<dynamic>> idToppingItem = Map<String, List<dynamic>>();
       Map<String, List<dynamic>> namaTopping = Map<String, List<dynamic>>();
@@ -88,8 +88,8 @@ class _CartPageState extends State<CartPage> {
           Map<String, List<dynamic>>();
 
       // untuk nota offline
-      List<String> listGambarItem = List<String>();
-      List<String> listNamaItem = List<String>();
+      List<String> listGambarItem = [];
+      List<String> listNamaItem = [];
       // end nota offline
 
       DateTime now = DateTime.now();
@@ -112,12 +112,12 @@ class _CartPageState extends State<CartPage> {
         listNamaItem.add(data.name);
         // end nota offline
 
-        idToppingItem[data.id.toString()] = List();
-        namaTopping[data.id.toString()] = List();
-        hargaToppingItem[data.id.toString()] = List();
+        idToppingItem[data.id.toString()] = [];
+        namaTopping[data.id.toString()] = [];
+        hargaToppingItem[data.id.toString()] = [];
 
-        List<ToppingMartabakModel> listTopping = List<ToppingMartabakModel>();
-        List<MartabakVarianModel> listVarian = List<MartabakVarianModel>();
+        List<ToppingMartabakModel> listTopping = [];
+        List<MartabakVarianModel> listVarian = [];
 
         listTopping = blocX.decodeListTopping(data.listTopping);
         listVarian = blocX.decodeListVarian(data.listVarian);
@@ -258,7 +258,7 @@ class _CartPageState extends State<CartPage> {
         onUseLocalFile: (ini) async {
           print(ini);
 
-          List<String> list = List();
+          List<String> list = [];
           // storage.hapusBerkas(namaFile);
 
           if (ini == '') {
@@ -485,8 +485,9 @@ class _CartPageState extends State<CartPage> {
                                         child: Text(
                                           "+ Tambah",
                                           style: TextStyle(
-                                            fontSize: 15.0,
+                                            fontSize: 17,
                                             color: Color(0xfffbaf18),
+                                            fontWeight: FontWeight.w700,
                                           ),
                                         ),
                                       )
@@ -774,7 +775,7 @@ class _CartPageState extends State<CartPage> {
                               minWidth: MediaQuery.of(context).size.width,
                               height: 50.0,
                               buttonColor: Color(0xfffbaf18),
-                              child: RaisedButton(
+                              child: ElevatedButton(
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -791,7 +792,6 @@ class _CartPageState extends State<CartPage> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                elevation: 0.0,
                               ),
                             ),
                           ),
@@ -1059,7 +1059,7 @@ class _CartPageState extends State<CartPage> {
                                     minWidth: MediaQuery.of(context).size.width,
                                     height: 50.0,
                                     buttonColor: Color(0xfffbaf18),
-                                    child: RaisedButton(
+                                    child: ElevatedButton(
                                       onPressed: _isSendRequest
                                           ? null
                                           : () {
@@ -1092,7 +1092,6 @@ class _CartPageState extends State<CartPage> {
                                         style: TextStyle(
                                             fontSize: 18, color: Colors.white),
                                       ),
-                                      elevation: 0.0,
                                     ),
                                   ),
                                 ),

@@ -42,9 +42,9 @@ class _PilihToppingState extends State<PilihTopping> {
   TextEditingController qtyController;
   FocusNode qtyFocus;
 
-  List<ToppingMartabakModel> _listTopping = List<ToppingMartabakModel>();
+  List<ToppingMartabakModel> _listTopping = [];
 
-  List<MartabakVarianModel> _listVarian = List<MartabakVarianModel>();
+  List<MartabakVarianModel> _listVarian = [];
 
   @override
   void initState() {
@@ -53,8 +53,8 @@ class _PilihToppingState extends State<PilihTopping> {
           widget.tipe == TipeTombol.edit ? widget.martabak.qty.toString() : '1',
     );
     qtyFocus = FocusNode();
-    _listTopping = List<ToppingMartabakModel>();
-    _listVarian = List<MartabakVarianModel>();
+    _listTopping = [];
+    _listVarian = [];
 
     KasirBloc blocX = context.read<KasirBloc>();
     _listTopping = blocX.decodeListTopping(widget.martabak.listTopping);
@@ -95,9 +95,11 @@ class _PilihToppingState extends State<PilihTopping> {
                           content: Text(
                               'Apa anda yakin ingin menghapus item dari keranjang?'),
                           actions: <Widget>[
-                            FlatButton(
-                              color: Colors.red,
-                              textColor: Colors.white,
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                primary: Colors.white,
+                              ),
                               onPressed: () {
                                 KasirBloc bloc = Provider.of<KasirBloc>(context,
                                     listen: false);
@@ -109,7 +111,7 @@ class _PilihToppingState extends State<PilihTopping> {
                               },
                               child: Text('Ya'),
                             ),
-                            FlatButton(
+                            TextButton(
                               onPressed: () {
                                 Navigator.pop(context);
                               },
@@ -125,7 +127,7 @@ class _PilihToppingState extends State<PilihTopping> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            List<String> validasi = List();
+            List<String> validasi = [];
             bool isVarianSelected = false;
 
             for (var data in _listVarian) {
@@ -305,8 +307,12 @@ class _PilihToppingState extends State<PilihTopping> {
                     margin: EdgeInsets.all(10),
                     child: Row(
                       children: <Widget>[
-                        FlatButton(
-                          padding: EdgeInsets.all(12),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.all(12),
+                            primary: Colors.white,
+                            backgroundColor: Colors.orange,
+                          ),
                           onPressed: () {
                             String ini = qtyController.text != ''
                                 ? qtyController.text
@@ -319,8 +325,6 @@ class _PilihToppingState extends State<PilihTopping> {
                               qtyController.text = decrement;
                             });
                           },
-                          color: Colors.orange,
-                          textColor: Colors.white,
                           child: Icon(
                             FontAwesomeIcons.minus,
                           ),
@@ -348,8 +352,12 @@ class _PilihToppingState extends State<PilihTopping> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        FlatButton(
-                          padding: EdgeInsets.all(12),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.all(12),
+                            backgroundColor: Colors.orange,
+                            primary: Colors.white,
+                          ),
                           onPressed: () {
                             String ini = qtyController.text != ''
                                 ? qtyController.text
@@ -361,8 +369,6 @@ class _PilihToppingState extends State<PilihTopping> {
                               qtyController.text = increment;
                             });
                           },
-                          color: Colors.orange,
-                          textColor: Colors.white,
                           child: Icon(
                             FontAwesomeIcons.plus,
                           ),

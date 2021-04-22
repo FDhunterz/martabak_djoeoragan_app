@@ -4,8 +4,8 @@ import 'package:martabakdjoeragan_app/pages/comp/comp_model.dart';
 class CompBloc with ChangeNotifier {
   Cabang _cabang;
   Outlet _outlet;
-  List<Cabang> _listCabang = List<Cabang>();
-  List<Outlet> _listOutlet = List<Outlet>();
+  List<Cabang> _listCabang = [];
+  List<Outlet> _listOutlet = [];
 
   Cabang get selectedCabang => _cabang;
 
@@ -15,7 +15,7 @@ class CompBloc with ChangeNotifier {
 
   List<Outlet> listOutlet({Cabang filterByCabang}) {
     if (filterByCabang != null) {
-      List<Outlet> a = List<Outlet>();
+      List<Outlet> a = [];
       for (Outlet o in this._listOutlet) {
         if (o.idCabang == filterByCabang.id) {
           a.add(o);
@@ -58,7 +58,7 @@ class CompBloc with ChangeNotifier {
   }
 
   List<Cabang> cariCabang(String text) {
-    List<Cabang> a = List<Cabang>();
+    List<Cabang> a = [];
     List<Cabang> b = this.listCabang;
 
     for (Cabang data in b) {
@@ -70,7 +70,7 @@ class CompBloc with ChangeNotifier {
   }
 
   List<Outlet> cariOutlet(String text, {Cabang filterByCabang}) {
-    List<Outlet> a = List<Outlet>();
+    List<Outlet> a = [];
     List<Outlet> b = listOutlet();
 
     for (Outlet data in b) {

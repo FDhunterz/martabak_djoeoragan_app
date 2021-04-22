@@ -7,11 +7,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:martabakdjoeragan_app/utils/martabakModel.dart';
 
 class KasirBloc with ChangeNotifier {
-  List<MartabakModel> _cart = List<MartabakModel>();
-  List<KuponBelanja> _kupon = List<KuponBelanja>();
-  List<HargaPenjualan> _listHarga = List<HargaPenjualan>();
-  List<MartabakModel> _list = List<MartabakModel>();
-  List<KategoriItem> _kategori = List<KategoriItem>();
+  List<MartabakModel> _cart = [];
+  List<KuponBelanja> _kupon = [];
+  List<HargaPenjualan> _listHarga = [];
+  List<MartabakModel> _list = [];
+  List<KategoriItem> _kategori = [];
   KategoriItem _selectedKategori;
   HargaPenjualan _selectedHargaPenjualan;
   Customer _selectedCustomer;
@@ -21,10 +21,10 @@ class KasirBloc with ChangeNotifier {
   String _encodedRequest;
 
   /// daftar customer
-  List<Customer> listCustomer = List<Customer>();
+  List<Customer> listCustomer = [];
 
   List<Customer> cariCustomer(String text) {
-    List<Customer> cs = List<Customer>();
+    List<Customer> cs = [];
 
     for (var data in listCustomer) {
       if (data.namaCustomer.toLowerCase().contains(text.toLowerCase()) ||
@@ -92,8 +92,8 @@ class KasirBloc with ChangeNotifier {
       double harga = 0;
       double listHargaVarian = 0;
       double listHargaTopping = 0;
-      List<MartabakVarianModel> listVarian = List<MartabakVarianModel>();
-      List<ToppingMartabakModel> listTopping = List<ToppingMartabakModel>();
+      List<MartabakVarianModel> listVarian = [];
+      List<ToppingMartabakModel> listTopping = [];
       listVarian = decodeListVarian(_cart[i].listVarian);
       listTopping = decodeListTopping(_cart[i].listTopping);
 
@@ -321,8 +321,8 @@ class KasirBloc with ChangeNotifier {
   }
 
   List<MartabakModel> cariItem(String text) {
-    List<MartabakModel> _listD = List<MartabakModel>();
-    List<MartabakModel> _listF = List<MartabakModel>();
+    List<MartabakModel> _listD = [];
+    List<MartabakModel> _listF = [];
 
     if (_selectedKategori != null) {
       if (_selectedKategori.id == 'all') {
@@ -390,13 +390,13 @@ class KasirBloc with ChangeNotifier {
   }
 
   void clearKupon() {
-    _kupon = List<KuponBelanja>();
+    _kupon = [];
     notifyListeners();
   }
 
   List<KuponBelanja> cariKupon(String cari) {
     List<KuponBelanja> ax = this.kupon;
-    List<KuponBelanja> filter = List();
+    List<KuponBelanja> filter = [];
     for (var data in ax) {
       if (data.nama.toLowerCase().contains(cari.toLowerCase()) ||
           data.catatan.toLowerCase().contains(cari.toLowerCase()) ||
@@ -416,7 +416,7 @@ class KasirBloc with ChangeNotifier {
 
   /// clear harga penjualan
   void clearHargaPenjualan() {
-    _listHarga = List<HargaPenjualan>();
+    _listHarga = [];
     notifyListeners();
   }
 
@@ -438,7 +438,7 @@ class KasirBloc with ChangeNotifier {
           content: Text(
               'Item yang ada dikeranjang akan dihapus! \n\nApa anda yakin ingin mengganti Kelompok Harga?'),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context);
                 this.clearCart();
@@ -449,9 +449,11 @@ class KasirBloc with ChangeNotifier {
               },
               child: Text('Ya'),
             ),
-            FlatButton(
-              color: Colors.orange,
-              textColor: Colors.white,
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.orange,
+              ),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -475,7 +477,7 @@ class KasirBloc with ChangeNotifier {
 
   List<HargaPenjualan> cariHargaPenjualan(String cari) {
     List<HargaPenjualan> ax = this.listHarga;
-    List<HargaPenjualan> filter = List();
+    List<HargaPenjualan> filter = [];
     for (HargaPenjualan data in ax) {
       if (data.nama.toLowerCase().contains(cari.toLowerCase())) {
         filter.add(data);
@@ -534,11 +536,11 @@ class KasirBloc with ChangeNotifier {
     MartabakModel model,
     int i,
   ) {
-    List<bool> _listA = List<bool>();
-    List<bool> _listB = List<bool>();
+    List<bool> _listA = [];
+    List<bool> _listB = [];
 
-    List<ToppingMartabakModel> _cartListTopping = List<ToppingMartabakModel>();
-    List<ToppingMartabakModel> _modelListTopping = List<ToppingMartabakModel>();
+    List<ToppingMartabakModel> _cartListTopping = [];
+    List<ToppingMartabakModel> _modelListTopping = [];
 
     _cartListTopping = decodeListTopping(_cart[i].listTopping);
     _modelListTopping = decodeListTopping(model.listTopping);
@@ -555,8 +557,8 @@ class KasirBloc with ChangeNotifier {
       }
     }
 
-    print(_listA);
-    print(_listB);
+    // print(_listA);
+    // print(_listB);
     if (IterableEquality().equals(_listA, _listB)) {
       return true;
     }
@@ -566,8 +568,8 @@ class KasirBloc with ChangeNotifier {
 
   bool _bandingVarianKeranjangDenganVarianItemDipilih(
       MartabakModel model, int i) {
-    List<MartabakVarianModel> _cartListVarian = List<MartabakVarianModel>();
-    List<MartabakVarianModel> _modelListVarian = List<MartabakVarianModel>();
+    List<MartabakVarianModel> _cartListVarian = [];
+    List<MartabakVarianModel> _modelListVarian = [];
 
     _cartListVarian = decodeListVarian(_cart[i].listVarian);
     _modelListVarian = decodeListVarian(model.listVarian);
@@ -594,7 +596,7 @@ class KasirBloc with ChangeNotifier {
         this.isKuponPass();
         notifyListeners();
 
-        print('true 1');
+        // print('true 1');
         break;
       } else if (model.listVarian.isNotEmpty &&
           model.listTopping.isEmpty &&
@@ -607,7 +609,7 @@ class KasirBloc with ChangeNotifier {
         this.ppn;
         this.isKuponPass();
         notifyListeners();
-        print('true 2');
+        // print('true 2');
         break;
       } else if (model.listTopping.isNotEmpty &&
           model.listVarian.isEmpty &&
@@ -620,12 +622,12 @@ class KasirBloc with ChangeNotifier {
         this.ppn;
         this.isKuponPass();
         notifyListeners();
-        print('true 3');
+        // print('true 3');
         break;
       } else if (_cart[i].id == model.id &&
           model.listVarian.isEmpty &&
           model.listTopping.isEmpty) {
-        print('else 4');
+        // print('else 4');
         _cart[i].qty += 1;
         isTidakAda = false;
         this.totalHarga;
@@ -639,7 +641,7 @@ class KasirBloc with ChangeNotifier {
 
     if (this.selectedHargaPenjualan != null) {
       if (isTidakAda) {
-        print('tidak ada');
+        // print('tidak ada');
         _cart.add(model);
         this.totalHarga;
         this.totalHargaPenjualan;
@@ -784,7 +786,7 @@ class KasirBloc with ChangeNotifier {
   /// ]
   /// ```
   List<MartabakVarianModel> decodeListVarian(String encodedListVarian) {
-    List<MartabakVarianModel> _listZ = List<MartabakVarianModel>();
+    List<MartabakVarianModel> _listZ = [];
 
     var data = jsonDecode(encodedListVarian);
 
@@ -846,11 +848,11 @@ class KasirBloc with ChangeNotifier {
   /// ],
   /// ```
   List<ToppingMartabakModel> decodeListTopping(String encodedListTopping) {
-    List<ToppingMartabakModel> _listY = List<ToppingMartabakModel>();
+    List<ToppingMartabakModel> _listY = [];
     var data = jsonDecode(encodedListTopping);
 
     for (var dataY in data) {
-      List<DetailToppingMartabakModel> _listAA = List();
+      List<DetailToppingMartabakModel> _listAA = [];
       for (var dataYD in dataY['modifier']['detail']) {
         _listAA.add(
           DetailToppingMartabakModel(

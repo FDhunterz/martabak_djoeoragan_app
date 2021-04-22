@@ -36,8 +36,8 @@ class _CariOutletState extends State<CariOutlet> {
 
   @override
   void initState() {
-    listOutlet = List<Outlet>();
-    listOutletX = List<Outlet>();
+    listOutlet = [];
+    listOutletX = [];
 
     delayRequest = 0;
     _isCari = false;
@@ -136,15 +136,13 @@ class _CariOutletState extends State<CariOutlet> {
             : Scrollbar(
                 child: ListView.builder(
                   itemCount: listOutlet.length,
-                  itemBuilder: (BuildContext context, int i) => Container(
+                  itemBuilder: (BuildContext context, int i) => Card(
                     child: ListTile(
                       title: Text(
                         listOutlet[i].nama,
                         style: TextStyle(
-                          color: bloc.selectedOutlet != null
-                              ? bloc.selectedOutlet.id == listOutlet[i].id
-                                  ? Colors.green
-                                  : Colors.black
+                          color: bloc.selectedOutlet?.id == listOutlet[i].id
+                              ? Colors.green
                               : Colors.black,
                         ),
                       ),
