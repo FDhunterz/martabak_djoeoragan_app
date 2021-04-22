@@ -4,11 +4,13 @@ import 'dart:ui';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:martabakdjoeragan_app/core/api.dart';
 import 'package:martabakdjoeragan_app/core/custom_sendrequest.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
+import 'package:martabakdjoeragan_app/core/logout.dart';
 import 'package:martabakdjoeragan_app/core/storage.dart';
 import 'package:martabakdjoeragan_app/pages/CekKoneksi/cek_koneksi.dart';
 // import 'package:martabakdjoeragan_app/pages/comp/cari_cabang.dart';
@@ -223,12 +225,14 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
       appBar: AppBar(
         title: Text('Setting Session'),
         actions: <Widget>[
-          FlatButton.icon(
-            onPressed: () async {
-              await Auth().logout(context);
+          TextButton.icon(
+            style: TextButton.styleFrom(
+              primary: Colors.white,
+            ),
+            onPressed: () {
+              logout(context);
             },
-            textColor: Colors.white,
-            icon: Icon(Icons.exit_to_app),
+            icon: Icon(FeatherIcons.logOut),
             label: Text('Logout'),
           ),
         ],
@@ -249,7 +253,7 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
                     }
                   },
                   label: Text('Simpan Informasi'),
-                  icon: Icon(Icons.save),
+                  icon: Icon(FeatherIcons.save),
                   backgroundColor: Colors.teal,
                 ),
       body: _isLoading
@@ -458,7 +462,7 @@ class PilihCabangOutletState extends State<PilihCabangOutlet> {
                                             ),
                                           ),
                                           Icon(
-                                            Icons.chevron_right,
+                                            FeatherIcons.chevronRight,
                                             color: Colors.blue,
                                           )
                                         ],

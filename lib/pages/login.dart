@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import '../core/api.dart';
 
@@ -17,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode passwordFocus = FocusNode();
   bool loading = false;
   String _message = '';
+  DateTime backbuttonpressedTime;
 
   /// nama versi apk. untuk versi bisa dilihat di file pubspec.yaml sintak :
   /// ```
@@ -199,8 +201,10 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           SizedBox(height: 10),
-          OutlineButton(
-            padding: EdgeInsets.fromLTRB(20.0, 1.0, 20.0, 1.0),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              padding: EdgeInsets.fromLTRB(20.0, 1.0, 20.0, 1.0),
+            ),
             onPressed: () {
               // MyNavigator.goToDashboard(context);
             },
@@ -224,89 +228,113 @@ class _LoginPageState extends State<LoginPage> {
           TextStyle(color: Colors.grey, fontFamily: 'Roboto', fontSize: 10.0),
     );
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(27.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  SizedBox(
-                    height: 160.0,
-                    child: Center(
-                      child: Image.asset(
-                        "images/djoeragan.png",
-                        height: 500.0,
-                        width: 500.0,
+    return WillPopScope(
+      onWillPop: () async {
+        DateTime currentTime = DateTime.now();
+        //Statement 1 Or statement2
+        bool backButton = backbuttonpressedTime == null ||
+            currentTime.difference(backbuttonpressedTime) >
+                Duration(seconds: 3);
+        if (backButton) {
+          backbuttonpressedTime = currentTime;
+          Fluttertoast.showToast(
+            msg: "Tekan lagi untuk keluar",
+            backgroundColor: Colors.black54,
+            textColor: Colors.white,
+          );
+          return false;
+        }
+        return true;
+      },
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(27.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 160.0,
+                        child: Center(
+                          child: Image.asset(
+                            "images/djoeragan.png",
+                            height: 500.0,
+                            width: 500.0,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: BorderDirectional(
-                              bottom:
-                                  BorderSide(width: 1, color: Colors.black45),
-                            )),
-                          ),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              'Login',
-                              style: TextStyle(
-                                  fontFamily: 'Roboto',
-                                  color: Colors.black45,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16),
+                      Container(
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: BorderDirectional(
+                                  bottom: BorderSide(
+                                      width: 1, color: Colors.black45),
+                                )),
+                              ),
                             ),
-                          ),
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  'Login',
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto',
+                                      color: Colors.black45,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: BorderDirectional(
+                                  bottom: BorderSide(
+                                      width: 1, color: Colors.black45),
+                                )),
+                              ),
+                            ),
+                          ],
                         ),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: BorderDirectional(
-                              bottom:
-                                  BorderSide(width: 1, color: Colors.black45),
-                            )),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 20.0),
+                      usernameField,
+                      SizedBox(height: 15.0),
+                      passwordField,
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      _errorWidget,
+                      loginButton,
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      // adsSection,
+                      // SizedBox(
+                      //   height: 15.0,
+                      // ),
+                      footer,
+                      SizedBox(
+                        height: 1.0,
+                      )
+                    ],
                   ),
-                  SizedBox(height: 20.0),
-                  usernameField,
-                  SizedBox(height: 15.0),
-                  passwordField,
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  _errorWidget,
-                  loginButton,
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  // adsSection,
-                  // SizedBox(
-                  //   height: 15.0,
-                  // ),
-                  footer,
-                  SizedBox(
-                    height: 1.0,
-                  )
-                ],
+                ),
               ),
             ),
           ),

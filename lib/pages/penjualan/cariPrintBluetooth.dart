@@ -26,8 +26,10 @@ class _CariPrintBluetoothState extends State<CariPrintBluetooth> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          FlatButton.icon(
-            textColor: Colors.white,
+          TextButton.icon(
+            style: TextButton.styleFrom(
+              primary: Colors.white,
+            ),
             icon: Icon(Icons.print),
             label: Text('Tes Print'),
             onPressed: () {
@@ -36,83 +38,141 @@ class _CariPrintBluetoothState extends State<CariPrintBluetooth> {
           ),
         ],
       ),
-      body: ListView.builder(
-          itemCount: bloc.listPrinterBluetooth.length,
-          itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-              onTap: () {
-                bloc.selectedPrinterBluetooth =
-                    bloc.listPrinterBluetooth[index];
-              },
-              child: Stack(
-                children: [
-                  Positioned(
-                      top: 7,
-                      right: 7,
-                      child: bloc.selectedPrinterBluetooth != null
-                          ? bloc.selectedPrinterBluetooth.address ==
-                                  bloc.listPrinterBluetooth[index].address
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(100.0),
-                                  ),
-                                  child: Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : Container()
-                          : Container()),
-                  Column(
-                    children: <Widget>[
-                      Container(
-                        constraints: BoxConstraints(minWidth: 100),
-                        padding: EdgeInsets.only(left: 10),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.print),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(bloc.listPrinterBluetooth[index].name ??
-                                      ''),
-                                  Text(
-                                      bloc.listPrinterBluetooth[index].address),
-                                  Text(
-                                    'Tap untuk memilih print',
-                                    style: TextStyle(color: Colors.grey[700]),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+      body: ListView(
+        children: [
+          bloc.listPrinterBluetooth.isEmpty && bloc.firstTime
+              ? Container(
+                  margin: EdgeInsets.all(25),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.info_rounded,
+                        size: 40,
+                        color: Colors.cyan,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Tekan Tombol Cari Printer',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Divider(),
                     ],
                   ),
-                ],
-              ),
-            );
-          }),
+                )
+              : bloc.listPrinterBluetooth.isEmpty
+                  ? Container(
+                      margin: EdgeInsets.all(25),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.info_rounded,
+                            size: 40,
+                            color: Colors.cyan,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Daftar Perangkat Bluetooth Kosong',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: bloc.listPrinterBluetooth.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                          onTap: () {
+                            bloc.selectedPrinterBluetooth =
+                                bloc.listPrinterBluetooth[index];
+                          },
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 7,
+                                right: 7,
+                                child: bloc.selectedPrinterBluetooth != null
+                                    ? bloc.selectedPrinterBluetooth.address ==
+                                            bloc.listPrinterBluetooth[index]
+                                                .address
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(100.0),
+                                            ),
+                                            child: Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        : Container()
+                                    : Container(),
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Container(
+                                    constraints: BoxConstraints(minWidth: 100),
+                                    padding: EdgeInsets.only(left: 10),
+                                    alignment: Alignment.centerLeft,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(Icons.print),
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text(bloc
+                                                      .listPrinterBluetooth[
+                                                          index]
+                                                      .name ??
+                                                  ''),
+                                              Text(bloc
+                                                  .listPrinterBluetooth[index]
+                                                  .address),
+                                              Text(
+                                                'Tap untuk memilih print',
+                                                style: TextStyle(
+                                                    color: Colors.grey[700]),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+        ],
+      ),
       floatingActionButton: StreamBuilder<bool>(
         stream: bloc.printerManager.isScanningStream,
         initialData: false,
         builder: (c, snapshot) {
           if (snapshot.data) {
-            return FloatingActionButton(
-              child: Icon(Icons.stop),
+            return FloatingActionButton.extended(
+              icon: Icon(Icons.stop),
+              label: Text('Hentikan Pencarian'),
               onPressed: bloc.cancelScan,
               backgroundColor: Colors.red,
             );
           } else {
-            return FloatingActionButton(
-              child: Icon(Icons.search),
+            return FloatingActionButton.extended(
+              icon: Icon(Icons.search),
+              label: Text('Cari Printer'),
               onPressed: bloc.startScan,
             );
           }

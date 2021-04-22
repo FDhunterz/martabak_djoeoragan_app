@@ -105,5 +105,13 @@ ThemeData buildDarkTheme() {
         fontSize: 14,
       ),
     ),
+    scrollbarTheme: ScrollbarThemeData(
+      thickness: MaterialStateProperty.all(10),
+      // isAlwaysShown: true,
+      thumbColor: MaterialStateProperty.all(
+        Colors.grey,
+      ),
+      radius: Radius.circular(5),
+    ),
   );
 }
