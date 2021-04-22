@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -184,7 +185,7 @@ class _CariCustomerState extends State<CariCustomer> {
                             ],
                           ),
                           child: ListTile(
-                            leading: Icon(FontAwesomeIcons.user),
+                            leading: Icon(FeatherIcons.user),
                             title: Text(e.namaCustomer),
                             subtitle: Text(e.alamat),
                             trailing: Text(e.noTelp),
