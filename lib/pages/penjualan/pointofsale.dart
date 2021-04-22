@@ -3,11 +3,13 @@ import 'dart:ui';
 // ignore: unused_import
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:martabakdjoeragan_app/core/api.dart';
 import 'package:martabakdjoeragan_app/core/custom_sendrequest.dart';
 import 'package:martabakdjoeragan_app/core/env.dart';
+import 'package:martabakdjoeragan_app/core/logout.dart';
 import 'package:martabakdjoeragan_app/core/storage.dart';
 import 'package:martabakdjoeragan_app/pages/CekKoneksi/cek_koneksi.dart';
 // import 'package:martabakdjoeragan_app/pages/CekKoneksi/cek_koneksi.dart';
@@ -54,8 +56,7 @@ class _PointofsalesState extends State<Pointofsales> {
   DataStore dataStore = DataStore();
   PenyimpananKu storage = PenyimpananKu();
   bool isSendNotaOffline = false;
-  bool _isCari = false;
-  bool _isCariEmpty = true;
+
   ScrollController _scrollController = ScrollController(
     keepScrollOffset: true,
   );
@@ -92,9 +93,9 @@ class _PointofsalesState extends State<Pointofsales> {
   @override
   void initState() {
     _isLoading = true;
-    _isCari = false;
+
     _isError = false;
-    _isCariEmpty = true;
+
     cekKoneksi.initialise();
     cekKoneksiFunction();
     resource();
@@ -169,12 +170,12 @@ class _PointofsalesState extends State<Pointofsales> {
 
       blocX.clearCart();
 
-      print(responseJson);
+      // print(responseJson);
 
       blocX.clearListItem();
 
       for (var data in responseJson['item']) {
-        List<HargaPenjualanPerItem> _listX = List<HargaPenjualanPerItem>();
+        List<HargaPenjualanPerItem> _listX = [];
         // List<ToppingMartabakModel> _listY = List<ToppingMartabakModel>();
         // List<MartabakVarianModel> _listZ = List<MartabakVarianModel>();
         for (var dataS in data['harga_jual']) {
@@ -286,7 +287,7 @@ class _PointofsalesState extends State<Pointofsales> {
           );
         }
 
-        blocX.listCustomer = List<Customer>();
+        blocX.listCustomer = [];
 
         for (var i in responseJson['customer']) {
           blocX.listCustomer.add(
@@ -327,10 +328,10 @@ class _PointofsalesState extends State<Pointofsales> {
           ),
         );
 
-        print('${responseJson['harga'].length} responseJson[harga] length');
+        // print('${responseJson['harga'].length} responseJson[harga] length');
 
         for (var j in responseJson['harga']) {
-          print('harga added');
+          // print('harga added');
           blocX.addHargaPenjualan(
             HargaPenjualan(
               id: j['gh_id'].toString(),
@@ -468,6 +469,8 @@ class _PointofsalesState extends State<Pointofsales> {
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
+            // elevation: 0.0,
+            backgroundColor: Colors.white,
             iconTheme: IconThemeData(
               color: Color(0xff25282b),
             ),
@@ -478,108 +481,110 @@ class _PointofsalesState extends State<Pointofsales> {
               ),
             ),
             actions: <Widget>[
-              Padding(
+              Container(
                 padding: EdgeInsets.all(10.0),
-                child: Container(
-                  height: 150.0,
-                  width: 30.0,
-                  child: InkWell(
-                    onTap: () async {
-                      dynamic cart = await Navigator.pushNamed(
-                        context,
-                        '/cart_pos',
-                      );
+                height: 100.0,
+                width: 70.0,
+                child: InkWell(
+                  onTap: () async {
+                    dynamic cart = await Navigator.pushNamed(
+                      context,
+                      '/cart_pos',
+                    );
 
-                      if (cart == true) {
-                        resource();
-                      }
-                    },
-                    child: Stack(
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(
-                            Icons.shopping_cart,
-                            color: Color(0xff25282b),
-                          ),
-                          onPressed: null,
+                    if (cart == true) {
+                      resource();
+                    }
+                  },
+                  child: Stack(
+                    children: <Widget>[
+                      Center(
+                        child: Icon(
+                          FeatherIcons.shoppingCart,
+                          color: Color(0xff25282b),
                         ),
-                        Positioned(
-                          top: 0.0,
-                          left: 0.0,
-                          child: Container(
-                            width: 20.0,
-                            height: 20.0,
-                            decoration: BoxDecoration(
-                              color: Colors.red[700],
-                              borderRadius: BorderRadius.circular(100.0),
-                            ),
-                            child: Center(
-                              child: Text(
-                                bloc.totalQtyKeranjang.toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                      ),
+                      Positioned(
+                        top: 0.0,
+                        right: 0.0,
+                        child: Container(
+                          width: 20.0,
+                          height: 20.0,
+                          decoration: BoxDecoration(
+                            color: Colors.red[700],
+                            borderRadius: BorderRadius.circular(100.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              bloc.totalQtyKeranjang.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
               PopupMenuButton(
+                padding: EdgeInsets.all(0),
                 tooltip: 'Pengaturan',
-                icon: Icon(FontAwesomeIcons.ellipsisV),
-                itemBuilder: (BuildContext context) =>
-                    ['Daftar Perangkat Bluetooth', 'Sinkron Data', 'Logout']
-                        .map(
-                          (e) => PopupMenuItem(
-                            child: Text(e),
-                            value: e,
-                          ),
-                        )
-                        .toList(),
+                icon: Icon(FeatherIcons.moreVertical),
+                itemBuilder: (BuildContext context) => [
+                  PopupMenuItem(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          FeatherIcons.bluetooth,
+                          color: Colors.blue,
+                        ),
+                        SizedBox(width: 10),
+                        Text('Daftar Perangkat Bluetooth'),
+                      ],
+                    ),
+                    value: 0,
+                  ),
+                  PopupMenuItem(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          FeatherIcons.refreshCcw,
+                          color: Colors.cyan,
+                        ),
+                        SizedBox(width: 10),
+                        Text('Sinkron Data'),
+                      ],
+                    ),
+                    value: 1,
+                  ),
+                  PopupMenuItem(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          FeatherIcons.logOut,
+                          color: Colors.red,
+                        ),
+                        SizedBox(width: 10),
+                        Text('Logout'),
+                      ],
+                    ),
+                    value: 2,
+                  ),
+                ],
                 onSelected: (ini) {
                   switch (ini) {
-                    case 'Logout':
-                      showDialog(
-                        context: context,
-                        builder: (c) => AlertDialog(
-                          backgroundColor: Color(0xfff85f73),
-                          contentTextStyle: TextStyle(
-                            color: Colors.white,
-                          ),
-                          titleTextStyle: TextStyle(
-                            color: Colors.white,
-                          ),
-                          title: Text('Peringatan!'),
-                          content: Text('Apa anda ingin keluar dari aplikasi?'),
-                          actions: <Widget>[
-                            RaisedButton(
-                              onPressed: () async {
-                                await Auth().logout(context);
-                              },
-                              child: Text('Ya'),
-                              color: Colors.blue,
-                              textColor: Colors.white,
-                            ),
-                            RaisedButton(
-                              onPressed: () {
-                                Navigator.pop(context, false);
-                              },
-                              child: Text('Tidak'),
-                              color: Colors.white,
-                              textColor: Colors.black,
-                            ),
-                          ],
-                        ),
-                      );
+                    case 2:
+                      logout(context);
 
                       break;
-                    case 'Daftar Perangkat Bluetooth':
+                    case 0:
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -589,11 +594,10 @@ class _PointofsalesState extends State<Pointofsales> {
                         ),
                       );
                       break;
-                    case 'Sinkron Data':
+                    case 1:
                       resource();
                       setState(() {
-                        _searchControl.text = '';
-                        _isCari = false;
+                        _searchControl.value = TextEditingValue.empty;
                       });
                       break;
                     default:
@@ -601,8 +605,6 @@ class _PointofsalesState extends State<Pointofsales> {
                 },
               ),
             ],
-            elevation: 0.0,
-            backgroundColor: Colors.white,
           ),
           floatingActionButton: offset > 1000
               ? FloatingActionButton(
@@ -693,7 +695,7 @@ class _PointofsalesState extends State<Pointofsales> {
                                     children: <Widget>[
                                       MenuTile(
                                         tooltip: 'Kelola Data Nota Kasir',
-                                        icon: FontAwesomeIcons.clipboardList,
+                                        icon: FeatherIcons.list,
                                         namaMenu: 'Data Kasir',
                                         onTap: () {
                                           Navigator.push(
@@ -706,7 +708,7 @@ class _PointofsalesState extends State<Pointofsales> {
                                         },
                                       ),
                                       MenuTile(
-                                        icon: FontAwesomeIcons.tags,
+                                        icon: FeatherIcons.tag,
                                         namaMenu: 'Golongan Harga',
                                         tooltip: 'Golongan Harga',
                                         onTap: () {
@@ -715,7 +717,7 @@ class _PointofsalesState extends State<Pointofsales> {
                                       ),
                                       MenuTile(
                                         tooltip: 'Setting Session',
-                                        icon: FontAwesomeIcons.store,
+                                        icon: FeatherIcons.airplay,
                                         namaMenu: 'Pilih Outlet',
                                         onTap: () {
                                           Navigator.pushNamed(context, '/comp');
@@ -737,122 +739,110 @@ class _PointofsalesState extends State<Pointofsales> {
                             ),
                             child: Row(
                               children: [
-                                _isCari
-                                    ? Expanded(
-                                        child: TextField(
-                                          autofocus: true,
-                                          style: TextStyle(
-                                            fontSize: 15.0,
-                                            color: Colors.blueGrey[700],
-                                          ),
-                                          decoration: InputDecoration(
-                                            contentPadding:
-                                                EdgeInsets.all(10.0),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                              borderSide: BorderSide(
-                                                color: Colors.transparent,
-                                              ),
-                                            ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.transparent,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Color(0xfffbaf18),
-                                                width: 2,
-                                              ),
-                                            ),
-                                            hintText: "Pencarian",
-                                            prefixIcon: Icon(
-                                              Icons.search,
-                                              color: Colors.blueGrey[500],
-                                            ),
-                                            hintStyle: TextStyle(
-                                              fontSize: 15.0,
-                                              color: Colors.blueGrey[400],
-                                            ),
-                                          ),
-                                          maxLines: 1,
-                                          controller: _searchControl,
-                                          onChanged: (ini) {
-                                            setState(() {
-                                              _searchControl.value =
-                                                  TextEditingValue(
-                                                text: ini,
-                                                selection:
-                                                    _searchControl.selection,
-                                              );
-                                            });
-
-                                            if (ini.length != 0) {
-                                              setState(() {
-                                                _isCariEmpty = false;
-                                              });
-                                            } else {
-                                              setState(() {
-                                                _isCariEmpty = true;
-                                              });
-                                            }
-                                          },
+                                Expanded(
+                                  child: TextField(
+                                    // autofocus: true,
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Colors.blueGrey[700],
+                                    ),
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(10.0),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
                                         ),
-                                      )
-                                    : Container(),
-                                !_isCari
-                                    ? Expanded(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15.0),
-                                          child: DropdownButton(
-                                            // isDense: false,
-                                            isExpanded: true,
-                                            underline: Container(),
-                                            items: bloc.listKategori
-                                                .map(
-                                                  (e) => DropdownMenuItem(
-                                                    child: Text(e.text),
-                                                    value: e,
-                                                  ),
-                                                )
-                                                .toList(),
-                                            hint: Text('Pilih Kategori'),
-                                            value: bloc.getSelectedKategoriItem,
-                                            onChanged: (e) {
-                                              bloc.setSelectedKategori(e);
-                                            },
-                                          ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
                                         ),
-                                      )
-                                    : Container(),
-                                FlatButton(
-                                  color: Colors.orange[300],
-                                  child: _isCari
-                                      ? Icon(Icons.close)
-                                      : Icon(Icons.search),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 0,
-                                    vertical: 12,
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xfffbaf18),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      hintText: "Pencarian",
+                                      prefixIcon: Icon(
+                                        Icons.search,
+                                        color: Colors.blueGrey[500],
+                                      ),
+                                      suffixIcon: _searchControl.text.isNotEmpty
+                                          ? InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  _searchControl.value =
+                                                      TextEditingValue.empty;
+                                                });
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                              },
+                                              child: Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                              ),
+                                            )
+                                          : null,
+                                      hintStyle: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Colors.blueGrey[400],
+                                      ),
+                                    ),
+                                    maxLines: 1,
+                                    controller: _searchControl,
+                                    onChanged: (ini) {
+                                      setState(() {});
+                                    },
                                   ),
-                                  onPressed: () {
-                                    if (_isCari) {
-                                      setState(() {
-                                        _isCari = !_isCari;
-                                        _searchControl.text = '';
-                                        _isCariEmpty = !_isCariEmpty;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        _isCari = !_isCari;
-                                      });
-                                    }
-                                  },
                                 ),
                               ],
+                            ),
+                          ),
+                          Container(
+                            constraints: BoxConstraints(
+                              maxHeight: 40,
+                            ),
+                            child: ListView.builder(
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: bloc.listKategori.length,
+                              itemBuilder: (_, index) {
+                                var d = bloc.listKategori[index];
+                                return Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 5),
+                                  child: Material(
+                                    color:
+                                        bloc.getSelectedKategoriItem.id == d.id
+                                            ? Color(0xFF4C1B37)
+                                            : Color(0xffFBAF18),
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: InkWell(
+                                      onTap: () {
+                                        bloc.setSelectedKategori(d);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 5),
+                                        child: Center(
+                                          child: Text(
+                                            d.text,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                           Divider(
@@ -926,7 +916,7 @@ class _PointofsalesState extends State<Pointofsales> {
                                               );
 
                                               if (a != null) {
-                                                print('changed');
+                                                // print('changed');
                                                 b.qty = a['qty'];
                                                 b.listTopping =
                                                     a['listTopping'];

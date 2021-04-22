@@ -41,35 +41,40 @@ class _HargaPenjualanListTileState extends State<HargaPenjualanListTile> {
           )
         ],
       ),
-      child: InkWell(
-        onTap: widget.onTap,
-        child: Stack(
-          children: [
-            Positioned(
-              top: 7,
-              right: 7,
-              child: widget.hargaPenjualan.selected == '1'
-                  ? Container(
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(100.0),
-                      ),
-                      child: Icon(
-                        Icons.check,
-                        color: Colors.white,
-                      ),
-                    )
-                  : Container(),
-            ),
-            Container(
-              height: 75.0,
-              child: Center(
-                child: Text(
-                  widget.hargaPenjualan.nama,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(5.0),
+        child: InkWell(
+          onTap: widget.onTap,
+          borderRadius: BorderRadius.circular(5.0),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 7,
+                right: 7,
+                child: widget.hargaPenjualan.selected == '1'
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(100.0),
+                        ),
+                        child: Icon(
+                          Icons.check,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Container(),
+              ),
+              Container(
+                height: 75.0,
+                child: Center(
+                  child: Text(
+                    widget.hargaPenjualan.nama,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
