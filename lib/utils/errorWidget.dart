@@ -64,13 +64,11 @@ class _ErrorOutputWidgetState extends State<ErrorOutputWidget> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  child: RaisedButton(
-                    child: Text(
-                      'Coba lagi',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.black,
                     ),
+                    child: Text('Coba lagi'),
                     onPressed: widget.onPress,
                   ),
                 ),

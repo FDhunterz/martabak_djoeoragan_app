@@ -236,9 +236,12 @@ class _Profile extends State<Profile> {
                       ),
                       child: ButtonTheme(
                         height: 50,
-                        child: RaisedButton(
-                          color: Colors.red,
-                          padding: EdgeInsets.symmetric(vertical: 10),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            onPrimary: Colors.white,
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                          ),
                           onPressed: () {
                             showDialog(
                               context: context,
@@ -254,21 +257,25 @@ class _Profile extends State<Profile> {
                                 content: Text(
                                     'Apa anda ingin keluar dari aplikasi?'),
                                 actions: <Widget>[
-                                  RaisedButton(
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.blue,
+                                      onPrimary: Colors.white,
+                                    ),
                                     onPressed: () async {
                                       await Auth().logout(context);
                                     },
                                     child: Text('Ya'),
-                                    color: Colors.blue,
-                                    textColor: Colors.white,
                                   ),
-                                  RaisedButton(
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.white,
+                                      onPrimary: Colors.black,
+                                    ),
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
                                     child: Text('Tidak'),
-                                    color: Colors.white,
-                                    textColor: Colors.black,
                                   ),
                                 ],
                               ),
@@ -277,7 +284,6 @@ class _Profile extends State<Profile> {
                           child: Text(
                             'Logout',
                             style: TextStyle(
-                              color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
