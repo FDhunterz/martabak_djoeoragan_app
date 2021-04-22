@@ -30,7 +30,7 @@ class _ViewDiskonState extends State<ViewDiskon> {
   @override
   void initState() {
     _scaffoldKeyDiskon = GlobalKey<ScaffoldState>();
-    _listModel = List<DiskonModel>();
+    _listModel = [];
     _isError = false;
     _isCari = false;
     _isLoading = false;
@@ -75,7 +75,7 @@ class _ViewDiskonState extends State<ViewDiskon> {
     requestHeaders['Authorization'] = 'Bearer $accessToken';
     try {
       final response = await http.post(
-        url + 'penjualan/diskon/search',
+        Uri.parse(url + 'penjualan/diskon/search'),
         headers: requestHeaders,
         body: {
           'cari': _cariController.text,
@@ -84,7 +84,7 @@ class _ViewDiskonState extends State<ViewDiskon> {
 
       if (response.statusCode == 200) {
         dynamic responseJson = jsonDecode(response.body);
-        _listModel = List<DiskonModel>();
+        _listModel = [];
 
         for (var data in responseJson['data1']) {
           _listModel.add(
@@ -141,13 +141,13 @@ class _ViewDiskonState extends State<ViewDiskon> {
     requestHeaders['Authorization'] = 'Bearer $accessToken';
     try {
       final response = await http.get(
-        url + 'penjualan/diskon/resource',
+        Uri.parse(url + 'penjualan/diskon/resource'),
         headers: requestHeaders,
       );
 
       if (response.statusCode == 200) {
         dynamic responseJson = jsonDecode(response.body);
-        _listModel = List<DiskonModel>();
+        _listModel = [];
 
         for (var data in responseJson['data1']) {
           _listModel.add(
@@ -215,9 +215,11 @@ class _ViewDiskonState extends State<ViewDiskon> {
               Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: <Widget>[
-                  FlatButton(
-                    color: Colors.orange,
-                    textColor: Colors.white,
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      primary: Colors.white,
+                    ),
                     onPressed: () async {
                       await Navigator.push(
                         context,
@@ -240,9 +242,11 @@ class _ViewDiskonState extends State<ViewDiskon> {
                       ],
                     ),
                   ),
-                  FlatButton(
-                    color: Colors.red,
-                    textColor: Colors.white,
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      primary: Colors.white,
+                    ),
                     onPressed: () {
                       delete(id);
                     },
@@ -257,8 +261,10 @@ class _ViewDiskonState extends State<ViewDiskon> {
                       ],
                     ),
                   ),
-                  FlatButton(
-                    textColor: Colors.black,
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.black,
+                    ),
                     onPressed: () {
                       aktifNonAktif(
                         id: id,
@@ -298,7 +304,7 @@ class _ViewDiskonState extends State<ViewDiskon> {
 
     try {
       final response = await http.post(
-        '${url}penjualan/diskon/status',
+        Uri.parse('${url}penjualan/diskon/status'),
         headers: requestHeaders,
         body: {
           'ids': id.toString(),
@@ -356,9 +362,11 @@ class _ViewDiskonState extends State<ViewDiskon> {
               title: Text('Peringatan!'),
               content: Text('Apa anda yakin ingin menghapus data ini?'),
               actions: <Widget>[
-                FlatButton(
-                  color: Colors.red,
-                  textColor: Colors.white,
+                TextButton(
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Colors.red,
+                  ),
                   onPressed: _isPressed
                       ? null
                       : () async {
@@ -374,7 +382,7 @@ class _ViewDiskonState extends State<ViewDiskon> {
                               'Bearer $accessToken';
                           try {
                             final response = await http.post(
-                              '${url}penjualan/diskon/delete',
+                              Uri.parse('${url}penjualan/diskon/delete'),
                               body: {
                                 'ids': id.toString(),
                               },
@@ -431,9 +439,11 @@ class _ViewDiskonState extends State<ViewDiskon> {
                         },
                   child: Text('Ya'),
                 ),
-                FlatButton(
-                  color: Colors.grey[300],
-                  textColor: Colors.black,
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.grey[300],
+                    primary: Colors.black,
+                  ),
                   onPressed: _isPressed
                       ? null
                       : () {
@@ -496,7 +506,7 @@ class _ViewDiskonState extends State<ViewDiskon> {
                   icon: Icon(Icons.search),
                   onPressed: () {
                     setState(() {
-                    _cariController.text = '';
+                      _cariController.text = '';
                       _isCari = true;
                     });
                   },

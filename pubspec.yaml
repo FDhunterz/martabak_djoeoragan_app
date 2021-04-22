@@ -27,7 +27,7 @@ dependencies:
   datetime_picker_formfield: 1.0.0
   shared_preferences: ^0.5.1+2
   provider: 4.3.2+2
-  http: ^0.12.2
+  http: ^0.13.1
   dio:
   fluttertoast:
   font_awesome_flutter:
@@ -38,10 +38,11 @@ dependencies:
   network_to_file_image: ^2.3.6
   connectivity: ^2.0.1
   flutter_masked_text: ^0.8.0
-  month_picker_dialog: ^0.2.3
+  month_picker_dialog: ^0.3.0
   collection: any
   esc_pos_bluetooth: ^0.2.8
   esc_pos_utils: ^0.3.6
+  flutter_feather_icons: ^2.0.0+1
   # escposprinter:
   #   git:
   #       url: https://github.com/marcusfelix/esc-pos-printer-flutter.git

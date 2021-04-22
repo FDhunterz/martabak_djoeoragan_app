@@ -46,7 +46,7 @@ class Auth {
     print('${url}login');
     try {
       final sendlogin = await http.post(
-        '${url}login',
+        Uri.parse('${url}login'),
         body: {
           // 'grant_type': grantType,
           // 'client_id': clientId,
@@ -241,7 +241,7 @@ class RequestGet {
       String token = "$acc $auth";
 
       final data = await http.get(
-        url + name + customrequest,
+        Uri.parse(url + name + customrequest),
         headers: {
           'Accept': 'application/json',
           'Authorization': token,
@@ -296,7 +296,7 @@ class RequestPost {
       String token = "$acc $auth";
 
       final data = await http.post(
-        url + name,
+        Uri.parse(url + name),
         body: body,
         headers: {
           'Accept': 'application/json',

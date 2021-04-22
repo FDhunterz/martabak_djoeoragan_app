@@ -72,7 +72,7 @@ class CustomSendRequest {
         onComplete();
       } else {
         final response = await http.post(
-          '$url',
+          Uri.parse('$url'),
           headers: headers,
           body: body,
         );
@@ -165,7 +165,7 @@ class CustomSendRequest {
 
       if (_hasil['isOnline']) {
         final response = await http.get(
-          '$url$form',
+          Uri.parse('$url$form'),
           headers: headers,
         );
 
@@ -230,7 +230,7 @@ void simpanNotaOfflineKeServer(
     if (encodedNotaOffline.isNotEmpty) {
       print('nota offline ada');
       final response = await http.post(
-        '${url}penjualan/kasir/sync',
+        Uri.parse('${url}penjualan/kasir/sync'),
         headers: requestHeaders,
         body: {
           'platform': 'android',
@@ -319,18 +319,23 @@ void showError({
         ),
       ),
       actions: <Widget>[
-        RaisedButton(
+        ElevatedButton(
           child: Text('Coba Lagi'),
-          color: Colors.orange,
+          style: ElevatedButton.styleFrom(
+            primary: Colors.orange,
+            onPrimary: Colors.white,
+          ),
           onPressed: onTryAgain,
-          textColor: Colors.white,
         ),
-        RaisedButton(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.white,
+            onPrimary: Colors.black,
+          ),
           child: Text('Tutup'),
           onPressed: () {
             Navigator.pop(contextX);
           },
-          textColor: Colors.black,
         ),
       ],
     ),

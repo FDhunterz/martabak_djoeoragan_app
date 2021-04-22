@@ -91,7 +91,7 @@ class _TambahDiskonState extends State<TambahDiskon> {
     _dGabung = 0;
     _dKonfirmasi = 1;
     _selectedProduk = null;
-    _listProduk = List<Produk>();
+    _listProduk = [];
     _selectedlistDTipe = DTipe(
       id: 'ITEM',
       text: 'Potongan harga item',
@@ -116,13 +116,13 @@ class _TambahDiskonState extends State<TambahDiskon> {
     requestHeaders['Authorization'] = 'Bearer $accessToken';
     try {
       final response = await http.get(
-        url + 'penjualan/diskon/resource',
+        Uri.parse(url + 'penjualan/diskon/resource'),
         headers: requestHeaders,
       );
 
       if (response.statusCode == 200) {
         dynamic responseJson = jsonDecode(response.body);
-        _listProduk = List<Produk>();
+        _listProduk = [];
 
         _listProduk.add(
           Produk(
@@ -214,7 +214,7 @@ class _TambahDiskonState extends State<TambahDiskon> {
 
     try {
       final response = await http.post(
-        '${url}penjualan/diskon/save',
+        Uri.parse('${url}penjualan/diskon/save'),
         headers: requestHeaders,
         body: formSerialize,
       );
@@ -282,7 +282,7 @@ class _TambahDiskonState extends State<TambahDiskon> {
           : FloatingActionButtonLocation.endTop,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          List<String> validasi = List<String>();
+          List<String> validasi = [];
 
           if (_namaDiskonController.text.isEmpty) {
             validasi.add('Input Nama Diskon tidak boleh kosong!');
@@ -888,7 +888,7 @@ class _TambahDiskonState extends State<TambahDiskon> {
                                           child: Container(
                                             width: 50.0,
                                             padding: EdgeInsets.all(0),
-                                            child: FlatButton(
+                                            child: TextButton(
                                               child: _isNilai
                                                   ? Text(
                                                       'Rp',

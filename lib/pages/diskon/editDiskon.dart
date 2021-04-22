@@ -95,7 +95,7 @@ class _EditDiskonState extends State<EditDiskon> {
     _dGabung = 0;
     _dKonfirmasi = 1;
     _selectedProduk = null;
-    _listProduk = List<Produk>();
+    _listProduk = [];
     _selectedlistDTipe = DTipe(
       id: 'ITEM',
       text: 'Potongan harga item',
@@ -120,7 +120,7 @@ class _EditDiskonState extends State<EditDiskon> {
     requestHeaders['Authorization'] = 'Bearer $accessToken';
     try {
       final response = await http.post(
-        url + 'penjualan/diskon/resourceEdit',
+        Uri.parse(url + 'penjualan/diskon/resourceEdit'),
         body: {
           'id': widget.id.toString(),
         },
@@ -129,7 +129,7 @@ class _EditDiskonState extends State<EditDiskon> {
 
       if (response.statusCode == 200) {
         dynamic responseJson = jsonDecode(response.body);
-        _listProduk = List<Produk>();
+        _listProduk = [];
 
         _listProduk.add(
           Produk(
@@ -296,7 +296,7 @@ class _EditDiskonState extends State<EditDiskon> {
 
     try {
       final response = await http.post(
-        '${url}penjualan/diskon/update',
+        Uri.parse('${url}penjualan/diskon/update'),
         headers: requestHeaders,
         body: formSerialize,
       );
@@ -364,7 +364,7 @@ class _EditDiskonState extends State<EditDiskon> {
           : FloatingActionButtonLocation.endTop,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          List<String> validasi = List<String>();
+          List<String> validasi = [];
 
           if (_namaDiskonController.text.isEmpty) {
             validasi.add('Input Nama Diskon tidak boleh kosong!');
@@ -972,7 +972,7 @@ class _EditDiskonState extends State<EditDiskon> {
                                           child: Container(
                                             width: 50.0,
                                             padding: EdgeInsets.all(0),
-                                            child: FlatButton(
+                                            child: TextButton(
                                               child: _isNilai
                                                   ? Text(
                                                       'Rp',
