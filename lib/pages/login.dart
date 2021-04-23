@@ -20,11 +20,11 @@ class _LoginPageState extends State<LoginPage> {
   String _message = '';
   DateTime backbuttonpressedTime;
 
-  /// nama versi apk. untuk versi bisa dilihat di file pubspec.yaml sintak :
+  /// TODO: nama versi apk. untuk versi bisa dilihat di file pubspec.yaml sintak :
   /// ```
   /// version: //some version
   /// ```
-  String versionName = '1.0.4';
+  String versionName = '1.0.5';
 
   void login() async {
     FocusScope.of(context).unfocus();
@@ -223,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
     final footer = Text(
-      "Powered by Alamraya Software v. $versionName © 2019",
+      "Powered by Alamraya Software v. $versionName © 2021",
       style:
           TextStyle(color: Colors.grey, fontFamily: 'Roboto', fontSize: 10.0),
     );
