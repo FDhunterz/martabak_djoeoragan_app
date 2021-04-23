@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:martabakdjoeragan_app/store/DataStore.dart';
 import '../core/api.dart';
@@ -16,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController password = TextEditingController();
   FocusNode usernameFocus = FocusNode();
   FocusNode passwordFocus = FocusNode();
-  bool loading = false;
+  bool loading = false, isPasswordHidden = true;
   String _message = '';
   DateTime backbuttonpressedTime;
 
@@ -124,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
     final passwordField = TextField(
       controller: password,
       focusNode: passwordFocus,
-      obscureText: true,
+      obscureText: isPasswordHidden,
       textInputAction: TextInputAction.done,
       style: TextStyle(
         fontFamily: 'Roboto',
@@ -135,10 +136,29 @@ class _LoginPageState extends State<LoginPage> {
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: "Kata Sandi",
         hintStyle: TextStyle(
-            fontWeight: FontWeight.w300, color: Colors.black38, fontSize: 14),
+          fontWeight: FontWeight.w300,
+          color: Colors.black38,
+          fontSize: 14,
+        ),
         focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            borderSide: BorderSide(color: Colors.black38)),
+          borderRadius: BorderRadius.all(
+            Radius.circular(5.0),
+          ),
+          borderSide: BorderSide(
+            color: Colors.black38,
+          ),
+        ),
+        suffixIcon: InkWell(
+          onTap: () {
+            setState(() {
+              isPasswordHidden = !isPasswordHidden;
+            });
+          },
+          child: Icon(
+            isPasswordHidden ? FeatherIcons.eye : FeatherIcons.eyeOff,
+            color: Colors.orange,
+          ),
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(5.0),
@@ -223,7 +243,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
     final footer = Text(
-      "Powered by Alamraya Software v. $versionName © 2021",
+      "Powered by ARSoft v. $versionName © 2021",
       style:
           TextStyle(color: Colors.grey, fontFamily: 'Roboto', fontSize: 10.0),
     );
@@ -282,10 +302,13 @@ class _LoginPageState extends State<LoginPage> {
                             Expanded(
                               child: Container(
                                 decoration: BoxDecoration(
-                                    border: BorderDirectional(
-                                  bottom: BorderSide(
-                                      width: 1, color: Colors.black45),
-                                )),
+                                  border: BorderDirectional(
+                                    bottom: BorderSide(
+                                      width: 1,
+                                      color: Colors.black45,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                             Expanded(
@@ -293,20 +316,24 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Text(
                                   'Login',
                                   style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      color: Colors.black45,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16),
+                                    fontFamily: 'Roboto',
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ),
                             Expanded(
                               child: Container(
                                 decoration: BoxDecoration(
-                                    border: BorderDirectional(
-                                  bottom: BorderSide(
-                                      width: 1, color: Colors.black45),
-                                )),
+                                  border: BorderDirectional(
+                                    bottom: BorderSide(
+                                      width: 1,
+                                      color: Colors.black45,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
