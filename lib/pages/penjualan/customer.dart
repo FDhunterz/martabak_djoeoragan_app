@@ -149,19 +149,25 @@ class _CariCustomerState extends State<CariCustomer> {
         ),
         body: Scrollbar(
           child: ListView(
-              children: bloc.cariCustomer(cariController.text).isEmpty
-                  ? [
-                      ListTile(
+            padding: EdgeInsets.only(bottom: 100),
+            children: [
+              bloc.cariCustomer(cariController.text).isEmpty
+                  ? Card(
+                      color: Colors.white,
+                      child: ListTile(
                         title: Text(
                           'Tidak ada Data',
                           textAlign: TextAlign.center,
                         ),
-                      )
-                    ]
-                  : bloc
-                      .cariCustomer(cariController.text)
-                      .map(
-                        (e) => Container(
+                      ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: bloc.cariCustomer(cariController.text).length,
+                      itemBuilder: (_, index) {
+                        var e = bloc.cariCustomer(cariController.text)[index];
+                        return Container(
                           margin: EdgeInsets.only(
                             top: 3.0,
                             bottom: 3.0,
@@ -197,9 +203,11 @@ class _CariCustomerState extends State<CariCustomer> {
                               Navigator.pop(context, customerState);
                             },
                           ),
-                        ),
-                      )
-                      .toList()),
+                        );
+                      },
+                    )
+            ],
+          ),
         ),
       ),
     );
@@ -260,6 +268,7 @@ class _CreateCustomerState extends State<CreateCustomer> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        backgroundColor: Colors.grey[300],
         appBar: AppBar(
           backgroundColor: Colors.orange[300],
           title: Text('Form Customer'),
@@ -287,45 +296,64 @@ class _CreateCustomerState extends State<CreateCustomer> {
         ),
         body: Scrollbar(
           child: ListView(
-            padding: EdgeInsets.symmetric(
-              vertical: 15,
-              horizontal: 15,
-            ),
+            padding: EdgeInsets.only(bottom: 100),
             children: [
-              CustomerTextField(
-                autoFocus: true,
-                controller: namaCustomer,
-                focusNode: namaFocus,
-                label: 'Nama Customer',
-                isRequired: true,
-                onChanged: (ini) {},
-                onEditingComplete: () {
-                  FocusScope.of(context).requestFocus(nomorFocus);
-                },
-              ),
-              Divider(),
-              CustomerTextField(
-                keyboardType: TextInputType.number,
-                controller: nomorTelp,
-                focusNode: nomorFocus,
-                label: 'Telp Customer',
-                isRequired: true,
-                onChanged: (ini) {},
-                onEditingComplete: () {
-                  FocusScope.of(context).requestFocus(alamatFocus);
-                },
-              ),
-              Divider(),
-              CustomerTextField(
-                controller: alamat,
-                focusNode: alamatFocus,
-                label: 'Alamat Customer',
-                maxLines: 3,
-                isRequired: false,
-                onChanged: (ini) {},
-                onEditingComplete: () {
-                  FocusScope.of(context).unfocus();
-                },
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 25, horizontal: 15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(1, 3),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    CustomerTextField(
+                      autoFocus: true,
+                      controller: namaCustomer,
+                      focusNode: namaFocus,
+                      label: 'Nama Customer',
+                      isRequired: true,
+                      onChanged: (ini) {},
+                      onEditingComplete: () {
+                        FocusScope.of(context).requestFocus(nomorFocus);
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    CustomerTextField(
+                      keyboardType: TextInputType.number,
+                      controller: nomorTelp,
+                      focusNode: nomorFocus,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      label: 'Telp Customer',
+                      isRequired: true,
+                      onChanged: (ini) {},
+                      maxLength: 15,
+                      onEditingComplete: () {
+                        FocusScope.of(context).requestFocus(alamatFocus);
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    CustomerTextField(
+                      controller: alamat,
+                      focusNode: alamatFocus,
+                      label: 'Alamat Customer',
+                      maxLines: 3,
+                      isRequired: false,
+                      onChanged: (ini) {},
+                      onEditingComplete: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -342,7 +370,7 @@ class CustomerTextField extends StatelessWidget {
   final Function(String) onChanged;
   final Function onEditingComplete;
   final FocusNode focusNode;
-  final int maxLines;
+  final int maxLines, maxLength;
   final TextInputType keyboardType;
   final List<TextInputFormatter> inputFormatters;
 
@@ -359,6 +387,7 @@ class CustomerTextField extends StatelessWidget {
     this.keyboardType,
     this.inputFormatters,
     this.autoFocus = false,
+    this.maxLength,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -370,6 +399,10 @@ class CustomerTextField extends StatelessWidget {
           child: Text.rich(
             TextSpan(
               text: '$label ',
+              style: TextStyle(
+                // fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
               children: [
                 TextSpan(
                   text: isRequired ? '*' : '',
@@ -390,9 +423,13 @@ class CustomerTextField extends StatelessWidget {
           focusNode: focusNode,
           onEditingComplete: onEditingComplete,
           maxLines: maxLines,
+          maxLength: maxLength,
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: EdgeInsets.zero,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 10,
+            ),
             hintText: hintText,
             border: InputBorder.none,
             enabledBorder: UnderlineInputBorder(
