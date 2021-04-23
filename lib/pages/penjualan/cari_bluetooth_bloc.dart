@@ -113,6 +113,7 @@ Future<Ticket> demoReceipt(
     styles: PosStyles(
       align: PosAlign.center,
       width: PosTextSize.size2,
+      bold: true,
     ),
   );
 
@@ -141,7 +142,12 @@ Future<Ticket> demoReceipt(
       }
     }
 
-    ticket.text(blocX.namaItem(data));
+    ticket.text(
+      blocX.namaItem(data),
+      styles: PosStyles(
+        bold: true,
+      ),
+    );
     if (namaTopping != '') {
       ticket.text(namaTopping);
     }
@@ -191,17 +197,19 @@ Future<Ticket> demoReceipt(
       width: 6,
     ),
   ]);
-  ticket.row([
-    PosColumn(
-      text: 'PPN',
-      width: 5,
-    ),
-    PosColumn(text: ':', width: 1),
-    PosColumn(
-      text: _numberFormat.format(blocX.ppn.ceilToDouble()),
-      width: 6,
-    ),
-  ]);
+  if (blocX.getSettingPpn != 0) {
+    ticket.row([
+      PosColumn(
+        text: 'PPN',
+        width: 5,
+      ),
+      PosColumn(text: ':', width: 1),
+      PosColumn(
+        text: _numberFormat.format(blocX.ppn.ceilToDouble()),
+        width: 6,
+      ),
+    ]);
+  }
 
   ticket.row([
     PosColumn(
