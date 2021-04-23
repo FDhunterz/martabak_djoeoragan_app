@@ -33,7 +33,7 @@ class _CariPrintBluetoothState extends State<CariPrintBluetooth> {
             icon: Icon(Icons.print),
             label: Text('Tes Print'),
             onPressed: () {
-              bloc.print(context, 'Nota-percobaan/001');
+              bloc.printPOS(context, 'Nota-percobaan/001');
             },
           ),
         ],
@@ -52,10 +52,11 @@ class _CariPrintBluetoothState extends State<CariPrintBluetooth> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        'Tekan Tombol Cari Printer',
+                        'Tekan Tombol Cari Printer Dan Jangan Lupa Untuk Menyalakan Bluetooth',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
@@ -76,6 +77,7 @@ class _CariPrintBluetoothState extends State<CariPrintBluetooth> {
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),

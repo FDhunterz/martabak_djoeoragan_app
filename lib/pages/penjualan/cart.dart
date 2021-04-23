@@ -225,7 +225,7 @@ class _CartPageState extends State<CartPage> {
             // await printKasir(responseJson['data']['nota'], context);
             CariBluetoothBloc blocB = context.read<CariBluetoothBloc>();
 
-            blocB.print(context, nota);
+            blocB.printPOS(context, nota);
             Fluttertoast.showToast(msg: responseJson['text']);
             blocX.clearCart();
             blocX.unsetCustomer();
@@ -271,7 +271,7 @@ class _CartPageState extends State<CartPage> {
 
             CariBluetoothBloc blocB = context.read<CariBluetoothBloc>();
 
-            blocB.print(context, nota);
+            blocB.printPOS(context, nota);
 
             blocX.clearCart();
             blocX.unsetCustomer();
@@ -294,7 +294,7 @@ class _CartPageState extends State<CartPage> {
 
             CariBluetoothBloc blocB = context.read<CariBluetoothBloc>();
 
-            blocB.print(context, nota);
+            blocB.printPOS(context, nota);
 
             blocX.clearCart();
             blocX.unsetCustomer();

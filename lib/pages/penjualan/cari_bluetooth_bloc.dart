@@ -26,14 +26,15 @@ class CariBluetoothBloc extends ChangeNotifier {
     listPrinterBluetooth.clear();
     firstTime = false;
     notifyListeners();
-    printerManager.startScan(Duration(seconds: 4));
+
+    printerManager.startScan(Duration(seconds: 5));
   }
 
   void cancelScan() {
     printerManager.stopScan();
   }
 
-  void print(BuildContext context, String nota) async {
+  void printPOS(BuildContext context, String nota) async {
     Fluttertoast.showToast(msg: 'Sedang membaca printer');
     printerManager.selectPrinter(selectedPrinterBluetooth);
 
