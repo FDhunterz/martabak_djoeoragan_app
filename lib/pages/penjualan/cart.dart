@@ -225,7 +225,7 @@ class _CartPageState extends State<CartPage> {
             // await printKasir(responseJson['data']['nota'], context);
             CariBluetoothBloc blocB = context.read<CariBluetoothBloc>();
 
-            blocB.printPOS(context, nota);
+            blocB.printPOS(context, responseJson['data']['nota']);
             Fluttertoast.showToast(msg: responseJson['text']);
             blocX.clearCart();
             blocX.unsetCustomer();
@@ -853,44 +853,52 @@ class _CartPageState extends State<CartPage> {
                                           ],
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              "PPN(${bloc.getSettingPpn}%)",
-                                              style: TextStyle(
-                                                fontFamily: "Roboto",
-                                                fontSize: 14.0,
-                                                color: Color(0xff25282b),
-                                                fontWeight: FontWeight.w500,
-                                                decoration:
-                                                    bloc.getSettingPpn == 0
-                                                        ? TextDecoration
-                                                            .lineThrough
-                                                        : null,
+                                      bloc.getSettingPpn == 0
+                                          ? Container()
+                                          : Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: <Widget>[
+                                                  Text(
+                                                    "PPN(${bloc.getSettingPpn}%)",
+                                                    style: TextStyle(
+                                                      fontFamily: "Roboto",
+                                                      fontSize: 14.0,
+                                                      color: Color(0xff25282b),
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      decoration:
+                                                          bloc.getSettingPpn ==
+                                                                  0
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : null,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    _numberFormat.format(bloc
+                                                        .ppn
+                                                        .ceilToDouble()),
+                                                    style: TextStyle(
+                                                      fontFamily: "Roboto",
+                                                      fontSize: 14.0,
+                                                      color: Color(0xff25282b),
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      decoration:
+                                                          bloc.getSettingPpn ==
+                                                                  0
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : null,
+                                                    ),
+                                                  )
+                                                ],
                                               ),
                                             ),
-                                            Text(
-                                              _numberFormat.format(
-                                                  bloc.ppn.ceilToDouble()),
-                                              style: TextStyle(
-                                                fontFamily: "Roboto",
-                                                fontSize: 14.0,
-                                                color: Color(0xff25282b),
-                                                fontWeight: FontWeight.w500,
-                                                decoration:
-                                                    bloc.getSettingPpn == 0
-                                                        ? TextDecoration
-                                                            .lineThrough
-                                                        : null,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
                                       Padding(
                                         padding: EdgeInsets.all(10.0),
                                         child: Row(
