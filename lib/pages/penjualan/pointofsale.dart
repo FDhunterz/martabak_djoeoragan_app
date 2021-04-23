@@ -89,6 +89,8 @@ class _PointofsalesState extends State<Pointofsales> {
     });
   }
 
+  bool lessOnce = false;
+  bool moreOnce = false;
   @override
   void initState() {
     _isLoading = true;
@@ -98,8 +100,6 @@ class _PointofsalesState extends State<Pointofsales> {
     cekKoneksi.initialise();
     cekKoneksiFunction();
     resource();
-    bool lessOnce = false;
-    bool moreOnce = false;
     _scrollController.addListener(() {
       if (lessOnce && _scrollController.offset < 2000) {
         setState(() {
@@ -543,7 +543,7 @@ class _PointofsalesState extends State<Pointofsales> {
                           color: Colors.blue,
                         ),
                         SizedBox(width: 10),
-                        Text('Daftar Perangkat Bluetooth'),
+                        Text('Printer Bluetooth'),
                       ],
                     ),
                     value: 0,
